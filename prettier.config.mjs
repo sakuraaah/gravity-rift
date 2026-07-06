@@ -1,0 +1,20 @@
+export default {
+  semi: true,
+  tabWidth: 2,
+  printWidth: 80,
+  singleQuote: true,
+  trailingComma: 'es5',
+  endOfLine: 'lf',
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  importOrder: [
+    '^react$',
+    '^react-dom(/.*)?$',
+    '^@pixi/react$',
+    '^pixi\\.js$',
+    '<THIRD_PARTY_MODULES>',
+    '^@/(.*)$',
+    '^[./]',
+  ],
+  importOrderSeparation: true,
+  importOrderSortSpecifiers: true,
+};
