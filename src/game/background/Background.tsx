@@ -1,6 +1,8 @@
-import { useApplication } from "@pixi/react";
-import type { Graphics } from "pixi.js";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
+import { useApplication } from '@pixi/react';
+
+import type { Graphics } from 'pixi.js';
 
 export function Background() {
   const { app } = useApplication();
@@ -12,7 +14,7 @@ export function Background() {
       graphics.rect(0, 0, app.screen.width, app.screen.height);
       graphics.fill();
     },
-    [app.screen.height, app.screen.width],
+    [app.screen.height, app.screen.width]
   );
 
   return <pixiGraphics draw={drawBackground} />;

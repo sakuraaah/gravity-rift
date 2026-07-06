@@ -1,5 +1,5 @@
-import { PlayerShip } from "../entities/PlayerShip";
-import { Background } from "../background/Background";
+import { Background } from '@/game/background/Background';
+import { PlayerShip } from '@/game/entities/PlayerShip';
 
 export function MainScene() {
   return (

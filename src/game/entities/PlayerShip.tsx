@@ -1,5 +1,6 @@
-import type { Graphics } from "pixi.js";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
+import type { Graphics } from 'pixi.js';
 
 const PLAYER_SHIP_SIZE = 44;
 const PLAYER_SHIP_POSITION = {

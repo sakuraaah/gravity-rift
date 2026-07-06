@@ -4,9 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile.local
     ports:
-      - "5174:5173"
+      - '5174:5173'
     volumes:
       - .:/app
       - /app/node_modules
     environment:
-      CHOKIDAR_USEPOLLING: "true"
+      CHOKIDAR_USEPOLLING: 'true'
