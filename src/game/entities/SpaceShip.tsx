@@ -2,16 +2,16 @@ import { useCallback } from 'react';
 
 import type { Graphics } from 'pixi.js';
 
-const PLAYER_SHIP_SIZE = 44;
-const PLAYER_SHIP_POSITION = {
+const SPACE_SHIP_SIZE = 44;
+const SPACE_SHIP_POSITION = {
   x: 88,
   y: 88,
 };
 
-export function PlayerShip() {
+export function SpaceShip() {
   const drawShip = useCallback((graphics: Graphics) => {
-    const halfWidth = PLAYER_SHIP_SIZE / 2;
-    const halfHeight = PLAYER_SHIP_SIZE / 2;
+    const halfWidth = SPACE_SHIP_SIZE / 2;
+    const halfHeight = SPACE_SHIP_SIZE / 2;
 
     graphics.clear();
     graphics.setFillStyle({ color: 0x6df7ff });
@@ -24,9 +24,9 @@ export function PlayerShip() {
 
   return (
     <pixiContainer
-      label="player-ship"
-      x={PLAYER_SHIP_POSITION.x}
-      y={PLAYER_SHIP_POSITION.y}
+      label="space-ship"
+      x={SPACE_SHIP_POSITION.x}
+      y={SPACE_SHIP_POSITION.y}
     >
       <pixiGraphics draw={drawShip} />
     </pixiContainer>

@@ -1,7 +1,8 @@
 import { Application } from '@pixi/react';
 
+import { MainScene } from '@/game/scenes';
+
 import './pixi-setup';
-import { MainScene } from './scenes/MainScene';
 
 export default function GameCanvas() {
   return (
