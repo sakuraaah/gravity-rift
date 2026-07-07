@@ -4,14 +4,20 @@ import { useTick } from '@pixi/react';
 
 import type { Container, Graphics, Ticker } from 'pixi.js';
 
+import { GAME_LAYOUT } from '@/game/constants';
 import { usePlayerControls } from '@/game/systems';
 
 import {
+  SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_INITIAL_POSITION,
   SPACESHIP_MOVEMENT_SPEED,
   SPACESHIP_ROTATION_SPEED,
   SPACESHIP_SIZE,
 } from './constants';
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
 
 export function Spaceship() {
   const spaceshipRef = useRef<Container>(null);
@@ -73,7 +79,18 @@ export function Spaceship() {
           SPACESHIP_MOVEMENT_SPEED *
           ticker.deltaTime;
 
-      spaceship.position.set(nextX, nextY);
+      spaceship.position.set(
+        clamp(
+          nextX,
+          SPACESHIP_BOUNDARY_RADIUS,
+          GAME_LAYOUT.Width - SPACESHIP_BOUNDARY_RADIUS
+        ),
+        clamp(
+          nextY,
+          SPACESHIP_BOUNDARY_RADIUS,
+          GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
+        )
+      );
     },
     [controlsRef]
   );

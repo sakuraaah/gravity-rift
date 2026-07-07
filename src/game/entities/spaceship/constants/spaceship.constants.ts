@@ -1,5 +1,7 @@
 export const SPACESHIP_SIZE = 10;
 
+export const SPACESHIP_BOUNDARY_RADIUS = SPACESHIP_SIZE;
+
 export const SPACESHIP_INITIAL_POSITION = {
   x: 88,
   y: 88,
