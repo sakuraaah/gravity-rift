@@ -1,5 +1,5 @@
 import { Background } from '@/game/background';
-import { SpaceShip } from '@/game/entities';
+import { Spaceship } from '@/game/entities';
 
 export function MainScene() {
   return (
@@ -8,7 +8,7 @@ export function MainScene() {
         <Background />
       </pixiContainer>
       <pixiContainer label="player-layer">
-        <SpaceShip />
+        <Spaceship />
       </pixiContainer>
     </>
   );
