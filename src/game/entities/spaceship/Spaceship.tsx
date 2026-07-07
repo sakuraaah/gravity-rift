@@ -5,7 +5,7 @@ import { useTick } from '@pixi/react';
 import type { Container, Graphics, Ticker } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
-import { usePlayerControls } from '@/game/systems';
+import { useGameContext } from '@/game/context';
 
 import {
   SPACESHIP_BOUNDARY_RADIUS,
@@ -21,21 +21,34 @@ function clamp(value: number, min: number, max: number) {
 
 export function Spaceship() {
   const spaceshipRef = useRef<Container>(null);
-  const controlsRef = usePlayerControls();
+  const { controlsRef, spaceshipLocationRef } = useGameContext();
 
-  const setSpaceshipRef = useCallback((spaceship: Container | null) => {
-    if (!spaceship) {
-      spaceshipRef.current = null;
-      return;
-    }
+  const syncSpaceshipLocation = useCallback(
+    (spaceship: Container) => {
+      spaceshipLocationRef.current.x = spaceship.position.x;
+      spaceshipLocationRef.current.y = spaceship.position.y;
+      spaceshipLocationRef.current.rotation = spaceship.rotation;
+    },
+    [spaceshipLocationRef]
+  );
 
-    spaceship.position.set(
-      SPACESHIP_INITIAL_POSITION.x,
-      SPACESHIP_INITIAL_POSITION.y
-    );
+  const setSpaceshipRef = useCallback(
+    (spaceship: Container | null) => {
+      if (!spaceship) {
+        spaceshipRef.current = null;
+        return;
+      }
 
-    spaceshipRef.current = spaceship;
-  }, []);
+      spaceship.position.set(
+        SPACESHIP_INITIAL_POSITION.x,
+        SPACESHIP_INITIAL_POSITION.y
+      );
+
+      spaceshipRef.current = spaceship;
+      syncSpaceshipLocation(spaceship);
+    },
+    [syncSpaceshipLocation]
+  );
 
   const drawShip = useCallback((graphics: Graphics) => {
     const halfWidth = SPACESHIP_SIZE / 2;
@@ -65,6 +78,7 @@ export function Spaceship() {
         rotationDirection * SPACESHIP_ROTATION_SPEED * ticker.deltaTime;
 
       if (!up) {
+        syncSpaceshipLocation(spaceship);
         return;
       }
 
@@ -91,8 +105,10 @@ export function Spaceship() {
           GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
         )
       );
+
+      syncSpaceshipLocation(spaceship);
     },
-    [controlsRef]
+    [controlsRef, syncSpaceshipLocation]
   );
 
   useTick(updateTransform);
