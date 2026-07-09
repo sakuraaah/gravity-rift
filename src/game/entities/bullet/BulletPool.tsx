@@ -34,13 +34,17 @@ export function BulletPool() {
     }
 
     const { x, y, rotation } = spaceshipLocationRef.current;
+    const velocity = {
+      x: Math.sin(rotation) * BULLET_MOVEMENT_SPEED,
+      y: -Math.cos(rotation) * BULLET_MOVEMENT_SPEED,
+    };
     const bullet = bulletPool.get({
       location: {
         x,
         y,
         rotation,
       },
-      speed: BULLET_MOVEMENT_SPEED,
+      velocity,
     });
 
     bulletLayer.addChild(bullet);

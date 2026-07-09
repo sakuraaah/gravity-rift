@@ -1,3 +1,5 @@
+import type { Vector2 } from '@/game/utils';
+
 export type BulletLocation = {
   x: number;
   y: number;
@@ -6,5 +8,5 @@ export type BulletLocation = {
 
 export type BulletSpawnData = {
   location: BulletLocation;
-  speed: number;
+  velocity: Vector2;
 };

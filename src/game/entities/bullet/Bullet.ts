@@ -1,9 +1,10 @@
 import { Container, Graphics } from 'pixi.js';
 
+import type { Vector2 } from '@/game/utils';
+
 import {
   BULLET_COLOR,
   BULLET_INITIAL_LOCATION,
-  BULLET_MOVEMENT_SPEED,
   BULLET_RADIUS,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
@@ -13,7 +14,7 @@ let bulletViewId = 0;
 export class Bullet extends Container {
   public isActive = false;
 
-  public speed = 0;
+  private velocity: Vector2 = { x: 0, y: 0 };
 
   public constructor() {
     super();
@@ -33,18 +34,18 @@ export class Bullet extends Container {
 
   public init(data?: BulletSpawnData) {
     const location = data?.location ?? BULLET_INITIAL_LOCATION;
-    const speed = data?.speed ?? BULLET_MOVEMENT_SPEED;
+    const velocity = data?.velocity ?? { x: 0, y: 0 };
 
     this.position.set(location.x, location.y);
     this.rotation = location.rotation;
-    this.speed = speed;
+    this.velocity = { ...velocity };
     this.visible = true;
     this.isActive = true;
   }
 
   public update(deltaTime: number) {
-    this.position.x += Math.sin(this.rotation) * this.speed * deltaTime;
-    this.position.y -= Math.cos(this.rotation) * this.speed * deltaTime;
+    this.position.x += this.velocity.x * deltaTime;
+    this.position.y += this.velocity.y * deltaTime;
   }
 
   public isOutsideBounds(width: number, height: number, margin: number) {
@@ -60,7 +61,7 @@ export class Bullet extends Container {
     this.removeFromParent();
     this.position.set(BULLET_INITIAL_LOCATION.x, BULLET_INITIAL_LOCATION.y);
     this.rotation = BULLET_INITIAL_LOCATION.rotation;
-    this.speed = 0;
+    this.velocity = { x: 0, y: 0 };
     this.visible = false;
     this.isActive = false;
   }

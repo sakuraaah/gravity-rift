@@ -1,6 +1,6 @@
 import { Background } from '@/game/background';
 import { GameProvider } from '@/game/context';
-import { BulletPool, Spaceship } from '@/game/entities';
+import { AsteroidPool, BulletPool, Spaceship } from '@/game/entities';
 
 export function MainScene() {
   return (
@@ -8,6 +8,7 @@ export function MainScene() {
       <pixiContainer label="background-layer">
         <Background />
       </pixiContainer>
+      <AsteroidPool />
       <BulletPool />
       <Spaceship />
     </GameProvider>
