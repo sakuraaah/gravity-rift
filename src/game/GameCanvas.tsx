@@ -1,6 +1,6 @@
 import { Application } from '@pixi/react';
 
-import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
+import { GAME_LAYOUT, LAYOUT_SCALE } from '@/game/constants';
 import { MainScene } from '@/game/scenes';
 
 import './pixi-setup';
@@ -10,8 +10,8 @@ export default function GameCanvas() {
     <div
       className="game-viewport"
       style={{
-        height: GAME_LAYOUT.Height * GAME_SCALE,
-        width: GAME_LAYOUT.Width * GAME_SCALE,
+        height: GAME_LAYOUT.Height * LAYOUT_SCALE,
+        width: GAME_LAYOUT.Width * LAYOUT_SCALE,
       }}
     >
       <Application

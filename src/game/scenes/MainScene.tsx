@@ -9,9 +9,7 @@ export function MainScene() {
         <Background />
       </pixiContainer>
       <BulletPool />
-      <pixiContainer label="player-layer">
-        <Spaceship />
-      </pixiContainer>
+      <Spaceship />
     </GameProvider>
   );
 }
