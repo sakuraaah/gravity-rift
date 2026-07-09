@@ -11,7 +11,7 @@ export const PlayerControl = {
 export type PlayerControl = (typeof PlayerControl)[keyof typeof PlayerControl];
 
 export const PlayerMouseButton = {
-  Fire: 1,
+  Fire: 0,
 } as const;
 
 export type PlayerMouseButton =
