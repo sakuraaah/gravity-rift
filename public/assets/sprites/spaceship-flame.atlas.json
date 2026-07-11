@@ -1,0 +1,461 @@
+﻿{
+  "frames": {
+    "engine_flame_deg_000_0": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_000_1": {
+      "frame": {
+        "x": 17,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_023_0": {
+      "frame": {
+        "x": 0,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_023_1": {
+      "frame": {
+        "x": 17,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_045_0": {
+      "frame": {
+        "x": 0,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_045_1": {
+      "frame": {
+        "x": 17,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_068_0": {
+      "frame": {
+        "x": 0,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_068_1": {
+      "frame": {
+        "x": 17,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_090_0": {
+      "frame": {
+        "x": 0,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_090_1": {
+      "frame": {
+        "x": 17,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_113_0": {
+      "frame": {
+        "x": 0,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_113_1": {
+      "frame": {
+        "x": 17,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_135_0": {
+      "frame": {
+        "x": 0,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_135_1": {
+      "frame": {
+        "x": 17,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_158_0": {
+      "frame": {
+        "x": 0,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_158_1": {
+      "frame": {
+        "x": 17,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_180_0": {
+      "frame": {
+        "x": 0,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_180_1": {
+      "frame": {
+        "x": 17,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_203_0": {
+      "frame": {
+        "x": 0,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_203_1": {
+      "frame": {
+        "x": 17,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_225_0": {
+      "frame": {
+        "x": 0,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_225_1": {
+      "frame": {
+        "x": 17,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_248_0": {
+      "frame": {
+        "x": 0,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_248_1": {
+      "frame": {
+        "x": 17,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_270_0": {
+      "frame": {
+        "x": 0,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_270_1": {
+      "frame": {
+        "x": 17,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_293_0": {
+      "frame": {
+        "x": 0,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_293_1": {
+      "frame": {
+        "x": 17,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_315_0": {
+      "frame": {
+        "x": 0,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_315_1": {
+      "frame": {
+        "x": 17,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_338_0": {
+      "frame": {
+        "x": 0,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_flame_deg_338_1": {
+      "frame": {
+        "x": 17,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "animations": {
+    "engine_flame_deg_000": [
+      "engine_flame_deg_000_0",
+      "engine_flame_deg_000_1"
+    ],
+    "engine_flame_deg_023": [
+      "engine_flame_deg_023_0",
+      "engine_flame_deg_023_1"
+    ],
+    "engine_flame_deg_045": [
+      "engine_flame_deg_045_0",
+      "engine_flame_deg_045_1"
+    ],
+    "engine_flame_deg_068": [
+      "engine_flame_deg_068_0",
+      "engine_flame_deg_068_1"
+    ],
+    "engine_flame_deg_090": [
+      "engine_flame_deg_090_0",
+      "engine_flame_deg_090_1"
+    ],
+    "engine_flame_deg_113": [
+      "engine_flame_deg_113_0",
+      "engine_flame_deg_113_1"
+    ],
+    "engine_flame_deg_135": [
+      "engine_flame_deg_135_0",
+      "engine_flame_deg_135_1"
+    ],
+    "engine_flame_deg_158": [
+      "engine_flame_deg_158_0",
+      "engine_flame_deg_158_1"
+    ],
+    "engine_flame_deg_180": [
+      "engine_flame_deg_180_0",
+      "engine_flame_deg_180_1"
+    ],
+    "engine_flame_deg_203": [
+      "engine_flame_deg_203_0",
+      "engine_flame_deg_203_1"
+    ],
+    "engine_flame_deg_225": [
+      "engine_flame_deg_225_0",
+      "engine_flame_deg_225_1"
+    ],
+    "engine_flame_deg_248": [
+      "engine_flame_deg_248_0",
+      "engine_flame_deg_248_1"
+    ],
+    "engine_flame_deg_270": [
+      "engine_flame_deg_270_0",
+      "engine_flame_deg_270_1"
+    ],
+    "engine_flame_deg_293": [
+      "engine_flame_deg_293_0",
+      "engine_flame_deg_293_1"
+    ],
+    "engine_flame_deg_315": [
+      "engine_flame_deg_315_0",
+      "engine_flame_deg_315_1"
+    ],
+    "engine_flame_deg_338": ["engine_flame_deg_338_0", "engine_flame_deg_338_1"]
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "engine_flame-1x.png",
+    "scale": "1",
+    "size": {
+      "w": 33,
+      "h": 271
+    }
+  }
+}
