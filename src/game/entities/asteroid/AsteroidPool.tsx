@@ -6,7 +6,6 @@ import type { Container, Pool, Ticker } from 'pixi.js';
 import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
-import { useGameContext } from '@/game/context';
 import {
   ASTEROID_SPAWN_CONFIG_BY_SIZE,
   ASTEROID_SPAWN_SIZES,
@@ -37,7 +36,6 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
-  const { spaceshipLocationRef } = useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
   const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
@@ -89,7 +87,10 @@ export function AsteroidPool() {
               activeAsteroidsRef.current
             ),
             size,
-            target: spaceshipLocationRef.current,
+            target: {
+              x: GAME_LAYOUT.Width / 2,
+              y: GAME_LAYOUT.Height / 2,
+            },
           })
         );
 
@@ -119,7 +120,7 @@ export function AsteroidPool() {
         }
       }
     },
-    [asteroidPool, spaceshipLocationRef, spawnAsteroid]
+    [asteroidPool, spawnAsteroid]
   );
 
   useEffect(() => {

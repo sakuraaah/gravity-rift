@@ -8,35 +8,37 @@ import {
   normalizeVector,
   randomBetween,
   randomCenteredBias,
-  randomInteger,
   rotateVector,
 } from '@/game/utils';
 import type { Vector2 } from '@/game/utils';
 
-import { ASTEROID_SPAWN_CONFIG_BY_SIZE } from './asteroidSpawn.constants';
+import {
+  ASTEROID_SPAWN_CONFIG_BY_SIZE,
+  ASTEROID_SPAWN_SIDE_WEIGHTS,
+} from './asteroidSpawn.constants';
 import type { AsteroidSpawnOptions } from './asteroidSpawn.types';
 
 function createBorderSpawnLocation({
   bounds,
   margin,
 }: Pick<AsteroidSpawnOptions, 'bounds' | 'margin'>): Vector2 {
-  const sideIndex = randomInteger(4);
+  const side = selectSpawnSide();
 
-  if (sideIndex === 0) {
+  if (side === 'top') {
     return {
       x: randomBetween(0, bounds.width),
       y: -margin,
     };
   }
 
-  if (sideIndex === 1) {
+  if (side === 'right') {
     return {
       x: bounds.width + margin,
       y: randomBetween(0, bounds.height),
     };
   }
 
-  if (sideIndex === 2) {
+  if (side === 'bottom') {
     return {
       x: randomBetween(0, bounds.width),
       y: bounds.height + margin,
@@ -47,6 +49,25 @@ function createBorderSpawnLocation({
     x: -margin,
     y: randomBetween(0, bounds.height),
   };
+}
+
+function selectSpawnSide() {
+  const sideWeights = ASTEROID_SPAWN_SIDE_WEIGHTS;
+  const totalWeight = Object.values(sideWeights).reduce(
+    (sum, weight) => sum + weight,
+    0
+  );
+  let roll = randomBetween(0, totalWeight);
+
+  for (const [side, weight] of Object.entries(sideWeights)) {
+    roll -= weight;
+
+    if (roll <= 0) {
+      return side as keyof typeof sideWeights;
+    }
+  }
+
+  return 'left' as keyof typeof sideWeights;
 }
 
 function createSpacedBorderSpawnLocation({

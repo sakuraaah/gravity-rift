@@ -17,6 +17,10 @@ export type AsteroidSpawnConfig = {
   minSpawnDistance: number;
 };
 
+export type AsteroidSpawnSide = 'bottom' | 'left' | 'right' | 'top';
+
+export type AsteroidSpawnSideWeights = Record<AsteroidSpawnSide, number>;
+
 export type AsteroidSpawnOptions = {
   bounds: AsteroidSpawnBounds;
   margin: number;

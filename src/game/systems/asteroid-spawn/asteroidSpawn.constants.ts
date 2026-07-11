@@ -1,7 +1,17 @@
 import { ASTEROID_SIZE } from '@/game/entities/asteroid/asteroid.enums';
 import type { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 
-import type { AsteroidSpawnConfig } from './asteroidSpawn.types';
+import type {
+  AsteroidSpawnConfig,
+  AsteroidSpawnSideWeights,
+} from './asteroidSpawn.types';
+
+export const ASTEROID_SPAWN_SIDE_WEIGHTS: AsteroidSpawnSideWeights = {
+  bottom: 0.75,
+  left: 0.25,
+  right: 5,
+  top: 0.75,
+};
 
 export const ASTEROID_SPAWN_SIZES = [
   ASTEROID_SIZE.Small,
@@ -14,33 +24,33 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
   AsteroidSpawnConfig
 > = {
   [ASTEROID_SIZE.Small]: {
-    initialDelayMs: 900,
+    initialDelayMs: 1200,
     intervalJitterRatio: 0.35,
-    maxDeviationDegrees: 6,
-    maxIntervalMs: 3400,
+    maxDeviationDegrees: 10,
+    maxIntervalMs: 4500,
     maxSpawnAttempts: 8,
-    meanIntervalMs: 2200,
-    minIntervalMs: 1400,
+    meanIntervalMs: 3000,
+    minIntervalMs: 1900,
     minSpawnDistance: 42,
   },
   [ASTEROID_SIZE.Medium]: {
-    initialDelayMs: 1800,
+    initialDelayMs: 2400,
     intervalJitterRatio: 0.3,
-    maxDeviationDegrees: 9,
-    maxIntervalMs: 5800,
+    maxDeviationDegrees: 15,
+    maxIntervalMs: 7500,
     maxSpawnAttempts: 8,
-    meanIntervalMs: 4200,
-    minIntervalMs: 2800,
+    meanIntervalMs: 5500,
+    minIntervalMs: 3600,
     minSpawnDistance: 54,
   },
   [ASTEROID_SIZE.Large]: {
-    initialDelayMs: 3200,
+    initialDelayMs: 4200,
     intervalJitterRatio: 0.25,
-    maxDeviationDegrees: 12,
-    maxIntervalMs: 9000,
+    maxDeviationDegrees: 20,
+    maxIntervalMs: 11500,
     maxSpawnAttempts: 8,
-    meanIntervalMs: 7000,
-    minIntervalMs: 5200,
+    meanIntervalMs: 9000,
+    minIntervalMs: 6800,
     minSpawnDistance: 68,
   },
 };
