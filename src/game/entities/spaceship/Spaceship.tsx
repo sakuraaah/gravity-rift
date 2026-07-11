@@ -2,7 +2,7 @@ import { useCallback, useRef } from 'react';
 
 import { useTick } from '@pixi/react';
 
-import type { Container, Graphics, Ticker } from 'pixi.js';
+import type { AnimatedSprite, Container, Sprite, Ticker } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
@@ -10,21 +10,32 @@ import { clamp } from '@/game/utils';
 
 import {
   SPACESHIP_BOUNDARY_RADIUS,
+  SPACESHIP_ENGINE_OFFSET,
+  SPACESHIP_FLAME_ANIMATION_SPEED,
   SPACESHIP_INITIAL_POSITION,
   SPACESHIP_MOVEMENT_SPEED,
   SPACESHIP_ROTATION_SPEED,
-  SPACESHIP_SIZE,
 } from './constants';
+import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
   const spaceshipRef = useRef<Container>(null);
+  const hullRef = useRef<Sprite>(null);
+  const flameRef = useRef<AnimatedSprite>(null);
+  const headingRef = useRef(0);
+  const { flameTextures, hullTexture, updateAnimation } = useSpaceshipAnimation(
+    {
+      flameRef,
+      hullRef,
+    }
+  );
   const { controlsRef, spaceshipLocationRef } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
     (spaceship: Container) => {
       spaceshipLocationRef.current.x = spaceship.position.x;
       spaceshipLocationRef.current.y = spaceship.position.y;
-      spaceshipLocationRef.current.rotation = spaceship.rotation;
+      spaceshipLocationRef.current.rotation = headingRef.current;
     },
     [spaceshipLocationRef]
   );
@@ -40,25 +51,14 @@ export function Spaceship() {
         SPACESHIP_INITIAL_POSITION.x,
         SPACESHIP_INITIAL_POSITION.y
       );
+      spaceship.rotation = 0;
+      headingRef.current = 0;
 
       spaceshipRef.current = spaceship;
       syncSpaceshipLocation(spaceship);
     },
     [syncSpaceshipLocation]
   );
-
-  const drawShip = useCallback((graphics: Graphics) => {
-    const halfWidth = SPACESHIP_SIZE / 2;
-    const halfHeight = SPACESHIP_SIZE / 2;
-
-    graphics.clear();
-    graphics.setFillStyle({ color: 0x6df7ff });
-    graphics.moveTo(0, -halfHeight);
-    graphics.lineTo(halfWidth, halfHeight);
-    graphics.lineTo(-halfWidth, halfHeight);
-    graphics.closePath();
-    graphics.fill();
-  }, []);
 
   const updateTransform = useCallback(
     (ticker: Ticker) => {
@@ -71,8 +71,9 @@ export function Spaceship() {
       const { left, right, up } = controlsRef.current;
       const rotationDirection = Number(right) - Number(left);
 
-      spaceship.rotation +=
+      headingRef.current +=
         rotationDirection * SPACESHIP_ROTATION_SPEED * ticker.deltaTime;
+      updateAnimation(headingRef.current);
 
       if (!up) {
         syncSpaceshipLocation(spaceship);
@@ -81,12 +82,12 @@ export function Spaceship() {
 
       const nextX =
         spaceship.position.x +
-        Math.sin(spaceship.rotation) *
+        Math.sin(headingRef.current) *
           SPACESHIP_MOVEMENT_SPEED *
           ticker.deltaTime;
       const nextY =
         spaceship.position.y -
-        Math.cos(spaceship.rotation) *
+        Math.cos(headingRef.current) *
           SPACESHIP_MOVEMENT_SPEED *
           ticker.deltaTime;
 
@@ -105,14 +106,31 @@ export function Spaceship() {
 
       syncSpaceshipLocation(spaceship);
     },
-    [controlsRef, syncSpaceshipLocation]
+    [controlsRef, syncSpaceshipLocation, updateAnimation]
   );
 
   useTick(updateTransform);
 
   return (
     <pixiContainer ref={setSpaceshipRef} label="spaceship">
-      <pixiGraphics draw={drawShip} />
+      <pixiAnimatedSprite
+        ref={flameRef}
+        anchor={0.5}
+        animationSpeed={SPACESHIP_FLAME_ANIMATION_SPEED}
+        autoPlay
+        label="spaceship-engine-flame"
+        loop
+        roundPixels
+        textures={flameTextures}
+        y={SPACESHIP_ENGINE_OFFSET}
+      />
+      <pixiSprite
+        ref={hullRef}
+        anchor={0.5}
+        label="spaceship-hull"
+        roundPixels
+        texture={hullTexture}
+      />
     </pixiContainer>
   );
 }
