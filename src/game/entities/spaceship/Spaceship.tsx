@@ -6,6 +6,7 @@ import type { Container, Graphics, Ticker } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
+import { clamp } from '@/game/utils';
 
 import {
   SPACESHIP_BOUNDARY_RADIUS,
@@ -14,10 +15,6 @@ import {
   SPACESHIP_ROTATION_SPEED,
   SPACESHIP_SIZE,
 } from './constants';
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
 
 export function Spaceship() {
   const spaceshipRef = useRef<Container>(null);
