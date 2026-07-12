@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { Application } from '@pixi/react';
 
-import { loadSpaceshipAssets } from '@/game/assets';
+import { loadGameAssets } from '@/game/assets';
 import { GAME_LAYOUT, LAYOUT_SCALE } from '@/game/constants';
 import { MainScene } from '@/game/scenes';
 
@@ -16,7 +16,7 @@ export default function GameCanvas() {
   useEffect(() => {
     let isMounted = true;
 
-    loadSpaceshipAssets()
+    loadGameAssets()
       .then(() => {
         if (isMounted) {
           setAssetState('ready');

@@ -1,9 +1,10 @@
-import { Container, Graphics } from 'pixi.js';
+import { Sprite, Texture } from 'pixi.js';
 
+import { getLoadedAsteroidTextures } from '@/game/assets';
 import type { Vector2 } from '@/game/utils';
+import { randomInteger } from '@/game/utils';
 
 import {
-  ASTEROID_COLORS,
   ASTEROID_INITIAL_SPAWN,
   ASTEROID_RADIUS_BY_SIZE,
 } from './asteroid.constants';
@@ -12,23 +13,21 @@ import type { AsteroidSpawnData } from './asteroid.types';
 
 let asteroidViewId = 0;
 
-export class Asteroid extends Container {
+export class Asteroid extends Sprite {
   public isActive = false;
 
   private hasEnteredBounds = false;
 
   private velocity: Vector2 = { x: 0, y: 0 };
 
-  private readonly graphics = new Graphics();
-
   public constructor() {
-    super();
+    super(Texture.EMPTY);
 
     this.label = `asteroid-${asteroidViewId}`;
     asteroidViewId += 1;
+    this.anchor.set(0.5);
+    this.roundPixels = true;
     this.visible = false;
-
-    this.addChild(this.graphics);
   }
 
   public init(data?: AsteroidSpawnData) {
@@ -37,7 +36,7 @@ export class Asteroid extends Container {
     this.position.set(spawnData.location.x, spawnData.location.y);
     this.velocity = { ...spawnData.velocity };
     this.hasEnteredBounds = false;
-    this.draw(spawnData.size);
+    this.applyTexture(spawnData.size);
     this.visible = true;
     this.isActive = true;
   }
@@ -82,32 +81,12 @@ export class Asteroid extends Container {
     this.isActive = false;
   }
 
-  private draw(size: AsteroidSize) {
+  private applyTexture(size: AsteroidSize) {
     const radius = ASTEROID_RADIUS_BY_SIZE[size];
-    const shadowRadius = radius * 0.86;
-    const highlightRadius = Math.max(1, radius * 0.18);
-    const pitRadius = Math.max(1, radius * 0.12);
+    const textures = getLoadedAsteroidTextures()[size];
 
-    this.graphics.clear();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Dark });
-    this.graphics.circle(radius * 0.12, radius * 0.14, radius);
-    this.graphics.fill();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Body });
-    this.graphics.circle(0, 0, radius);
-    this.graphics.fill();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Shade });
-    this.graphics.circle(radius * 0.18, radius * 0.2, shadowRadius);
-    this.graphics.fill();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Body });
-    this.graphics.circle(-radius * 0.1, -radius * 0.08, radius * 0.88);
-    this.graphics.fill();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Light });
-    this.graphics.circle(-radius * 0.38, -radius * 0.34, highlightRadius);
-    this.graphics.circle(radius * 0.08, -radius * 0.46, highlightRadius * 0.7);
-    this.graphics.fill();
-    this.graphics.setFillStyle({ color: ASTEROID_COLORS.Dark });
-    this.graphics.circle(radius * 0.28, radius * 0.12, pitRadius);
-    this.graphics.circle(-radius * 0.2, radius * 0.32, pitRadius * 0.75);
-    this.graphics.fill();
+    this.texture = textures[randomInteger(textures.length)];
+    this.width = radius * 2;
+    this.height = radius * 2;
   }
 }

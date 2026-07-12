@@ -8,13 +8,6 @@ import { ASTEROID_SIZE } from './asteroid.enums';
 import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
-export const ASTEROID_COLORS = {
-  Body: 0x6b4a7a,
-  Dark: 0x241036,
-  Light: 0xa983bb,
-  Shade: 0x3a2450,
-} as const;
-
 export const ASTEROID_RADIUS_BY_SIZE: Record<AsteroidSize, number> = {
   [ASTEROID_SIZE.Large]: 15 * GAME_SCALE,
   [ASTEROID_SIZE.Medium]: 9 * GAME_SCALE,
