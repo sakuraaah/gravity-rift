@@ -9,9 +9,9 @@ import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
 export const ASTEROID_MOVEMENT_SPEED_BY_SIZE: Record<AsteroidSize, number> = {
-  [ASTEROID_SIZE.Large]: 0.25 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
-  [ASTEROID_SIZE.Medium]: 0.35 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
-  [ASTEROID_SIZE.Small]: 0.45 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
+  [ASTEROID_SIZE.Large]: 0.15 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
+  [ASTEROID_SIZE.Medium]: 0.2 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
+  [ASTEROID_SIZE.Small]: 0.25 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
 };
 
 export const ASTEROID_DESPAWN_MARGIN = 12 * GAME_SCALE;
