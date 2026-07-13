@@ -1,8 +1,8 @@
 import { GAME_SCALE } from './game.constants';
 
 export const GAME_LAYOUT = {
-  Height: 270 * GAME_SCALE,
-  Width: 480 * GAME_SCALE,
+  Height: 135 * GAME_SCALE,
+  Width: 240 * GAME_SCALE,
 } as const;
 
-export const LAYOUT_SCALE = 2;
+export const LAYOUT_SCALE = 4;
