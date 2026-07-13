@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Application } from '@pixi/react';
 
 import { loadGameAssets } from '@/game/assets';
-import { GAME_LAYOUT, LAYOUT_SCALE } from '@/game/constants';
+import { GAME_LAYOUT, LAYOUT_SCALE, RENDER_RESOLUTION } from '@/game/constants';
 import { MainScene } from '@/game/scenes';
 
 import './pixi-setup';
@@ -53,7 +53,7 @@ export default function GameCanvas() {
         background={'#050714'}
         className="game-canvas"
         height={GAME_LAYOUT.Height}
-        resolution={1}
+        resolution={RENDER_RESOLUTION}
         roundPixels
         width={GAME_LAYOUT.Width}
       >

@@ -6,3 +6,5 @@ export const GAME_LAYOUT = {
 } as const;
 
 export const LAYOUT_SCALE = 4;
+
+export const RENDER_RESOLUTION = Math.min(2, LAYOUT_SCALE);
