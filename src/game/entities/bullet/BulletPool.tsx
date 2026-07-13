@@ -10,14 +10,14 @@ import { useGameContext } from '@/game/context';
 
 import { Bullet } from './Bullet';
 import {
+  BULLET_BASE_MOVEMENT_SPEED,
   BULLET_DESPAWN_MARGIN,
   BULLET_FIRE_DEBOUNCE_MS,
-  BULLET_MOVEMENT_SPEED,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
 
 export function BulletPool() {
-  const { controlsRef, spaceshipLocationRef } = useGameContext();
+  const { controlsRef, gameSpeedRef, spaceshipLocationRef } = useGameContext();
   const bulletLayerRef = useRef<Container>(null);
   const activeBulletsRef = useRef<Bullet[]>([]);
   const lastBulletFiredAtRef = useRef<number | null>(null);
@@ -35,8 +35,8 @@ export function BulletPool() {
 
     const { x, y, rotation } = spaceshipLocationRef.current;
     const velocity = {
-      x: Math.sin(rotation) * BULLET_MOVEMENT_SPEED,
-      y: -Math.cos(rotation) * BULLET_MOVEMENT_SPEED,
+      x: Math.sin(rotation) * BULLET_BASE_MOVEMENT_SPEED,
+      y: -Math.cos(rotation) * BULLET_BASE_MOVEMENT_SPEED,
     };
     const bullet = bulletPool.get({
       location: {
@@ -62,7 +62,7 @@ export function BulletPool() {
       ) {
         const bullet = activeBulletsRef.current[index];
 
-        bullet.update(ticker.deltaTime);
+        bullet.update(ticker.deltaTime, gameSpeedRef.current.multiplier);
 
         if (
           bullet.isOutsideBounds(
@@ -97,7 +97,7 @@ export function BulletPool() {
         }
       }
     },
-    [bulletPool, controlsRef, spawnBullet]
+    [bulletPool, controlsRef, gameSpeedRef, spawnBullet]
   );
 
   useEffect(() => {

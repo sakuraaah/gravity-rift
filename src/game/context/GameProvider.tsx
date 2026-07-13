@@ -1,6 +1,10 @@
-import { useMemo, useRef } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 
-import { usePlayerControls } from '@/game/systems';
+import {
+  createInitialGameSpeed,
+  updateGameSpeed as updateGameSpeedValue,
+  usePlayerControls,
+} from '@/game/systems';
 
 import { GameContext } from './GameContext';
 import type {
@@ -19,16 +23,22 @@ function createInitialSpaceshipLocation(): SpaceshipLocation {
 
 export function GameProvider({ children }: GameProviderProps) {
   const controlsRef = usePlayerControls();
+  const gameSpeedRef = useRef(createInitialGameSpeed());
   const spaceshipLocationRef = useRef<SpaceshipLocation>(
     createInitialSpaceshipLocation()
   );
+  const updateGameSpeed = useCallback((newSpeed: number) => {
+    updateGameSpeedValue(gameSpeedRef.current, newSpeed);
+  }, []);
 
   const gameContextValue = useMemo<GameContextValue>(
     () => ({
       controlsRef,
+      gameSpeedRef,
+      updateGameSpeed,
       spaceshipLocationRef,
     }),
-    [controlsRef, spaceshipLocationRef]
+    [controlsRef, gameSpeedRef, spaceshipLocationRef, updateGameSpeed]
   );
 
   return (

@@ -43,9 +43,11 @@ export class Bullet extends Container {
     this.isActive = true;
   }
 
-  public update(deltaTime: number) {
-    this.position.x += this.velocity.x * deltaTime;
-    this.position.y += this.velocity.y * deltaTime;
+  public update(deltaTime: number, speedMultiplier: number) {
+    this.position.set(
+      this.position.x + this.velocity.x * deltaTime * speedMultiplier,
+      this.position.y + this.velocity.y * deltaTime * speedMultiplier
+    );
   }
 
   public isOutsideBounds(width: number, height: number, margin: number) {

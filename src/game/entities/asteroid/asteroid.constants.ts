@@ -1,17 +1,16 @@
-import {
-  GAME_LAYOUT,
-  GAME_SCALE,
-  GAME_SPEED_MULTIPLIER,
-} from '@/game/constants';
+import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 
 import { ASTEROID_SIZE } from './asteroid.enums';
 import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
-export const ASTEROID_MOVEMENT_SPEED_BY_SIZE: Record<AsteroidSize, number> = {
-  [ASTEROID_SIZE.Large]: 0.15 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
-  [ASTEROID_SIZE.Medium]: 0.2 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
-  [ASTEROID_SIZE.Small]: 0.25 * GAME_SCALE * GAME_SPEED_MULTIPLIER,
+export const ASTEROID_BASE_MOVEMENT_SPEED_BY_SIZE: Record<
+  AsteroidSize,
+  number
+> = {
+  [ASTEROID_SIZE.Large]: 0.15 * GAME_SCALE,
+  [ASTEROID_SIZE.Medium]: 0.2 * GAME_SCALE,
+  [ASTEROID_SIZE.Small]: 0.25 * GAME_SCALE,
 };
 
 export const ASTEROID_DESPAWN_MARGIN = 12 * GAME_SCALE;
@@ -23,7 +22,7 @@ export const ASTEROID_INITIAL_SPAWN: AsteroidSpawnData = {
   },
   size: ASTEROID_SIZE.Large,
   velocity: {
-    x: ASTEROID_MOVEMENT_SPEED_BY_SIZE[ASTEROID_SIZE.Large],
+    x: ASTEROID_BASE_MOVEMENT_SPEED_BY_SIZE[ASTEROID_SIZE.Large],
     y: 0,
   },
 };

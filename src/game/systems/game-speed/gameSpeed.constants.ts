@@ -1,0 +1,1 @@
+export const GAME_SPEED_INITIAL_MULTIPLIER = 1;

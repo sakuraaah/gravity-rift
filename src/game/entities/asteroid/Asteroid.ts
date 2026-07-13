@@ -39,10 +39,10 @@ export class Asteroid extends Sprite {
     this.isActive = true;
   }
 
-  public update(deltaTime: number) {
+  public update(deltaTime: number, speedMultiplier: number) {
     this.position.set(
-      this.position.x + this.velocity.x * deltaTime,
-      this.position.y + this.velocity.y * deltaTime
+      this.position.x + this.velocity.x * deltaTime * speedMultiplier,
+      this.position.y + this.velocity.y * deltaTime * speedMultiplier
     );
   }
 

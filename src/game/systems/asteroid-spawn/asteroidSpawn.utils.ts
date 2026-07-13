@@ -1,4 +1,4 @@
-import { ASTEROID_MOVEMENT_SPEED_BY_SIZE } from '@/game/entities/asteroid/asteroid.constants';
+import { ASTEROID_BASE_MOVEMENT_SPEED_BY_SIZE } from '@/game/entities/asteroid/asteroid.constants';
 import type { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 import type { AsteroidSpawnData } from '@/game/entities/asteroid/asteroid.types';
 import {
@@ -142,7 +142,7 @@ export function createAsteroidSpawnData({
   const deviationDegrees = randomCenteredBias() * config.maxDeviationDegrees;
   const deviationRadians = degreesToRadians(deviationDegrees);
   const direction = rotateVector(directionToTarget, deviationRadians);
-  const speed = ASTEROID_MOVEMENT_SPEED_BY_SIZE[size];
+  const speed = ASTEROID_BASE_MOVEMENT_SPEED_BY_SIZE[size];
 
   return {
     location,

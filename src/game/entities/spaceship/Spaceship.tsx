@@ -9,12 +9,12 @@ import { useGameContext } from '@/game/context';
 import { clamp } from '@/game/utils';
 
 import {
+  SPACESHIP_BASE_MOVEMENT_SPEED,
+  SPACESHIP_BASE_ROTATION_SPEED,
   SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_ENGINE_OFFSET,
   SPACESHIP_FLAME_ANIMATION_SPEED,
-  SPACESHIP_MOVEMENT_SPEED,
   SPACESHIP_PARTICLES_ANIMATION_SPEED,
-  SPACESHIP_ROTATION_SPEED,
   getSpaceshipInitialPosition,
 } from './constants';
 import { useSpaceshipAnimation } from './hooks';
@@ -31,7 +31,7 @@ export function Spaceship() {
       hullRef,
       particlesRef,
     });
-  const { controlsRef, spaceshipLocationRef } = useGameContext();
+  const { controlsRef, gameSpeedRef, spaceshipLocationRef } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
     (spaceship: Container) => {
@@ -71,9 +71,13 @@ export function Spaceship() {
 
       const { left, right, up } = controlsRef.current;
       const rotationDirection = Number(right) - Number(left);
+      const speedMultiplier = gameSpeedRef.current.multiplier;
 
       headingRef.current +=
-        rotationDirection * SPACESHIP_ROTATION_SPEED * ticker.deltaTime;
+        rotationDirection *
+        SPACESHIP_BASE_ROTATION_SPEED *
+        ticker.deltaTime *
+        speedMultiplier;
       updateAnimation(headingRef.current);
 
       if (!up) {
@@ -84,13 +88,15 @@ export function Spaceship() {
       const nextX =
         spaceship.position.x +
         Math.sin(headingRef.current) *
-          SPACESHIP_MOVEMENT_SPEED *
-          ticker.deltaTime;
+          SPACESHIP_BASE_MOVEMENT_SPEED *
+          ticker.deltaTime *
+          speedMultiplier;
       const nextY =
         spaceship.position.y -
         Math.cos(headingRef.current) *
-          SPACESHIP_MOVEMENT_SPEED *
-          ticker.deltaTime;
+          SPACESHIP_BASE_MOVEMENT_SPEED *
+          ticker.deltaTime *
+          speedMultiplier;
 
       spaceship.position.set(
         clamp(
@@ -107,7 +113,7 @@ export function Spaceship() {
 
       syncSpaceshipLocation(spaceship);
     },
-    [controlsRef, syncSpaceshipLocation, updateAnimation]
+    [controlsRef, gameSpeedRef, syncSpaceshipLocation, updateAnimation]
   );
 
   useTick(updateTransform);

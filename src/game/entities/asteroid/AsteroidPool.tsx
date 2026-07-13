@@ -6,6 +6,7 @@ import type { Container, Pool, Ticker } from 'pixi.js';
 import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
+import { useGameContext } from '@/game/context';
 import {
   ASTEROID_SPAWN_CONFIG_BY_SIZE,
   ASTEROID_SPAWN_SIZES,
@@ -36,6 +37,7 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
+  const { gameSpeedRef } = useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
   const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
@@ -106,7 +108,7 @@ export function AsteroidPool() {
       ) {
         const asteroid = activeAsteroidsRef.current[index];
 
-        asteroid.update(ticker.deltaTime);
+        asteroid.update(ticker.deltaTime, gameSpeedRef.current.multiplier);
 
         if (
           asteroid.isOutsideBounds(
@@ -120,7 +122,7 @@ export function AsteroidPool() {
         }
       }
     },
-    [asteroidPool, spawnAsteroid]
+    [asteroidPool, gameSpeedRef, spawnAsteroid]
   );
 
   useEffect(() => {
