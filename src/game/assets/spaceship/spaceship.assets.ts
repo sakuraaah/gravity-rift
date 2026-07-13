@@ -11,20 +11,25 @@ import {
 
 const SPACESHIP_HULL_ATLAS_URL = '/assets/sprites/spaceship-hull.atlas.json';
 const SPACESHIP_FLAME_ATLAS_URL = '/assets/sprites/spaceship-flame.atlas.json';
+const SPACESHIP_PARTICLES_ATLAS_URL =
+  '/assets/sprites/spaceship-particles.atlas.json';
 
 export interface SpaceshipTextures {
   flame: DirectionalTextureFrames;
   hull: TextureFrames;
+  particles: DirectionalTextureFrames;
 }
 
 let spaceshipTextures: SpaceshipTextures | null = null;
 let spaceshipTexturesLoadPromise: Promise<SpaceshipTextures> | null = null;
 
 async function loadTextures() {
-  const [hullSpritesheet, flameSpritesheet] = await Promise.all([
-    loadSpritesheet(SPACESHIP_HULL_ATLAS_URL),
-    loadSpritesheet(SPACESHIP_FLAME_ATLAS_URL),
-  ]);
+  const [hullSpritesheet, flameSpritesheet, particlesSpritesheet] =
+    await Promise.all([
+      loadSpritesheet(SPACESHIP_HULL_ATLAS_URL),
+      loadSpritesheet(SPACESHIP_FLAME_ATLAS_URL),
+      loadSpritesheet(SPACESHIP_PARTICLES_ATLAS_URL),
+    ]);
 
   return {
     flame: DIRECTIONAL_FRAME_SUFFIXES.map((direction) =>
@@ -32,6 +37,12 @@ async function loadTextures() {
     ),
     hull: DIRECTIONAL_FRAME_SUFFIXES.map((direction) =>
       getSpritesheetTexture(hullSpritesheet, `ship_rot_deg_${direction}`)
+    ),
+    particles: DIRECTIONAL_FRAME_SUFFIXES.map((direction) =>
+      getSpritesheetAnimation(
+        particlesSpritesheet,
+        `engine_particles_deg_${direction}`
+      )
     ),
   };
 }

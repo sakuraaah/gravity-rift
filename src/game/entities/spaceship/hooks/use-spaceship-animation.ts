@@ -15,6 +15,7 @@ const FACING_ANGLE = FULL_ROTATION / SPACESHIP_FACING_COUNT;
 interface UseSpaceshipAnimationOptions {
   flameRef: RefObject<AnimatedSprite | null>;
   hullRef: RefObject<Sprite | null>;
+  particlesRef: RefObject<AnimatedSprite | null>;
 }
 
 function normalizeRotation(rotation: number) {
@@ -31,6 +32,7 @@ function getFacingIndex(rotation: number) {
 export function useSpaceshipAnimation({
   flameRef,
   hullRef,
+  particlesRef,
 }: UseSpaceshipAnimationOptions) {
   const textures = getLoadedSpaceshipTextures();
   const facingIndexRef = useRef(0);
@@ -39,8 +41,9 @@ export function useSpaceshipAnimation({
     (rotation: number) => {
       const hull = hullRef.current;
       const flame = flameRef.current;
+      const particles = particlesRef.current;
 
-      if (!hull || !flame) {
+      if (!hull || !flame || !particles) {
         return;
       }
 
@@ -51,21 +54,24 @@ export function useSpaceshipAnimation({
         hull.texture = textures.hull[facingIndex]!;
         flame.textures = textures.flame[facingIndex]!;
         flame.gotoAndPlay(flame.currentFrame % flame.totalFrames);
+        particles.textures = textures.particles[facingIndex]!;
+        particles.gotoAndPlay(particles.currentFrame % particles.totalFrames);
 
         const snappedHeading = facingIndex * FACING_ANGLE;
+        const flameX = -Math.sin(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
+        const flameY = Math.cos(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
 
-        flame.position.set(
-          -Math.sin(snappedHeading) * SPACESHIP_ENGINE_OFFSET,
-          Math.cos(snappedHeading) * SPACESHIP_ENGINE_OFFSET
-        );
+        flame.position.set(flameX, flameY);
+        particles.position.set(flameX, flameY);
       }
     },
-    [flameRef, hullRef, textures]
+    [flameRef, hullRef, particlesRef, textures]
   );
 
   return {
     flameTextures: textures.flame[0]!,
     hullTexture: textures.hull[0]!,
+    particlesTextures: textures.particles[0]!,
     updateAnimation,
   };
 }

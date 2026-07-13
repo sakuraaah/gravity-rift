@@ -1,11 +1,10 @@
-import { GAME_SCALE, GAME_SPEED_MULTIPLIER } from '@/game/constants';
+import {
+  GAME_LAYOUT,
+  GAME_SCALE,
+  GAME_SPEED_MULTIPLIER,
+} from '@/game/constants';
 
 const SPACESHIP_BASE_SIZE = 10;
-
-const SPACESHIP_BASE_INITIAL_POSITION = {
-  x: 88,
-  y: 88,
-} as const;
 
 const SPACESHIP_BASE_ROTATION_SPEED = 0.08;
 
@@ -17,10 +16,12 @@ export const SPACESHIP_SIZE = SPACESHIP_BASE_SIZE * GAME_SCALE;
 
 export const SPACESHIP_BOUNDARY_RADIUS = SPACESHIP_SIZE;
 
-export const SPACESHIP_INITIAL_POSITION = {
-  x: SPACESHIP_BASE_INITIAL_POSITION.x * GAME_SCALE,
-  y: SPACESHIP_BASE_INITIAL_POSITION.y * GAME_SCALE,
-};
+export function getSpaceshipInitialPosition() {
+  return {
+    x: GAME_LAYOUT.Width / 2,
+    y: GAME_LAYOUT.Height / 2,
+  };
+}
 
 export const SPACESHIP_ROTATION_SPEED =
   SPACESHIP_BASE_ROTATION_SPEED * GAME_SPEED_MULTIPLIER;
@@ -34,3 +35,5 @@ export const SPACESHIP_ENGINE_OFFSET =
 export const SPACESHIP_FACING_COUNT = 16;
 
 export const SPACESHIP_FLAME_ANIMATION_SPEED = 1 / 6;
+
+export const SPACESHIP_PARTICLES_ANIMATION_SPEED = 1 / 6;

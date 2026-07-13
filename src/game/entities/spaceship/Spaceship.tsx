@@ -4,7 +4,7 @@ import { useTick } from '@pixi/react';
 
 import type { AnimatedSprite, Container, Sprite, Ticker } from 'pixi.js';
 
-import { GAME_LAYOUT } from '@/game/constants';
+import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 import { useGameContext } from '@/game/context';
 import { clamp } from '@/game/utils';
 
@@ -12,9 +12,10 @@ import {
   SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_ENGINE_OFFSET,
   SPACESHIP_FLAME_ANIMATION_SPEED,
-  SPACESHIP_INITIAL_POSITION,
   SPACESHIP_MOVEMENT_SPEED,
+  SPACESHIP_PARTICLES_ANIMATION_SPEED,
   SPACESHIP_ROTATION_SPEED,
+  getSpaceshipInitialPosition,
 } from './constants';
 import { useSpaceshipAnimation } from './hooks';
 
@@ -22,13 +23,14 @@ export function Spaceship() {
   const spaceshipRef = useRef<Container>(null);
   const hullRef = useRef<Sprite>(null);
   const flameRef = useRef<AnimatedSprite>(null);
+  const particlesRef = useRef<AnimatedSprite>(null);
   const headingRef = useRef(0);
-  const { flameTextures, hullTexture, updateAnimation } = useSpaceshipAnimation(
-    {
+  const { flameTextures, hullTexture, particlesTextures, updateAnimation } =
+    useSpaceshipAnimation({
       flameRef,
       hullRef,
-    }
-  );
+      particlesRef,
+    });
   const { controlsRef, spaceshipLocationRef } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
@@ -47,10 +49,9 @@ export function Spaceship() {
         return;
       }
 
-      spaceship.position.set(
-        SPACESHIP_INITIAL_POSITION.x,
-        SPACESHIP_INITIAL_POSITION.y
-      );
+      const initialPosition = getSpaceshipInitialPosition();
+
+      spaceship.position.set(initialPosition.x, initialPosition.y);
       spaceship.rotation = 0;
       headingRef.current = 0;
 
@@ -114,6 +115,18 @@ export function Spaceship() {
   return (
     <pixiContainer ref={setSpaceshipRef} label="spaceship">
       <pixiAnimatedSprite
+        ref={particlesRef}
+        anchor={0.5}
+        animationSpeed={SPACESHIP_PARTICLES_ANIMATION_SPEED}
+        autoPlay
+        label="spaceship-engine-particles"
+        loop
+        roundPixels
+        scale={GAME_SCALE}
+        textures={particlesTextures}
+        y={SPACESHIP_ENGINE_OFFSET}
+      />
+      <pixiAnimatedSprite
         ref={flameRef}
         anchor={0.5}
         animationSpeed={SPACESHIP_FLAME_ANIMATION_SPEED}
@@ -121,6 +134,7 @@ export function Spaceship() {
         label="spaceship-engine-flame"
         loop
         roundPixels
+        scale={GAME_SCALE}
         textures={flameTextures}
         y={SPACESHIP_ENGINE_OFFSET}
       />
@@ -129,6 +143,7 @@ export function Spaceship() {
         anchor={0.5}
         label="spaceship-hull"
         roundPixels
+        scale={GAME_SCALE}
         texture={hullTexture}
       />
     </pixiContainer>

@@ -1,0 +1,1088 @@
+﻿{
+  "frames": {
+    "engine_particles_deg_000_0": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_000_1": {
+      "frame": {
+        "x": 17,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_000_2": {
+      "frame": {
+        "x": 34,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_000_3": {
+      "frame": {
+        "x": 51,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_000_4": {
+      "frame": {
+        "x": 68,
+        "y": 0,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_023_0": {
+      "frame": {
+        "x": 0,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_023_1": {
+      "frame": {
+        "x": 17,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_023_2": {
+      "frame": {
+        "x": 34,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_023_3": {
+      "frame": {
+        "x": 51,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_023_4": {
+      "frame": {
+        "x": 68,
+        "y": 17,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_045_0": {
+      "frame": {
+        "x": 0,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_045_1": {
+      "frame": {
+        "x": 17,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_045_2": {
+      "frame": {
+        "x": 34,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_045_3": {
+      "frame": {
+        "x": 51,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_045_4": {
+      "frame": {
+        "x": 68,
+        "y": 34,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_068_0": {
+      "frame": {
+        "x": 0,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_068_1": {
+      "frame": {
+        "x": 17,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_068_2": {
+      "frame": {
+        "x": 34,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_068_3": {
+      "frame": {
+        "x": 51,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_068_4": {
+      "frame": {
+        "x": 68,
+        "y": 51,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_090_0": {
+      "frame": {
+        "x": 0,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_090_1": {
+      "frame": {
+        "x": 17,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_090_2": {
+      "frame": {
+        "x": 34,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_090_3": {
+      "frame": {
+        "x": 51,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_090_4": {
+      "frame": {
+        "x": 68,
+        "y": 68,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_113_0": {
+      "frame": {
+        "x": 0,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_113_1": {
+      "frame": {
+        "x": 17,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_113_2": {
+      "frame": {
+        "x": 34,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_113_3": {
+      "frame": {
+        "x": 51,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_113_4": {
+      "frame": {
+        "x": 68,
+        "y": 85,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_135_0": {
+      "frame": {
+        "x": 0,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_135_1": {
+      "frame": {
+        "x": 17,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_135_2": {
+      "frame": {
+        "x": 34,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_135_3": {
+      "frame": {
+        "x": 51,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_135_4": {
+      "frame": {
+        "x": 68,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_158_0": {
+      "frame": {
+        "x": 0,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_158_1": {
+      "frame": {
+        "x": 17,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_158_2": {
+      "frame": {
+        "x": 34,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_158_3": {
+      "frame": {
+        "x": 51,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_158_4": {
+      "frame": {
+        "x": 68,
+        "y": 119,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_180_0": {
+      "frame": {
+        "x": 0,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_180_1": {
+      "frame": {
+        "x": 17,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_180_2": {
+      "frame": {
+        "x": 34,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_180_3": {
+      "frame": {
+        "x": 51,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_180_4": {
+      "frame": {
+        "x": 68,
+        "y": 136,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_203_0": {
+      "frame": {
+        "x": 0,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_203_1": {
+      "frame": {
+        "x": 17,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_203_2": {
+      "frame": {
+        "x": 34,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_203_3": {
+      "frame": {
+        "x": 51,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_203_4": {
+      "frame": {
+        "x": 68,
+        "y": 153,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_225_0": {
+      "frame": {
+        "x": 0,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_225_1": {
+      "frame": {
+        "x": 17,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_225_2": {
+      "frame": {
+        "x": 34,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_225_3": {
+      "frame": {
+        "x": 51,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_225_4": {
+      "frame": {
+        "x": 68,
+        "y": 170,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_248_0": {
+      "frame": {
+        "x": 0,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_248_1": {
+      "frame": {
+        "x": 17,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_248_2": {
+      "frame": {
+        "x": 34,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_248_3": {
+      "frame": {
+        "x": 51,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_248_4": {
+      "frame": {
+        "x": 68,
+        "y": 187,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_270_0": {
+      "frame": {
+        "x": 0,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_270_1": {
+      "frame": {
+        "x": 17,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_270_2": {
+      "frame": {
+        "x": 34,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_270_3": {
+      "frame": {
+        "x": 51,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_270_4": {
+      "frame": {
+        "x": 68,
+        "y": 204,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_293_0": {
+      "frame": {
+        "x": 0,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_293_1": {
+      "frame": {
+        "x": 17,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_293_2": {
+      "frame": {
+        "x": 34,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_293_3": {
+      "frame": {
+        "x": 51,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_293_4": {
+      "frame": {
+        "x": 68,
+        "y": 221,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_315_0": {
+      "frame": {
+        "x": 0,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_315_1": {
+      "frame": {
+        "x": 17,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_315_2": {
+      "frame": {
+        "x": 34,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_315_3": {
+      "frame": {
+        "x": 51,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_315_4": {
+      "frame": {
+        "x": 68,
+        "y": 238,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_338_0": {
+      "frame": {
+        "x": 0,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_338_1": {
+      "frame": {
+        "x": 17,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_338_2": {
+      "frame": {
+        "x": 34,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_338_3": {
+      "frame": {
+        "x": 51,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "engine_particles_deg_338_4": {
+      "frame": {
+        "x": 68,
+        "y": 255,
+        "w": 16,
+        "h": 16
+      },
+      "anchor": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
+  "animations": {
+    "engine_particles_deg_000": [
+      "engine_particles_deg_000_0",
+      "engine_particles_deg_000_1",
+      "engine_particles_deg_000_2",
+      "engine_particles_deg_000_3",
+      "engine_particles_deg_000_4"
+    ],
+    "engine_particles_deg_023": [
+      "engine_particles_deg_023_0",
+      "engine_particles_deg_023_1",
+      "engine_particles_deg_023_2",
+      "engine_particles_deg_023_3",
+      "engine_particles_deg_023_4"
+    ],
+    "engine_particles_deg_045": [
+      "engine_particles_deg_045_0",
+      "engine_particles_deg_045_1",
+      "engine_particles_deg_045_2",
+      "engine_particles_deg_045_3",
+      "engine_particles_deg_045_4"
+    ],
+    "engine_particles_deg_068": [
+      "engine_particles_deg_068_0",
+      "engine_particles_deg_068_1",
+      "engine_particles_deg_068_2",
+      "engine_particles_deg_068_3",
+      "engine_particles_deg_068_4"
+    ],
+    "engine_particles_deg_090": [
+      "engine_particles_deg_090_0",
+      "engine_particles_deg_090_1",
+      "engine_particles_deg_090_2",
+      "engine_particles_deg_090_3",
+      "engine_particles_deg_090_4"
+    ],
+    "engine_particles_deg_113": [
+      "engine_particles_deg_113_0",
+      "engine_particles_deg_113_1",
+      "engine_particles_deg_113_2",
+      "engine_particles_deg_113_3",
+      "engine_particles_deg_113_4"
+    ],
+    "engine_particles_deg_135": [
+      "engine_particles_deg_135_0",
+      "engine_particles_deg_135_1",
+      "engine_particles_deg_135_2",
+      "engine_particles_deg_135_3",
+      "engine_particles_deg_135_4"
+    ],
+    "engine_particles_deg_158": [
+      "engine_particles_deg_158_0",
+      "engine_particles_deg_158_1",
+      "engine_particles_deg_158_2",
+      "engine_particles_deg_158_3",
+      "engine_particles_deg_158_4"
+    ],
+    "engine_particles_deg_180": [
+      "engine_particles_deg_180_0",
+      "engine_particles_deg_180_1",
+      "engine_particles_deg_180_2",
+      "engine_particles_deg_180_3",
+      "engine_particles_deg_180_4"
+    ],
+    "engine_particles_deg_203": [
+      "engine_particles_deg_203_0",
+      "engine_particles_deg_203_1",
+      "engine_particles_deg_203_2",
+      "engine_particles_deg_203_3",
+      "engine_particles_deg_203_4"
+    ],
+    "engine_particles_deg_225": [
+      "engine_particles_deg_225_0",
+      "engine_particles_deg_225_1",
+      "engine_particles_deg_225_2",
+      "engine_particles_deg_225_3",
+      "engine_particles_deg_225_4"
+    ],
+    "engine_particles_deg_248": [
+      "engine_particles_deg_248_0",
+      "engine_particles_deg_248_1",
+      "engine_particles_deg_248_2",
+      "engine_particles_deg_248_3",
+      "engine_particles_deg_248_4"
+    ],
+    "engine_particles_deg_270": [
+      "engine_particles_deg_270_0",
+      "engine_particles_deg_270_1",
+      "engine_particles_deg_270_2",
+      "engine_particles_deg_270_3",
+      "engine_particles_deg_270_4"
+    ],
+    "engine_particles_deg_293": [
+      "engine_particles_deg_293_0",
+      "engine_particles_deg_293_1",
+      "engine_particles_deg_293_2",
+      "engine_particles_deg_293_3",
+      "engine_particles_deg_293_4"
+    ],
+    "engine_particles_deg_315": [
+      "engine_particles_deg_315_0",
+      "engine_particles_deg_315_1",
+      "engine_particles_deg_315_2",
+      "engine_particles_deg_315_3",
+      "engine_particles_deg_315_4"
+    ],
+    "engine_particles_deg_338": [
+      "engine_particles_deg_338_0",
+      "engine_particles_deg_338_1",
+      "engine_particles_deg_338_2",
+      "engine_particles_deg_338_3",
+      "engine_particles_deg_338_4"
+    ]
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "engine_particles-1x.png",
+    "scale": "1",
+    "size": {
+      "w": 84,
+      "h": 271
+    }
+  }
+}
