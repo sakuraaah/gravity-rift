@@ -4,12 +4,9 @@ import {
   PlayerControlByKey,
   PlayerControlByMouseButton,
 } from './playerControls.constants';
-import type {
-  PlayerControlCounts,
-  PlayerControls,
-} from './playerControls.types';
+import type { PlayerActionCounts, PlayerActions } from './playerControls.types';
 
-function createDefaultPlayerControls(): PlayerControls {
+function createDefaultPlayerActions(): PlayerActions {
   return {
     fire: false,
     left: false,
@@ -18,7 +15,7 @@ function createDefaultPlayerControls(): PlayerControls {
   };
 }
 
-function createDefaultPlayerControlCounts(): PlayerControlCounts {
+function createDefaultPlayerActionCounts(): PlayerActionCounts {
   return {
     fire: 0,
     left: 0,
@@ -27,9 +24,9 @@ function createDefaultPlayerControlCounts(): PlayerControlCounts {
   };
 }
 
-function createPlayerControlsFromCounts(
-  controlCounts: PlayerControlCounts
-): PlayerControls {
+function createPlayerActionsFromCounts(
+  controlCounts: PlayerActionCounts
+): PlayerActions {
   return {
     fire: controlCounts.fire > 0,
     left: controlCounts.left > 0,
@@ -39,18 +36,16 @@ function createPlayerControlsFromCounts(
 }
 
 export function usePlayerControls() {
-  const controlsRef = useRef<PlayerControls>(createDefaultPlayerControls());
-  const controlCountsRef = useRef<PlayerControlCounts>(
-    createDefaultPlayerControlCounts()
+  const controlsRef = useRef<PlayerActions>(createDefaultPlayerActions());
+  const controlCountsRef = useRef<PlayerActionCounts>(
+    createDefaultPlayerActionCounts()
   );
-  const activeInputControlsRef = useRef(
-    new Map<string, keyof PlayerControls>()
-  );
+  const activeInputControlsRef = useRef(new Map<string, keyof PlayerActions>());
 
   useEffect(() => {
     function setControlInputState(
       inputId: string,
-      control: keyof PlayerControls,
+      control: keyof PlayerActions,
       isPressed: boolean
     ) {
       if (isPressed) {
@@ -74,7 +69,7 @@ export function usePlayerControls() {
         );
       }
 
-      controlsRef.current = createPlayerControlsFromCounts(
+      controlsRef.current = createPlayerActionsFromCounts(
         controlCountsRef.current
       );
     }
@@ -125,8 +120,8 @@ export function usePlayerControls() {
 
     function handleWindowBlur() {
       activeInputControlsRef.current.clear();
-      controlCountsRef.current = createDefaultPlayerControlCounts();
-      controlsRef.current = createDefaultPlayerControls();
+      controlCountsRef.current = createDefaultPlayerActionCounts();
+      controlsRef.current = createDefaultPlayerActions();
     }
 
     window.addEventListener('keydown', handleKeyDown);

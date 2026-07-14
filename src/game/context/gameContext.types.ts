@@ -1,6 +1,6 @@
 import type { ReactNode, RefObject } from 'react';
 
-import type { GameSpeed, PlayerControls } from '@/game/systems';
+import type { GameSpeed, PlayerActions } from '@/game/systems';
 
 export type SpaceshipLocation = {
   facingIndex: number;
@@ -10,7 +10,7 @@ export type SpaceshipLocation = {
 };
 
 export type GameContextValue = {
-  controlsRef: RefObject<PlayerControls>;
+  controlsRef: RefObject<PlayerActions>;
   gameSpeedRef: RefObject<GameSpeed>;
   updateGameSpeed: (newSpeed: number) => void;
   spaceshipLocationRef: RefObject<SpaceshipLocation>;

@@ -1,5 +1,4 @@
-import { ASTEROID_SIZE } from '@/game/entities/asteroid/asteroid.enums';
-import type { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
+import { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 
 import type {
   AsteroidSpawnConfig,
@@ -14,16 +13,16 @@ export const ASTEROID_SPAWN_SIDE_WEIGHTS: AsteroidSpawnSideWeights = {
 };
 
 export const ASTEROID_SPAWN_SIZES = [
-  ASTEROID_SIZE.Small,
-  ASTEROID_SIZE.Medium,
-  ASTEROID_SIZE.Large,
+  AsteroidSize.Small,
+  AsteroidSize.Medium,
+  AsteroidSize.Large,
 ] as const;
 
 export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
   AsteroidSize,
   AsteroidSpawnConfig
 > = {
-  [ASTEROID_SIZE.Small]: {
+  [AsteroidSize.Small]: {
     initialDelayMs: 1200,
     intervalJitterRatio: 0.35,
     maxDeviationDegrees: 10,
@@ -33,7 +32,7 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
     minIntervalMs: 1900,
     minSpawnDistance: 42,
   },
-  [ASTEROID_SIZE.Medium]: {
+  [AsteroidSize.Medium]: {
     initialDelayMs: 2400,
     intervalJitterRatio: 0.3,
     maxDeviationDegrees: 15,
@@ -43,7 +42,7 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
     minIntervalMs: 3600,
     minSpawnDistance: 54,
   },
-  [ASTEROID_SIZE.Large]: {
+  [AsteroidSize.Large]: {
     initialDelayMs: 4200,
     intervalJitterRatio: 0.25,
     maxDeviationDegrees: 20,

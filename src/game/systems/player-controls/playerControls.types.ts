@@ -1,8 +1,8 @@
-export type PlayerControls = {
+export type PlayerActions = {
   fire: boolean;
   left: boolean;
   right: boolean;
   up: boolean;
 };
 
-export type PlayerControlCounts = Record<keyof PlayerControls, number>;
+export type PlayerActionCounts = Record<keyof PlayerActions, number>;

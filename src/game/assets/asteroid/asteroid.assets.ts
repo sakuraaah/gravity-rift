@@ -1,7 +1,6 @@
 import { Assets, Rectangle, Texture } from 'pixi.js';
 
-import { ASTEROID_SIZE } from '@/game/entities/asteroid/asteroid.enums';
-import type { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
+import { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 
 type AsteroidTextureConfig = {
   frameCount: number;
@@ -13,17 +12,17 @@ const ASTEROID_TEXTURE_CONFIG_BY_SIZE: Record<
   AsteroidSize,
   AsteroidTextureConfig
 > = {
-  [ASTEROID_SIZE.Large]: {
+  [AsteroidSize.Large]: {
     frameCount: 4,
     frameSize: 24,
     url: '/assets/sprites/asteroid_lg-1x.png',
   },
-  [ASTEROID_SIZE.Medium]: {
+  [AsteroidSize.Medium]: {
     frameCount: 4,
     frameSize: 16,
     url: '/assets/sprites/asteroid_md-1x.png',
   },
-  [ASTEROID_SIZE.Small]: {
+  [AsteroidSize.Small]: {
     frameCount: 3,
     frameSize: 8,
     url: '/assets/sprites/asteroid_sm-1x.png',
@@ -55,7 +54,7 @@ function createStaticTextures(
 }
 
 async function loadTextures(): Promise<AsteroidTextures> {
-  const sizes = Object.values(ASTEROID_SIZE);
+  const sizes = Object.values(AsteroidSize);
   const sourceTextures = await Promise.all(
     sizes.map((size) =>
       Assets.load<Texture>(ASTEROID_TEXTURE_CONFIG_BY_SIZE[size].url)

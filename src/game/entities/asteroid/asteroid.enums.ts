@@ -1,7 +1,7 @@
-export const ASTEROID_SIZE = {
+export const AsteroidSize = {
   Large: 'large',
   Medium: 'medium',
   Small: 'small',
 } as const;
 
-export type AsteroidSize = (typeof ASTEROID_SIZE)[keyof typeof ASTEROID_SIZE];
+export type AsteroidSize = (typeof AsteroidSize)[keyof typeof AsteroidSize];

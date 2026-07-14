@@ -1,7 +1,7 @@
 import { PlayerControl, PlayerMouseButton } from './playerControls.enums';
-import type { PlayerControls } from './playerControls.types';
+import type { PlayerActions } from './playerControls.types';
 
-export const PlayerControlByKey: Partial<Record<string, keyof PlayerControls>> =
+export const PlayerControlByKey: Partial<Record<string, keyof PlayerActions>> =
   {
     [PlayerControl.Fire]: 'fire',
     [PlayerControl.MoveUpPrimary]: 'up',
@@ -13,7 +13,7 @@ export const PlayerControlByKey: Partial<Record<string, keyof PlayerControls>> =
   };
 
 export const PlayerControlByMouseButton: Partial<
-  Record<number, keyof PlayerControls>
+  Record<number, keyof PlayerActions>
 > = {
   [PlayerMouseButton.Fire]: 'fire',
 };
