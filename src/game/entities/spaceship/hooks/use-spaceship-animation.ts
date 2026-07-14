@@ -4,29 +4,13 @@ import type { RefObject } from 'react';
 import type { AnimatedSprite, Sprite } from 'pixi.js';
 
 import { getLoadedSpaceshipTextures } from '@/game/assets';
-import {
-  SPACESHIP_ENGINE_OFFSET,
-  SPACESHIP_FACING_COUNT,
-} from '@/game/entities/spaceship/constants';
-
-const FULL_ROTATION = Math.PI * 2;
-const FACING_ANGLE = FULL_ROTATION / SPACESHIP_FACING_COUNT;
+import { SPACESHIP_ENGINE_OFFSET } from '@/game/entities/spaceship/constants';
+import { DIRECTIONAL_FACING_ANGLE } from '@/game/utils';
 
 interface UseSpaceshipAnimationOptions {
   flameRef: RefObject<AnimatedSprite | null>;
   hullRef: RefObject<Sprite | null>;
   particlesRef: RefObject<AnimatedSprite | null>;
-}
-
-function normalizeRotation(rotation: number) {
-  return ((rotation % FULL_ROTATION) + FULL_ROTATION) % FULL_ROTATION;
-}
-
-function getFacingIndex(rotation: number) {
-  return (
-    Math.round(normalizeRotation(rotation) / FACING_ANGLE) %
-    SPACESHIP_FACING_COUNT
-  );
 }
 
 export function useSpaceshipAnimation({
@@ -38,7 +22,7 @@ export function useSpaceshipAnimation({
   const facingIndexRef = useRef<number | null>(null);
 
   const updateAnimation = useCallback(
-    (rotation: number) => {
+    (facingIndex: number) => {
       const hull = hullRef.current;
       const flame = flameRef.current;
       const particles = particlesRef.current;
@@ -46,8 +30,6 @@ export function useSpaceshipAnimation({
       if (!hull || !flame || !particles) {
         return;
       }
-
-      const facingIndex = getFacingIndex(rotation);
 
       if (facingIndex !== facingIndexRef.current) {
         facingIndexRef.current = facingIndex;
@@ -57,7 +39,7 @@ export function useSpaceshipAnimation({
         particles.textures = textures.particles[facingIndex]!;
         particles.gotoAndPlay(particles.currentFrame % particles.totalFrames);
 
-        const snappedHeading = facingIndex * FACING_ANGLE;
+        const snappedHeading = facingIndex * DIRECTIONAL_FACING_ANGLE;
         const flameX = -Math.sin(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
         const flameY = Math.cos(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
 

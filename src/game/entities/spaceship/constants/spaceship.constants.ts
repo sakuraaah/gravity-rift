@@ -22,8 +22,6 @@ export function getSpaceshipInitialPosition() {
 export const SPACESHIP_ENGINE_OFFSET =
   SPACESHIP_BASE_ENGINE_OFFSET * GAME_SCALE;
 
-export const SPACESHIP_FACING_COUNT = 16;
-
 export const SPACESHIP_FLAME_ANIMATION_SPEED = 1 / 6;
 
 export const SPACESHIP_PARTICLES_ANIMATION_SPEED = 1 / 6;

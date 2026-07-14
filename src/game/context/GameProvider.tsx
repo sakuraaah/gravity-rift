@@ -15,6 +15,7 @@ import type {
 
 function createInitialSpaceshipLocation(): SpaceshipLocation {
   return {
+    facingIndex: 0,
     x: 0,
     y: 0,
     rotation: 0,

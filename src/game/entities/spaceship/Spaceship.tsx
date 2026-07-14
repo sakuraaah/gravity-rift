@@ -6,7 +6,7 @@ import type { AnimatedSprite, Container, Sprite, Ticker } from 'pixi.js';
 
 import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 import { useGameContext } from '@/game/context';
-import { clamp } from '@/game/utils';
+import { clamp, getFacingIndex } from '@/game/utils';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
@@ -34,10 +34,11 @@ export function Spaceship() {
   const { controlsRef, gameSpeedRef, spaceshipLocationRef } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
-    (spaceship: Container) => {
+    (spaceship: Container, facingIndex: number) => {
       spaceshipLocationRef.current.x = spaceship.position.x;
       spaceshipLocationRef.current.y = spaceship.position.y;
       spaceshipLocationRef.current.rotation = headingRef.current;
+      spaceshipLocationRef.current.facingIndex = facingIndex;
     },
     [spaceshipLocationRef]
   );
@@ -56,7 +57,7 @@ export function Spaceship() {
       headingRef.current = 0;
 
       spaceshipRef.current = spaceship;
-      syncSpaceshipLocation(spaceship);
+      syncSpaceshipLocation(spaceship, getFacingIndex(headingRef.current));
     },
     [syncSpaceshipLocation]
   );
@@ -78,40 +79,39 @@ export function Spaceship() {
         SPACESHIP_BASE_ROTATION_SPEED *
         ticker.deltaTime *
         speedMultiplier;
-      updateAnimation(headingRef.current);
 
-      if (!up) {
-        syncSpaceshipLocation(spaceship);
-        return;
+      if (up) {
+        const nextX =
+          spaceship.position.x +
+          Math.sin(headingRef.current) *
+            SPACESHIP_BASE_MOVEMENT_SPEED *
+            ticker.deltaTime *
+            speedMultiplier;
+        const nextY =
+          spaceship.position.y -
+          Math.cos(headingRef.current) *
+            SPACESHIP_BASE_MOVEMENT_SPEED *
+            ticker.deltaTime *
+            speedMultiplier;
+
+        spaceship.position.set(
+          clamp(
+            nextX,
+            SPACESHIP_BOUNDARY_RADIUS,
+            GAME_LAYOUT.Width - SPACESHIP_BOUNDARY_RADIUS
+          ),
+          clamp(
+            nextY,
+            SPACESHIP_BOUNDARY_RADIUS,
+            GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
+          )
+        );
       }
 
-      const nextX =
-        spaceship.position.x +
-        Math.sin(headingRef.current) *
-          SPACESHIP_BASE_MOVEMENT_SPEED *
-          ticker.deltaTime *
-          speedMultiplier;
-      const nextY =
-        spaceship.position.y -
-        Math.cos(headingRef.current) *
-          SPACESHIP_BASE_MOVEMENT_SPEED *
-          ticker.deltaTime *
-          speedMultiplier;
+      const facingIndex = getFacingIndex(headingRef.current);
 
-      spaceship.position.set(
-        clamp(
-          nextX,
-          SPACESHIP_BOUNDARY_RADIUS,
-          GAME_LAYOUT.Width - SPACESHIP_BOUNDARY_RADIUS
-        ),
-        clamp(
-          nextY,
-          SPACESHIP_BOUNDARY_RADIUS,
-          GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
-        )
-      );
-
-      syncSpaceshipLocation(spaceship);
+      updateAnimation(facingIndex);
+      syncSpaceshipLocation(spaceship, facingIndex);
     },
     [controlsRef, gameSpeedRef, syncSpaceshipLocation, updateAnimation]
   );
