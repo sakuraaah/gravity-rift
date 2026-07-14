@@ -124,7 +124,6 @@ export function Spaceship() {
         ref={particlesRef}
         anchor={0.5}
         animationSpeed={SPACESHIP_PARTICLES_ANIMATION_SPEED}
-        autoPlay
         label="spaceship-engine-particles"
         loop
         roundPixels
@@ -136,7 +135,6 @@ export function Spaceship() {
         ref={flameRef}
         anchor={0.5}
         animationSpeed={SPACESHIP_FLAME_ANIMATION_SPEED}
-        autoPlay
         label="spaceship-engine-flame"
         loop
         roundPixels

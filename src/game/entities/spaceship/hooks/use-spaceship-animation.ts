@@ -35,7 +35,7 @@ export function useSpaceshipAnimation({
   particlesRef,
 }: UseSpaceshipAnimationOptions) {
   const textures = getLoadedSpaceshipTextures();
-  const facingIndexRef = useRef(0);
+  const facingIndexRef = useRef<number | null>(null);
 
   const updateAnimation = useCallback(
     (rotation: number) => {
