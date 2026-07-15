@@ -4,9 +4,13 @@ import { useTick } from '@pixi/react';
 
 import type { AnimatedSprite, Container, Sprite, Ticker } from 'pixi.js';
 
+import { Polygon } from 'check2d';
+
 import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 import { useGameContext } from '@/game/context';
-import { clamp, getFacingIndex } from '@/game/utils';
+import { CollisionKind, scaleHitboxPoints } from '@/game/systems';
+import type { CollisionParticipant } from '@/game/systems';
+import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
@@ -14,12 +18,16 @@ import {
   SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_ENGINE_OFFSET,
   SPACESHIP_FLAME_ANIMATION_SPEED,
+  SPACESHIP_HITBOX_LOCAL_POINTS,
   SPACESHIP_PARTICLES_ANIMATION_SPEED,
   getSpaceshipInitialPosition,
 } from './constants';
 import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
+  const spaceshipColliderRef = useRef<Polygon<CollisionParticipant> | null>(
+    null
+  );
   const spaceshipRef = useRef<Container>(null);
   const hullRef = useRef<Sprite>(null);
   const flameRef = useRef<AnimatedSprite>(null);
@@ -31,7 +39,8 @@ export function Spaceship() {
       hullRef,
       particlesRef,
     });
-  const { controlsRef, gameSpeedRef, spaceshipLocationRef } = useGameContext();
+  const { collisionWorldRef, controlsRef, gameSpeedRef, spaceshipLocationRef } =
+    useGameContext();
 
   const syncSpaceshipLocation = useCallback(
     (spaceship: Container, facingIndex: number) => {
@@ -46,6 +55,13 @@ export function Spaceship() {
   const setSpaceshipRef = useCallback(
     (spaceship: Container | null) => {
       if (!spaceship) {
+        const collider = spaceshipColliderRef.current;
+
+        if (collider) {
+          collisionWorldRef.current.unregister(collider);
+          spaceshipColliderRef.current = null;
+        }
+
         spaceshipRef.current = null;
         return;
       }
@@ -56,10 +72,41 @@ export function Spaceship() {
       spaceship.rotation = 0;
       headingRef.current = 0;
 
+      const facingIndex = getFacingIndex(headingRef.current);
+      const collider = new Polygon<CollisionParticipant>(
+        initialPosition,
+        scaleHitboxPoints(SPACESHIP_HITBOX_LOCAL_POINTS, GAME_SCALE)
+      );
+
+      spaceshipColliderRef.current = collisionWorldRef.current.register(
+        collider,
+        {
+          id: 'spaceship',
+          kind: CollisionKind.Spaceship,
+        }
+      );
+
       spaceshipRef.current = spaceship;
-      syncSpaceshipLocation(spaceship, getFacingIndex(headingRef.current));
+      syncSpaceshipLocation(spaceship, facingIndex);
     },
-    [syncSpaceshipLocation]
+    [collisionWorldRef, syncSpaceshipLocation]
+  );
+
+  const syncSpaceshipCollider = useCallback(
+    (spaceship: Container, facingIndex: number) => {
+      const collider = spaceshipColliderRef.current;
+
+      if (!collider) {
+        return;
+      }
+
+      collisionWorldRef.current.sync(collider, {
+        angle: facingIndex * DIRECTIONAL_FACING_ANGLE,
+        x: spaceship.position.x,
+        y: spaceship.position.y,
+      });
+    },
+    [collisionWorldRef]
   );
 
   const updateTransform = useCallback(
@@ -111,9 +158,16 @@ export function Spaceship() {
       const facingIndex = getFacingIndex(headingRef.current);
 
       updateAnimation(facingIndex);
+      syncSpaceshipCollider(spaceship, facingIndex);
       syncSpaceshipLocation(spaceship, facingIndex);
     },
-    [controlsRef, gameSpeedRef, syncSpaceshipLocation, updateAnimation]
+    [
+      controlsRef,
+      gameSpeedRef,
+      syncSpaceshipCollider,
+      syncSpaceshipLocation,
+      updateAnimation,
+    ]
   );
 
   useTick(updateTransform);

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react';
 
 import {
+  CollisionWorld,
   createInitialGameSpeed,
   updateGameSpeed as updateGameSpeedValue,
   usePlayerControls,
@@ -23,6 +24,7 @@ function createInitialSpaceshipLocation(): SpaceshipLocation {
 }
 
 export function GameProvider({ children }: GameProviderProps) {
+  const collisionWorldRef = useRef(new CollisionWorld());
   const controlsRef = usePlayerControls();
   const gameSpeedRef = useRef(createInitialGameSpeed());
   const spaceshipLocationRef = useRef<SpaceshipLocation>(
@@ -34,12 +36,19 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const gameContextValue = useMemo<GameContextValue>(
     () => ({
+      collisionWorldRef,
       controlsRef,
       gameSpeedRef,
       updateGameSpeed,
       spaceshipLocationRef,
     }),
-    [controlsRef, gameSpeedRef, spaceshipLocationRef, updateGameSpeed]
+    [
+      collisionWorldRef,
+      controlsRef,
+      gameSpeedRef,
+      spaceshipLocationRef,
+      updateGameSpeed,
+    ]
   );
 
   return (
