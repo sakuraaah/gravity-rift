@@ -1,11 +1,18 @@
 import { Sprite, Texture } from 'pixi.js';
 
+import { Circle } from 'check2d';
+
 import { getLoadedAsteroidTextures } from '@/game/assets';
 import { GAME_SCALE } from '@/game/constants';
+import { CollisionKind } from '@/game/systems';
+import type { CollisionParticipant, CollisionWorld } from '@/game/systems';
 import type { Vector2 } from '@/game/utils';
 import { randomInteger } from '@/game/utils';
 
-import { ASTEROID_INITIAL_SPAWN } from './asteroid.constants';
+import {
+  ASTEROID_HITBOX_RADIUS_BY_SIZE,
+  ASTEROID_INITIAL_SPAWN,
+} from './asteroid.constants';
 import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
@@ -13,6 +20,10 @@ let asteroidViewId = 0;
 
 export class Asteroid extends Sprite {
   public isActive = false;
+
+  private readonly collider: Circle<CollisionParticipant>;
+
+  private colliderSize: AsteroidSize | null = null;
 
   private hasEnteredBounds = false;
 
@@ -26,6 +37,13 @@ export class Asteroid extends Sprite {
     this.anchor.set(0.5);
     this.roundPixels = true;
     this.visible = false;
+
+    // The collider uses a unit radius. Its scale becomes the hitbox radius for
+    // the active asteroid size when the pooled object is initialized.
+    this.collider = new Circle<CollisionParticipant>(
+      ASTEROID_INITIAL_SPAWN.location,
+      1
+    );
   }
 
   public init(data?: AsteroidSpawnData) {
@@ -34,6 +52,7 @@ export class Asteroid extends Sprite {
     this.position.set(spawnData.location.x, spawnData.location.y);
     this.velocity = { ...spawnData.velocity };
     this.hasEnteredBounds = false;
+    this.syncColliderSize(spawnData.size);
     this.applyTexture(spawnData.size);
     this.visible = true;
     this.isActive = true;
@@ -44,6 +63,26 @@ export class Asteroid extends Sprite {
       this.position.x + this.velocity.x * deltaTime * speedMultiplier,
       this.position.y + this.velocity.y * deltaTime * speedMultiplier
     );
+  }
+
+  public registerCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.register(this.collider, {
+      id: this.label,
+      kind: CollisionKind.Asteroid,
+    });
+
+    this.syncCollider(collisionWorld);
+  }
+
+  public syncCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.sync(this.collider, {
+      x: this.position.x,
+      y: this.position.y,
+    });
+  }
+
+  public unregisterCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.unregister(this.collider);
   }
 
   public isOutsideBounds(width: number, height: number, margin: number) {
@@ -86,5 +125,14 @@ export class Asteroid extends Sprite {
 
     this.texture = textures[randomInteger(textures.length)];
     this.scale.set(GAME_SCALE);
+  }
+
+  private syncColliderSize(size: AsteroidSize) {
+    if (this.colliderSize === size) {
+      return;
+    }
+
+    this.collider.setScale(ASTEROID_HITBOX_RADIUS_BY_SIZE[size]);
+    this.colliderSize = size;
   }
 }

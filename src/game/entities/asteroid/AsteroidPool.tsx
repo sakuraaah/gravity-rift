@@ -37,7 +37,7 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
-  const { gameSpeedRef } = useGameContext();
+  const { collisionWorldRef, gameSpeedRef } = useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
   const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
@@ -57,17 +57,21 @@ export function AsteroidPool() {
       }
 
       const asteroid = asteroidPool.get(spawnData);
+      const collisionWorld = collisionWorldRef.current;
 
+      asteroid.registerCollider(collisionWorld);
       asteroidLayer.addChild(asteroid);
       activeAsteroidsRef.current.push(asteroid);
 
       return true;
     },
-    [asteroidPool]
+    [asteroidPool, collisionWorldRef]
   );
 
   const updateAsteroids = useCallback(
     (ticker: Ticker) => {
+      const collisionWorld = collisionWorldRef.current;
+
       ASTEROID_SPAWN_SIZES.forEach((size) => {
         const nextDelay = spawnDelaysRef.current[size] - ticker.deltaMS;
 
@@ -117,24 +121,31 @@ export function AsteroidPool() {
             ASTEROID_DESPAWN_MARGIN
           )
         ) {
+          asteroid.unregisterCollider(collisionWorld);
           asteroidPool.return(asteroid);
           activeAsteroidsRef.current.splice(index, 1);
+          continue;
         }
+
+        asteroid.syncCollider(collisionWorld);
       }
     },
-    [asteroidPool, gameSpeedRef, spawnAsteroid]
+    [asteroidPool, collisionWorldRef, gameSpeedRef, spawnAsteroid]
   );
 
   useEffect(() => {
+    const collisionWorld = collisionWorldRef.current;
+
     return () => {
       activeAsteroidsRef.current.forEach((asteroid) => {
+        asteroid.unregisterCollider(collisionWorld);
         asteroidPool.return(asteroid);
       });
       activeAsteroidsRef.current = [];
 
       asteroidPool.clear();
     };
-  }, [asteroidPool]);
+  }, [asteroidPool, collisionWorldRef]);
 
   useTick(updateAsteroids);
 
