@@ -1,9 +1,14 @@
 import { Container, Graphics } from 'pixi.js';
 
+import { Circle } from 'check2d';
+
+import { CollisionKind } from '@/game/systems';
+import type { CollisionParticipant, CollisionWorld } from '@/game/systems';
 import type { Vector2 } from '@/game/utils';
 
 import {
   BULLET_COLOR,
+  BULLET_HITBOX_RADIUS,
   BULLET_INITIAL_LOCATION,
   BULLET_RADIUS,
 } from './bullet.constants';
@@ -14,6 +19,8 @@ let bulletViewId = 0;
 export class Bullet extends Container {
   public isActive = false;
 
+  private readonly collider: Circle<CollisionParticipant>;
+
   private velocity: Vector2 = { x: 0, y: 0 };
 
   public constructor() {
@@ -22,6 +29,11 @@ export class Bullet extends Container {
     this.label = `bullet-${bulletViewId}`;
     bulletViewId += 1;
     this.visible = false;
+
+    this.collider = new Circle<CollisionParticipant>(
+      BULLET_INITIAL_LOCATION,
+      BULLET_HITBOX_RADIUS
+    );
 
     const graphics = new Graphics();
 
@@ -48,6 +60,26 @@ export class Bullet extends Container {
       this.position.x + this.velocity.x * deltaTime * speedMultiplier,
       this.position.y + this.velocity.y * deltaTime * speedMultiplier
     );
+  }
+
+  public registerCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.register(this.collider, {
+      id: this.label,
+      kind: CollisionKind.Bullet,
+    });
+
+    this.syncCollider(collisionWorld);
+  }
+
+  public syncCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.sync(this.collider, {
+      x: this.position.x,
+      y: this.position.y,
+    });
+  }
+
+  public unregisterCollider(collisionWorld: CollisionWorld) {
+    collisionWorld.unregister(this.collider);
   }
 
   public isOutsideBounds(width: number, height: number, margin: number) {

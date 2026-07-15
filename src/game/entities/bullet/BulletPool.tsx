@@ -17,7 +17,8 @@ import {
 import type { BulletSpawnData } from './bullet.types';
 
 export function BulletPool() {
-  const { controlsRef, gameSpeedRef, spaceshipLocationRef } = useGameContext();
+  const { collisionWorldRef, controlsRef, gameSpeedRef, spaceshipLocationRef } =
+    useGameContext();
   const bulletLayerRef = useRef<Container>(null);
   const activeBulletsRef = useRef<Bullet[]>([]);
   const lastBulletFiredAtRef = useRef<number | null>(null);
@@ -33,6 +34,7 @@ export function BulletPool() {
       return false;
     }
 
+    const collisionWorld = collisionWorldRef.current;
     const { x, y, rotation } = spaceshipLocationRef.current;
     const velocity = {
       x: Math.sin(rotation) * BULLET_BASE_MOVEMENT_SPEED,
@@ -47,14 +49,17 @@ export function BulletPool() {
       velocity,
     });
 
+    bullet.registerCollider(collisionWorld);
     bulletLayer.addChild(bullet);
     activeBulletsRef.current.push(bullet);
 
     return true;
-  }, [bulletPool, spaceshipLocationRef]);
+  }, [bulletPool, collisionWorldRef, spaceshipLocationRef]);
 
   const updateBullets = useCallback(
     (ticker: Ticker) => {
+      const collisionWorld = collisionWorldRef.current;
+
       for (
         let index = activeBulletsRef.current.length - 1;
         index >= 0;
@@ -71,9 +76,13 @@ export function BulletPool() {
             BULLET_DESPAWN_MARGIN
           )
         ) {
+          bullet.unregisterCollider(collisionWorld);
           bulletPool.return(bullet);
           activeBulletsRef.current.splice(index, 1);
+          continue;
         }
+
+        bullet.syncCollider(collisionWorld);
       }
 
       const isFirePressed = controlsRef.current.fire;
@@ -97,19 +106,22 @@ export function BulletPool() {
         }
       }
     },
-    [bulletPool, controlsRef, gameSpeedRef, spawnBullet]
+    [bulletPool, collisionWorldRef, controlsRef, gameSpeedRef, spawnBullet]
   );
 
   useEffect(() => {
+    const collisionWorld = collisionWorldRef.current;
+
     return () => {
       activeBulletsRef.current.forEach((bullet) => {
+        bullet.unregisterCollider(collisionWorld);
         bulletPool.return(bullet);
       });
       activeBulletsRef.current = [];
 
       bulletPool.clear();
     };
-  }, [bulletPool]);
+  }, [bulletPool, collisionWorldRef]);
 
   useTick(updateBullets);
 

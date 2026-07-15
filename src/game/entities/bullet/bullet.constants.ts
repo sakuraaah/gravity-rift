@@ -2,6 +2,8 @@ import { GAME_SCALE } from '@/game/constants';
 
 export const BULLET_RADIUS = 1 * GAME_SCALE;
 
+export const BULLET_HITBOX_RADIUS = BULLET_RADIUS * 1.5;
+
 export const BULLET_COLOR = 0x4fd6ff;
 
 export const BULLET_FIRE_DEBOUNCE_MS = 250;
