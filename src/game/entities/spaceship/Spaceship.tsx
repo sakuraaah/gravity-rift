@@ -52,16 +52,61 @@ export function Spaceship() {
     [spaceshipLocationRef]
   );
 
+  const unregisterCollider = useCallback(() => {
+    const collider = spaceshipColliderRef.current;
+
+    if (!collider) {
+      return;
+    }
+
+    const collisionWorld = collisionWorldRef.current;
+
+    collisionWorld.unregister(collider);
+    spaceshipColliderRef.current = null;
+  }, [collisionWorldRef]);
+
+  const syncCollider = useCallback(
+    (spaceship: Container, facingIndex: number) => {
+      const collider = spaceshipColliderRef.current;
+
+      if (!collider) {
+        return;
+      }
+
+      const collisionWorld = collisionWorldRef.current;
+
+      collisionWorld.sync(collider, {
+        angle: facingIndex * DIRECTIONAL_FACING_ANGLE,
+        x: spaceship.position.x,
+        y: spaceship.position.y,
+      });
+    },
+    [collisionWorldRef]
+  );
+
+  const registerCollider = useCallback(
+    (spaceship: Container, facingIndex: number) => {
+      const collider = new Polygon<CollisionParticipant>(
+        spaceship.position,
+        scaleHitboxPoints(SPACESHIP_HITBOX_LOCAL_POINTS, GAME_SCALE)
+      );
+      const collisionWorld = collisionWorldRef.current;
+
+      spaceshipColliderRef.current = collider;
+      collisionWorld.register(collider, {
+        id: 'spaceship',
+        kind: CollisionKind.Spaceship,
+      });
+
+      syncCollider(spaceship, facingIndex);
+    },
+    [collisionWorldRef, syncCollider]
+  );
+
   const setSpaceshipRef = useCallback(
     (spaceship: Container | null) => {
       if (!spaceship) {
-        const collider = spaceshipColliderRef.current;
-
-        if (collider) {
-          collisionWorldRef.current.unregister(collider);
-          spaceshipColliderRef.current = null;
-        }
-
+        unregisterCollider();
         spaceshipRef.current = null;
         return;
       }
@@ -73,40 +118,12 @@ export function Spaceship() {
       headingRef.current = 0;
 
       const facingIndex = getFacingIndex(headingRef.current);
-      const collider = new Polygon<CollisionParticipant>(
-        initialPosition,
-        scaleHitboxPoints(SPACESHIP_HITBOX_LOCAL_POINTS, GAME_SCALE)
-      );
-
-      spaceshipColliderRef.current = collisionWorldRef.current.register(
-        collider,
-        {
-          id: 'spaceship',
-          kind: CollisionKind.Spaceship,
-        }
-      );
 
       spaceshipRef.current = spaceship;
+      registerCollider(spaceship, facingIndex);
       syncSpaceshipLocation(spaceship, facingIndex);
     },
-    [collisionWorldRef, syncSpaceshipLocation]
-  );
-
-  const syncSpaceshipCollider = useCallback(
-    (spaceship: Container, facingIndex: number) => {
-      const collider = spaceshipColliderRef.current;
-
-      if (!collider) {
-        return;
-      }
-
-      collisionWorldRef.current.sync(collider, {
-        angle: facingIndex * DIRECTIONAL_FACING_ANGLE,
-        x: spaceship.position.x,
-        y: spaceship.position.y,
-      });
-    },
-    [collisionWorldRef]
+    [registerCollider, syncSpaceshipLocation, unregisterCollider]
   );
 
   const updateTransform = useCallback(
@@ -158,13 +175,13 @@ export function Spaceship() {
       const facingIndex = getFacingIndex(headingRef.current);
 
       updateAnimation(facingIndex);
-      syncSpaceshipCollider(spaceship, facingIndex);
+      syncCollider(spaceship, facingIndex);
       syncSpaceshipLocation(spaceship, facingIndex);
     },
     [
       controlsRef,
       gameSpeedRef,
-      syncSpaceshipCollider,
+      syncCollider,
       syncSpaceshipLocation,
       updateAnimation,
     ]
