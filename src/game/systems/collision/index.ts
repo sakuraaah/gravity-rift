@@ -3,6 +3,7 @@ export * from './collision.enums';
 export { scaleHitboxPoints } from './hitbox.utils';
 export type {
   ColliderTransform,
+  CollisionEvent,
   CollisionPair,
   CollisionParticipant,
   GameBody,

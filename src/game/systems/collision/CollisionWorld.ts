@@ -1,7 +1,9 @@
 import { System } from 'check2d';
 
+import { CollisionPhase } from './collision.enums';
 import type {
   ColliderTransform,
+  CollisionEvent,
   CollisionPair,
   CollisionParticipant,
   GameBody,
@@ -9,6 +11,8 @@ import type {
 
 export class CollisionWorld {
   private readonly system = new System<GameBody>();
+
+  private activeCollisions = new Map<string, CollisionPair>();
 
   public register<TBody extends GameBody>(
     body: TBody,
@@ -45,9 +49,8 @@ export class CollisionWorld {
     body.updateBody();
   }
 
-  public checkAll(): CollisionPair[] {
-    const collisions: CollisionPair[] = [];
-    const collisionKeys = new Set<string>();
+  public checkAll(): CollisionEvent[] {
+    const currentCollisions = new Map<string, CollisionPair>();
 
     this.system.checkAll((response) => {
       const a: CollisionParticipant | undefined = response.a.userData;
@@ -59,14 +62,33 @@ export class CollisionWorld {
 
       const collisionKey = JSON.stringify([a.id, b.id].sort());
 
-      if (collisionKeys.has(collisionKey)) {
-        return;
+      if (!currentCollisions.has(collisionKey)) {
+        currentCollisions.set(collisionKey, { a, b });
       }
-
-      collisionKeys.add(collisionKey);
-      collisions.push({ a, b });
     });
 
-    return collisions;
+    const collisionEvents: CollisionEvent[] = [];
+
+    currentCollisions.forEach((collision, collisionKey) => {
+      collisionEvents.push({
+        ...collision,
+        phase: this.activeCollisions.has(collisionKey)
+          ? CollisionPhase.Stay
+          : CollisionPhase.Enter,
+      });
+    });
+
+    this.activeCollisions.forEach((collision, collisionKey) => {
+      if (!currentCollisions.has(collisionKey)) {
+        collisionEvents.push({
+          ...collision,
+          phase: CollisionPhase.Exit,
+        });
+      }
+    });
+
+    this.activeCollisions = currentCollisions;
+
+    return collisionEvents;
   }
 }

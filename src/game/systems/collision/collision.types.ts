@@ -1,6 +1,6 @@
 import type { Body } from 'check2d';
 
-import type { CollisionKind } from './collision.enums';
+import type { CollisionKind, CollisionPhase } from './collision.enums';
 
 export type CollisionParticipant = {
   id: string;
@@ -18,4 +18,8 @@ export type ColliderTransform = {
 export type CollisionPair = {
   a: CollisionParticipant;
   b: CollisionParticipant;
+};
+
+export type CollisionEvent = CollisionPair & {
+  phase: CollisionPhase;
 };
