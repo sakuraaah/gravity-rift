@@ -26,9 +26,19 @@ export class CollisionWorld {
   }
 
   public sync(body: GameBody, transform: ColliderTransform): void {
-    body.setPosition(transform.x, transform.y, false);
+    const positionChanged = body.x !== transform.x || body.y !== transform.y;
+    const angleChanged =
+      transform.angle !== undefined && body.angle !== transform.angle;
 
-    if (transform.angle !== undefined) {
+    if (!positionChanged && !angleChanged && !body.dirty) {
+      return;
+    }
+
+    if (positionChanged) {
+      body.setPosition(transform.x, transform.y, false);
+    }
+
+    if (transform.angle !== undefined && angleChanged) {
       body.setAngle(transform.angle, false);
     }
 
