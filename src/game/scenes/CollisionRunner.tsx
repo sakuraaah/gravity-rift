@@ -2,12 +2,8 @@ import { useCallback } from 'react';
 
 import { useTick } from '@pixi/react';
 
-import { UPDATE_PRIORITY } from 'pixi.js';
-
 import { useGameContext } from '@/game/context';
-import { resolveCollisionEvent } from '@/game/systems';
-
-const COLLISION_TICK_PRIORITY = UPDATE_PRIORITY.LOW + 1;
+import { GameTickPriority, resolveCollisionEvent } from '@/game/systems';
 
 export function CollisionRunner() {
   const { collisionWorldRef } = useGameContext();
@@ -20,7 +16,7 @@ export function CollisionRunner() {
 
   useTick({
     callback: updateCollisions,
-    priority: COLLISION_TICK_PRIORITY,
+    priority: GameTickPriority.CollisionResolution,
   });
 
   return null;

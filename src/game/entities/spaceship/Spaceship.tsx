@@ -8,7 +8,11 @@ import { Polygon } from 'check2d';
 
 import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 import { useGameContext } from '@/game/context';
-import { CollisionKind, scaleHitboxPoints } from '@/game/systems';
+import {
+  CollisionKind,
+  GameTickPriority,
+  scaleHitboxPoints,
+} from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
 import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
 
@@ -187,7 +191,10 @@ export function Spaceship() {
     ]
   );
 
-  useTick(updateTransform);
+  useTick({
+    callback: updateTransform,
+    priority: GameTickPriority.EntityUpdate,
+  });
 
   return (
     <pixiContainer ref={setSpaceshipRef} label="spaceship">

@@ -7,6 +7,7 @@ import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
+import { GameTickPriority } from '@/game/systems';
 
 import { Bullet } from './Bullet';
 import {
@@ -123,7 +124,10 @@ export function BulletPool() {
     };
   }, [bulletPool, collisionWorldRef]);
 
-  useTick(updateBullets);
+  useTick({
+    callback: updateBullets,
+    priority: GameTickPriority.EntityUpdate,
+  });
 
   return <pixiContainer ref={bulletLayerRef} label="bullet-layer" />;
 }

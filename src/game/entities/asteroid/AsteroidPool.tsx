@@ -10,6 +10,7 @@ import { useGameContext } from '@/game/context';
 import {
   ASTEROID_SPAWN_CONFIG_BY_SIZE,
   ASTEROID_SPAWN_SIZES,
+  GameTickPriority,
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
@@ -147,7 +148,10 @@ export function AsteroidPool() {
     };
   }, [asteroidPool, collisionWorldRef]);
 
-  useTick(updateAsteroids);
+  useTick({
+    callback: updateAsteroids,
+    priority: GameTickPriority.EntityUpdate,
+  });
 
   return <pixiContainer ref={asteroidLayerRef} label="asteroid-layer" />;
 }
