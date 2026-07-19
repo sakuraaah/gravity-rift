@@ -3,8 +3,14 @@ import { Container, Graphics } from 'pixi.js';
 import { Circle } from 'check2d';
 
 import { CollisionKind } from '@/game/systems';
-import type { CollisionParticipant, CollisionWorld } from '@/game/systems';
+import type {
+  CollisionParticipant,
+  CollisionWorld,
+  Consumable,
+  ProjectileDamageSource,
+} from '@/game/systems';
 import type { Vector2 } from '@/game/utils';
+import { DEFAULT_BULLET_DAMAGE } from '@/store';
 
 import {
   BULLET_COLOR,
@@ -16,7 +22,12 @@ import type { BulletSpawnData } from './bullet.types';
 
 let bulletViewId = 0;
 
-export class Bullet extends Container {
+export class Bullet
+  extends Container
+  implements Consumable, ProjectileDamageSource
+{
+  public damage = DEFAULT_BULLET_DAMAGE;
+
   public isActive = false;
 
   private readonly collider: Circle<CollisionParticipant>;
@@ -48,6 +59,7 @@ export class Bullet extends Container {
     const location = data?.location ?? BULLET_INITIAL_LOCATION;
     const velocity = data?.velocity ?? { x: 0, y: 0 };
 
+    this.damage = data?.damage ?? DEFAULT_BULLET_DAMAGE;
     this.position.set(location.x, location.y);
     this.rotation = location.rotation;
     this.velocity = { ...velocity };
@@ -62,8 +74,20 @@ export class Bullet extends Container {
     );
   }
 
+  public consume(): boolean {
+    if (!this.isActive) {
+      return false;
+    }
+
+    this.isActive = false;
+    this.visible = false;
+
+    return true;
+  }
+
   public registerCollider(collisionWorld: CollisionWorld) {
     collisionWorld.register(this.collider, {
+      actor: this,
       id: this.label,
       kind: CollisionKind.Bullet,
     });
@@ -95,6 +119,7 @@ export class Bullet extends Container {
     this.removeFromParent();
     this.position.set(BULLET_INITIAL_LOCATION.x, BULLET_INITIAL_LOCATION.y);
     this.rotation = BULLET_INITIAL_LOCATION.rotation;
+    this.damage = DEFAULT_BULLET_DAMAGE;
     this.velocity = { x: 0, y: 0 };
     this.visible = false;
     this.isActive = false;

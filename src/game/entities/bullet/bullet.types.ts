@@ -7,6 +7,7 @@ export type BulletLocation = {
 };
 
 export type BulletSpawnData = {
+  damage: number;
   location: BulletLocation;
   velocity: Vector2;
 };

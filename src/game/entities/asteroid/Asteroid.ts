@@ -4,21 +4,35 @@ import { Circle } from 'check2d';
 
 import { getLoadedAsteroidTextures } from '@/game/assets';
 import { GAME_SCALE } from '@/game/constants';
-import { CollisionKind } from '@/game/systems';
-import type { CollisionParticipant, CollisionWorld } from '@/game/systems';
+import { CollisionKind, applyDamage } from '@/game/systems';
+import type {
+  CollisionParticipant,
+  CollisionWorld,
+  ContactDamageSource,
+  DamageResult,
+  Damageable,
+} from '@/game/systems';
 import type { Vector2 } from '@/game/utils';
 import { randomInteger } from '@/game/utils';
 
 import {
+  ASTEROID_CONTACT_DAMAGE_BY_SIZE,
   ASTEROID_HITBOX_RADIUS_BY_SIZE,
   ASTEROID_INITIAL_SPAWN,
+  ASTEROID_MAX_HP_BY_SIZE,
 } from './asteroid.constants';
 import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
 let asteroidViewId = 0;
 
-export class Asteroid extends Sprite {
+export class Asteroid
+  extends Sprite
+  implements Damageable, ContactDamageSource
+{
+  public contactDamage =
+    ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+
   public isActive = false;
 
   private readonly collider: Circle<CollisionParticipant>;
@@ -26,6 +40,8 @@ export class Asteroid extends Sprite {
   private colliderSize: AsteroidSize | null = null;
 
   private hasEnteredBounds = false;
+
+  private hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
 
   private velocity: Vector2 = { x: 0, y: 0 };
 
@@ -50,6 +66,8 @@ export class Asteroid extends Sprite {
     const spawnData = data ?? ASTEROID_INITIAL_SPAWN;
 
     this.position.set(spawnData.location.x, spawnData.location.y);
+    this.contactDamage = ASTEROID_CONTACT_DAMAGE_BY_SIZE[spawnData.size];
+    this.hp = ASTEROID_MAX_HP_BY_SIZE[spawnData.size];
     this.velocity = { ...spawnData.velocity };
     this.hasEnteredBounds = false;
     this.syncColliderSize(spawnData.size);
@@ -65,8 +83,26 @@ export class Asteroid extends Sprite {
     );
   }
 
+  public takeDamage(damage: number): DamageResult | null {
+    if (!this.isActive) {
+      return null;
+    }
+
+    const result = applyDamage(this.hp, damage);
+
+    this.hp = result.remainingHp;
+
+    if (result.destroyed) {
+      this.isActive = false;
+      this.visible = false;
+    }
+
+    return result;
+  }
+
   public registerCollider(collisionWorld: CollisionWorld) {
     collisionWorld.register(this.collider, {
+      actor: this,
       id: this.label,
       kind: CollisionKind.Asteroid,
     });
@@ -115,6 +151,9 @@ export class Asteroid extends Sprite {
       ASTEROID_INITIAL_SPAWN.location.y
     );
     this.velocity = { x: 0, y: 0 };
+    this.contactDamage =
+      ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+    this.hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
     this.hasEnteredBounds = false;
     this.visible = false;
     this.isActive = false;

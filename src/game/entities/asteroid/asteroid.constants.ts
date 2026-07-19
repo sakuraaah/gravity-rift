@@ -20,6 +20,18 @@ export const ASTEROID_HITBOX_RADIUS_BY_SIZE: Record<AsteroidSize, number> = {
   [AsteroidSize.Small]: 2.5 * GAME_SCALE,
 };
 
+export const ASTEROID_MAX_HP_BY_SIZE: Record<AsteroidSize, number> = {
+  [AsteroidSize.Large]: 3,
+  [AsteroidSize.Medium]: 2,
+  [AsteroidSize.Small]: 1,
+};
+
+export const ASTEROID_CONTACT_DAMAGE_BY_SIZE: Record<AsteroidSize, number> = {
+  [AsteroidSize.Large]: 1,
+  [AsteroidSize.Medium]: 1,
+  [AsteroidSize.Small]: 1,
+};
+
 export const ASTEROID_DESPAWN_MARGIN = 12 * GAME_SCALE;
 
 export const ASTEROID_INITIAL_SPAWN: AsteroidSpawnData = {

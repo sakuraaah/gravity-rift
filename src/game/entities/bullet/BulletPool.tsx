@@ -43,6 +43,7 @@ export function BulletPool() {
       y: -Math.cos(rotation) * BULLET_BASE_MOVEMENT_SPEED,
     };
     const bullet = bulletPool.get({
+      damage: useGameStore.getState().bulletDamage,
       location: {
         x,
         y,
