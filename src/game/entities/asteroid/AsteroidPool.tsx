@@ -14,6 +14,7 @@ import {
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
+import { useGameStore } from '@/store';
 
 import { Asteroid } from './Asteroid';
 import { ASTEROID_DESPAWN_MARGIN } from './asteroid.constants';
@@ -38,7 +39,7 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
-  const { collisionWorldRef, gameSpeedRef } = useGameContext();
+  const { collisionWorldRef } = useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
   const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
@@ -72,6 +73,7 @@ export function AsteroidPool() {
   const updateAsteroids = useCallback(
     (ticker: Ticker) => {
       const collisionWorld = collisionWorldRef.current;
+      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       ASTEROID_SPAWN_SIZES.forEach((size) => {
         const nextDelay = spawnDelaysRef.current[size] - ticker.deltaMS;
@@ -113,7 +115,7 @@ export function AsteroidPool() {
       ) {
         const asteroid = activeAsteroidsRef.current[index];
 
-        asteroid.update(ticker.deltaTime, gameSpeedRef.current.multiplier);
+        asteroid.update(ticker.deltaTime, speedMultiplier);
 
         if (
           asteroid.isOutsideBounds(
@@ -131,7 +133,7 @@ export function AsteroidPool() {
         asteroid.syncCollider(collisionWorld);
       }
     },
-    [asteroidPool, collisionWorldRef, gameSpeedRef, spawnAsteroid]
+    [asteroidPool, collisionWorldRef, spawnAsteroid]
   );
 
   useEffect(() => {

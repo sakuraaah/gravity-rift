@@ -8,6 +8,7 @@ import { Pool as PixiPool } from 'pixi.js';
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
 import { GameTickPriority } from '@/game/systems';
+import { useGameStore } from '@/store';
 
 import { Bullet } from './Bullet';
 import {
@@ -18,7 +19,7 @@ import {
 import type { BulletSpawnData } from './bullet.types';
 
 export function BulletPool() {
-  const { collisionWorldRef, controlsRef, gameSpeedRef, spaceshipLocationRef } =
+  const { collisionWorldRef, controlsRef, spaceshipLocationRef } =
     useGameContext();
   const bulletLayerRef = useRef<Container>(null);
   const activeBulletsRef = useRef<Bullet[]>([]);
@@ -60,6 +61,7 @@ export function BulletPool() {
   const updateBullets = useCallback(
     (ticker: Ticker) => {
       const collisionWorld = collisionWorldRef.current;
+      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       for (
         let index = activeBulletsRef.current.length - 1;
@@ -68,7 +70,7 @@ export function BulletPool() {
       ) {
         const bullet = activeBulletsRef.current[index];
 
-        bullet.update(ticker.deltaTime, gameSpeedRef.current.multiplier);
+        bullet.update(ticker.deltaTime, speedMultiplier);
 
         if (
           bullet.isOutsideBounds(
@@ -107,7 +109,7 @@ export function BulletPool() {
         }
       }
     },
-    [bulletPool, collisionWorldRef, controlsRef, gameSpeedRef, spawnBullet]
+    [bulletPool, collisionWorldRef, controlsRef, spawnBullet]
   );
 
   useEffect(() => {

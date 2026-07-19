@@ -15,6 +15,7 @@ import {
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
 import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
+import { useGameStore } from '@/store';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
@@ -43,7 +44,7 @@ export function Spaceship() {
       hullRef,
       particlesRef,
     });
-  const { collisionWorldRef, controlsRef, gameSpeedRef, spaceshipLocationRef } =
+  const { collisionWorldRef, controlsRef, spaceshipLocationRef } =
     useGameContext();
 
   const syncSpaceshipLocation = useCallback(
@@ -140,7 +141,7 @@ export function Spaceship() {
 
       const { left, right, up } = controlsRef.current;
       const rotationDirection = Number(right) - Number(left);
-      const speedMultiplier = gameSpeedRef.current.multiplier;
+      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       headingRef.current +=
         rotationDirection *
@@ -182,13 +183,7 @@ export function Spaceship() {
       syncCollider(spaceship, facingIndex);
       syncSpaceshipLocation(spaceship, facingIndex);
     },
-    [
-      controlsRef,
-      gameSpeedRef,
-      syncCollider,
-      syncSpaceshipLocation,
-      updateAnimation,
-    ]
+    [controlsRef, syncCollider, syncSpaceshipLocation, updateAnimation]
   );
 
   useTick({
