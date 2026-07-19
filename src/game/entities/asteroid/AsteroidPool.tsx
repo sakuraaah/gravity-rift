@@ -50,6 +50,14 @@ export function AsteroidPool() {
     []
   );
 
+  const releaseAsteroid = useCallback(
+    (asteroid: Asteroid) => {
+      asteroid.unregisterCollider(collisionWorldRef.current);
+      asteroidPool.return(asteroid);
+    },
+    [asteroidPool, collisionWorldRef]
+  );
+
   const spawnAsteroid = useCallback(
     (spawnData: AsteroidSpawnData) => {
       const asteroidLayer = asteroidLayerRef.current;
@@ -72,7 +80,6 @@ export function AsteroidPool() {
 
   const updateAsteroids = useCallback(
     (ticker: Ticker) => {
-      const collisionWorld = collisionWorldRef.current;
       const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       ASTEROID_SPAWN_SIZES.forEach((size) => {
@@ -124,35 +131,53 @@ export function AsteroidPool() {
             ASTEROID_DESPAWN_MARGIN
           )
         ) {
-          asteroid.unregisterCollider(collisionWorld);
-          asteroidPool.return(asteroid);
+          releaseAsteroid(asteroid);
           activeAsteroidsRef.current.splice(index, 1);
           continue;
         }
 
-        asteroid.syncCollider(collisionWorld);
+        asteroid.syncCollider(collisionWorldRef.current);
       }
     },
-    [asteroidPool, collisionWorldRef, spawnAsteroid]
+    [collisionWorldRef, releaseAsteroid, spawnAsteroid]
   );
 
-  useEffect(() => {
-    const collisionWorld = collisionWorldRef.current;
+  const cleanupInactiveAsteroids = useCallback(() => {
+    for (
+      let index = activeAsteroidsRef.current.length - 1;
+      index >= 0;
+      index -= 1
+    ) {
+      const asteroid = activeAsteroidsRef.current[index];
 
+      if (asteroid.isActive) {
+        continue;
+      }
+
+      releaseAsteroid(asteroid);
+      activeAsteroidsRef.current.splice(index, 1);
+    }
+  }, [releaseAsteroid]);
+
+  useEffect(() => {
     return () => {
       activeAsteroidsRef.current.forEach((asteroid) => {
-        asteroid.unregisterCollider(collisionWorld);
-        asteroidPool.return(asteroid);
+        releaseAsteroid(asteroid);
       });
       activeAsteroidsRef.current = [];
 
       asteroidPool.clear();
     };
-  }, [asteroidPool, collisionWorldRef]);
+  }, [asteroidPool, releaseAsteroid]);
 
   useTick({
     callback: updateAsteroids,
     priority: GameTickPriority.EntityUpdate,
+  });
+
+  useTick({
+    callback: cleanupInactiveAsteroids,
+    priority: GameTickPriority.EntityCleanup,
   });
 
   return <pixiContainer ref={asteroidLayerRef} label="asteroid-layer" />;

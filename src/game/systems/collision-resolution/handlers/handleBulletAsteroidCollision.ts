@@ -10,7 +10,18 @@ export function handleBulletAsteroidCollision(collision: CollisionEvent) {
     return;
   }
 
-  console.log(
-    `[collision:${collision.phase}] Bullet ${bullet.id} hit asteroid ${asteroid.id}`
-  );
+  const bulletActor = bullet.actor;
+  const asteroidActor = asteroid.actor;
+
+  if (!asteroidActor.isActive) {
+    return;
+  }
+
+  const bulletDamage = bulletActor.damage;
+
+  if (!bulletActor.consume()) {
+    return;
+  }
+
+  asteroidActor.takeDamage(bulletDamage);
 }

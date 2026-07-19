@@ -29,6 +29,14 @@ export function BulletPool() {
     []
   );
 
+  const releaseBullet = useCallback(
+    (bullet: Bullet) => {
+      bullet.unregisterCollider(collisionWorldRef.current);
+      bulletPool.return(bullet);
+    },
+    [bulletPool, collisionWorldRef]
+  );
+
   const spawnBullet = useCallback(() => {
     const bulletLayer = bulletLayerRef.current;
 
@@ -61,7 +69,6 @@ export function BulletPool() {
 
   const updateBullets = useCallback(
     (ticker: Ticker) => {
-      const collisionWorld = collisionWorldRef.current;
       const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       for (
@@ -80,13 +87,12 @@ export function BulletPool() {
             BULLET_DESPAWN_MARGIN
           )
         ) {
-          bullet.unregisterCollider(collisionWorld);
-          bulletPool.return(bullet);
+          releaseBullet(bullet);
           activeBulletsRef.current.splice(index, 1);
           continue;
         }
 
-        bullet.syncCollider(collisionWorld);
+        bullet.syncCollider(collisionWorldRef.current);
       }
 
       const isFirePressed = controlsRef.current.fire;
@@ -110,26 +116,45 @@ export function BulletPool() {
         }
       }
     },
-    [bulletPool, collisionWorldRef, controlsRef, spawnBullet]
+    [collisionWorldRef, controlsRef, releaseBullet, spawnBullet]
   );
 
-  useEffect(() => {
-    const collisionWorld = collisionWorldRef.current;
+  const cleanupInactiveBullets = useCallback(() => {
+    for (
+      let index = activeBulletsRef.current.length - 1;
+      index >= 0;
+      index -= 1
+    ) {
+      const bullet = activeBulletsRef.current[index];
 
+      if (bullet.isActive) {
+        continue;
+      }
+
+      releaseBullet(bullet);
+      activeBulletsRef.current.splice(index, 1);
+    }
+  }, [releaseBullet]);
+
+  useEffect(() => {
     return () => {
       activeBulletsRef.current.forEach((bullet) => {
-        bullet.unregisterCollider(collisionWorld);
-        bulletPool.return(bullet);
+        releaseBullet(bullet);
       });
       activeBulletsRef.current = [];
 
       bulletPool.clear();
     };
-  }, [bulletPool, collisionWorldRef]);
+  }, [bulletPool, releaseBullet]);
 
   useTick({
     callback: updateBullets,
     priority: GameTickPriority.EntityUpdate,
+  });
+
+  useTick({
+    callback: cleanupInactiveBullets,
+    priority: GameTickPriority.EntityCleanup,
   });
 
   return <pixiContainer ref={bulletLayerRef} label="bullet-layer" />;
