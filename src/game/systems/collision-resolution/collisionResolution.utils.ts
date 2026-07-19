@@ -49,16 +49,16 @@ export function getCollisionInteraction(
   return null;
 }
 
-export function getCollisionParticipant(
+export function getCollisionParticipant<TKind extends CollisionKind>(
   collision: CollisionEvent,
-  kind: CollisionKind
-): CollisionParticipant | null {
+  kind: TKind
+): Extract<CollisionParticipant, { kind: TKind }> | null {
   if (collision.a.kind === kind) {
-    return collision.a;
+    return collision.a as Extract<CollisionParticipant, { kind: TKind }>;
   }
 
   if (collision.b.kind === kind) {
-    return collision.b;
+    return collision.b as Extract<CollisionParticipant, { kind: TKind }>;
   }
 
   return null;

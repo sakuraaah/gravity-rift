@@ -1,11 +1,30 @@
 import type { Body } from 'check2d';
 
-import type { CollisionKind, CollisionPhase } from './collision.enums';
+import type {
+  Consumable,
+  ContactDamageSource,
+  Damageable,
+  ProjectileDamageSource,
+} from '@/game/systems/combat';
 
-export type CollisionParticipant = {
-  id: string;
-  kind: CollisionKind;
-};
+import { CollisionKind } from './collision.enums';
+import type { CollisionPhase } from './collision.enums';
+
+export type CollisionParticipant =
+  | {
+      actor: Damageable & ContactDamageSource;
+      id: string;
+      kind: typeof CollisionKind.Asteroid;
+    }
+  | {
+      actor: Consumable & ProjectileDamageSource;
+      id: string;
+      kind: typeof CollisionKind.Bullet;
+    }
+  | {
+      id: string;
+      kind: typeof CollisionKind.Spaceship;
+    };
 
 export type GameBody = Body<CollisionParticipant>;
 
