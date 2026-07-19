@@ -12,8 +12,8 @@ import type {
   DamageResult,
   Damageable,
 } from '@/game/systems';
-import type { Vector2 } from '@/game/utils';
 import { randomInteger } from '@/game/utils';
+import type { Vector2 } from '@/game/utils';
 
 import {
   ASTEROID_CONTACT_DAMAGE_BY_SIZE,
@@ -38,6 +38,8 @@ export class Asteroid
   private readonly collider: Circle<CollisionParticipant>;
 
   private colliderSize: AsteroidSize | null = null;
+
+  private entityId: string | null = null;
 
   private hasEnteredBounds = false;
 
@@ -67,6 +69,7 @@ export class Asteroid
 
     this.position.set(spawnData.location.x, spawnData.location.y);
     this.contactDamage = ASTEROID_CONTACT_DAMAGE_BY_SIZE[spawnData.size];
+    this.entityId = crypto.randomUUID();
     this.hp = ASTEROID_MAX_HP_BY_SIZE[spawnData.size];
     this.velocity = { ...spawnData.velocity };
     this.hasEnteredBounds = false;
@@ -101,9 +104,15 @@ export class Asteroid
   }
 
   public registerCollider(collisionWorld: CollisionWorld) {
+    if (this.entityId === null) {
+      throw new Error(
+        'Cannot register an asteroid collider before initialization'
+      );
+    }
+
     collisionWorld.register(this.collider, {
       actor: this,
-      id: this.label,
+      id: this.entityId,
       kind: CollisionKind.Asteroid,
     });
 
@@ -153,6 +162,7 @@ export class Asteroid
     this.velocity = { x: 0, y: 0 };
     this.contactDamage =
       ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+    this.entityId = null;
     this.hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
     this.hasEnteredBounds = false;
     this.visible = false;

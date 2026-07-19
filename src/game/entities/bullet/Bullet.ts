@@ -32,6 +32,8 @@ export class Bullet
 
   private readonly collider: Circle<CollisionParticipant>;
 
+  private entityId: string | null = null;
+
   private velocity: Vector2 = { x: 0, y: 0 };
 
   public constructor() {
@@ -60,6 +62,7 @@ export class Bullet
     const velocity = data?.velocity ?? { x: 0, y: 0 };
 
     this.damage = data?.damage ?? DEFAULT_BULLET_DAMAGE;
+    this.entityId = crypto.randomUUID();
     this.position.set(location.x, location.y);
     this.rotation = location.rotation;
     this.velocity = { ...velocity };
@@ -86,9 +89,15 @@ export class Bullet
   }
 
   public registerCollider(collisionWorld: CollisionWorld) {
+    if (this.entityId === null) {
+      throw new Error(
+        'Cannot register a bullet collider before initialization'
+      );
+    }
+
     collisionWorld.register(this.collider, {
       actor: this,
-      id: this.label,
+      id: this.entityId,
       kind: CollisionKind.Bullet,
     });
 
@@ -120,6 +129,7 @@ export class Bullet
     this.position.set(BULLET_INITIAL_LOCATION.x, BULLET_INITIAL_LOCATION.y);
     this.rotation = BULLET_INITIAL_LOCATION.rotation;
     this.damage = DEFAULT_BULLET_DAMAGE;
+    this.entityId = null;
     this.velocity = { x: 0, y: 0 };
     this.visible = false;
     this.isActive = false;

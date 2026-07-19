@@ -30,6 +30,13 @@ import {
 import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
+  const entityIdRef = useRef<string | null>(null);
+
+  if (entityIdRef.current === null) {
+    entityIdRef.current = crypto.randomUUID();
+  }
+
+  const entityId = entityIdRef.current;
   const spaceshipColliderRef = useRef<Polygon<CollisionParticipant> | null>(
     null
   );
@@ -99,13 +106,13 @@ export function Spaceship() {
 
       spaceshipColliderRef.current = collider;
       collisionWorld.register(collider, {
-        id: 'spaceship',
+        id: entityId,
         kind: CollisionKind.Spaceship,
       });
 
       syncCollider(spaceship, facingIndex);
     },
-    [collisionWorldRef, syncCollider]
+    [collisionWorldRef, entityId, syncCollider]
   );
 
   const setSpaceshipRef = useCallback(
