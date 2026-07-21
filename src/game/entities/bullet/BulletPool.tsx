@@ -8,7 +8,7 @@ import { Pool as PixiPool } from 'pixi.js';
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
 import { GameTickPriority } from '@/game/systems';
-import { useGameStore } from '@/store';
+import { GamePhase, useGameStore } from '@/store';
 
 import { Bullet } from './Bullet';
 import {
@@ -19,8 +19,12 @@ import {
 import type { BulletSpawnData } from './bullet.types';
 
 export function BulletPool() {
-  const { collisionWorldRef, controlsRef, spaceshipLocationRef } =
-    useGameContext();
+  const {
+    collisionWorldRef,
+    controlsRef,
+    gameTimeMsRef,
+    spaceshipLocationRef,
+  } = useGameContext();
   const bulletLayerRef = useRef<Container>(null);
   const activeBulletsRef = useRef<Bullet[]>([]);
   const lastBulletFiredAtRef = useRef<number | null>(null);
@@ -69,7 +73,11 @@ export function BulletPool() {
 
   const updateBullets = useCallback(
     (ticker: Ticker) => {
-      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
+      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
+
+      if (gamePhase !== GamePhase.Running) {
+        return;
+      }
 
       for (
         let index = activeBulletsRef.current.length - 1;
@@ -78,7 +86,7 @@ export function BulletPool() {
       ) {
         const bullet = activeBulletsRef.current[index];
 
-        bullet.update(ticker.deltaTime, speedMultiplier);
+        bullet.update(ticker.deltaTime, gameSpeedMultiplier);
 
         if (
           bullet.isOutsideBounds(
@@ -102,21 +110,21 @@ export function BulletPool() {
         return;
       }
 
-      const now = performance.now();
+      const gameTimeMs = gameTimeMsRef.current;
       const lastBulletFiredAt = lastBulletFiredAtRef.current;
       const canFire =
         lastBulletFiredAt === null ||
-        now - lastBulletFiredAt >= BULLET_FIRE_DEBOUNCE_MS;
+        gameTimeMs - lastBulletFiredAt >= BULLET_FIRE_DEBOUNCE_MS;
 
       if (canFire) {
         const spawnBulletSuccess = spawnBullet();
 
         if (spawnBulletSuccess) {
-          lastBulletFiredAtRef.current = now;
+          lastBulletFiredAtRef.current = gameTimeMs;
         }
       }
     },
-    [collisionWorldRef, controlsRef, releaseBullet, spawnBullet]
+    [collisionWorldRef, controlsRef, gameTimeMsRef, releaseBullet, spawnBullet]
   );
 
   const cleanupInactiveBullets = useCallback(() => {

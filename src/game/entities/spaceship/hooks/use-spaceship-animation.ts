@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import type { RefObject } from 'react';
 
 import type { AnimatedSprite, Sprite } from 'pixi.js';
@@ -10,16 +10,36 @@ import { DIRECTIONAL_FACING_ANGLE } from '@/game/utils';
 interface UseSpaceshipAnimationOptions {
   flameRef: RefObject<AnimatedSprite | null>;
   hullRef: RefObject<Sprite | null>;
+  isPlaying: boolean;
   particlesRef: RefObject<AnimatedSprite | null>;
 }
 
 export function useSpaceshipAnimation({
   flameRef,
   hullRef,
+  isPlaying,
   particlesRef,
 }: UseSpaceshipAnimationOptions) {
   const textures = getLoadedSpaceshipTextures();
   const facingIndexRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const flame = flameRef.current;
+    const particles = particlesRef.current;
+
+    if (!flame || !particles) {
+      return;
+    }
+
+    if (isPlaying) {
+      flame.play();
+      particles.play();
+      return;
+    }
+
+    flame.stop();
+    particles.stop();
+  }, [flameRef, isPlaying, particlesRef]);
 
   const updateAnimation = useCallback(
     (facingIndex: number) => {
@@ -35,9 +55,18 @@ export function useSpaceshipAnimation({
         facingIndexRef.current = facingIndex;
         hull.texture = textures.hull[facingIndex]!;
         flame.textures = textures.flame[facingIndex]!;
-        flame.gotoAndPlay(flame.currentFrame % flame.totalFrames);
         particles.textures = textures.particles[facingIndex]!;
-        particles.gotoAndPlay(particles.currentFrame % particles.totalFrames);
+
+        const flameFrame = flame.currentFrame % flame.totalFrames;
+        const particlesFrame = particles.currentFrame % particles.totalFrames;
+
+        if (isPlaying) {
+          flame.gotoAndPlay(flameFrame);
+          particles.gotoAndPlay(particlesFrame);
+        } else {
+          flame.gotoAndStop(flameFrame);
+          particles.gotoAndStop(particlesFrame);
+        }
 
         const snappedHeading = facingIndex * DIRECTIONAL_FACING_ANGLE;
         const flameX = -Math.sin(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
@@ -47,7 +76,7 @@ export function useSpaceshipAnimation({
         particles.position.set(flameX, flameY);
       }
     },
-    [flameRef, hullRef, particlesRef, textures]
+    [flameRef, hullRef, isPlaying, particlesRef, textures]
   );
 
   return {

@@ -14,7 +14,7 @@ import {
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
-import { useGameStore } from '@/store';
+import { GamePhase, useGameStore } from '@/store';
 
 import { Asteroid } from './Asteroid';
 import { ASTEROID_DESPAWN_MARGIN } from './asteroid.constants';
@@ -80,7 +80,11 @@ export function AsteroidPool() {
 
   const updateAsteroids = useCallback(
     (ticker: Ticker) => {
-      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
+      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
+
+      if (gamePhase !== GamePhase.Running) {
+        return;
+      }
 
       ASTEROID_SPAWN_SIZES.forEach((size) => {
         const nextDelay = spawnDelaysRef.current[size] - ticker.deltaMS;
@@ -122,7 +126,7 @@ export function AsteroidPool() {
       ) {
         const asteroid = activeAsteroidsRef.current[index];
 
-        asteroid.update(ticker.deltaTime, speedMultiplier);
+        asteroid.update(ticker.deltaTime, gameSpeedMultiplier);
 
         if (
           asteroid.isOutsideBounds(

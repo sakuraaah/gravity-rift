@@ -15,7 +15,7 @@ import {
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
 import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
-import { useGameStore } from '@/store';
+import { GamePhase, useGameStore } from '@/store';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
@@ -30,6 +30,7 @@ import {
 import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
+  const gamePhase = useGameStore((state) => state.gamePhase);
   const entityIdRef = useRef<string | null>(null);
 
   if (entityIdRef.current === null) {
@@ -49,6 +50,7 @@ export function Spaceship() {
     useSpaceshipAnimation({
       flameRef,
       hullRef,
+      isPlaying: gamePhase === GamePhase.Running,
       particlesRef,
     });
   const { collisionWorldRef, controlsRef, spaceshipLocationRef } =
@@ -141,20 +143,20 @@ export function Spaceship() {
   const updateTransform = useCallback(
     (ticker: Ticker) => {
       const spaceship = spaceshipRef.current;
+      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
 
-      if (!spaceship) {
+      if (!spaceship || gamePhase !== GamePhase.Running) {
         return;
       }
 
       const { left, right, up } = controlsRef.current;
       const rotationDirection = Number(right) - Number(left);
-      const speedMultiplier = useGameStore.getState().gameSpeedMultiplier;
 
       headingRef.current +=
         rotationDirection *
         SPACESHIP_BASE_ROTATION_SPEED *
         ticker.deltaTime *
-        speedMultiplier;
+        gameSpeedMultiplier;
 
       if (up) {
         const nextX =
@@ -162,13 +164,13 @@ export function Spaceship() {
           Math.sin(headingRef.current) *
             SPACESHIP_BASE_MOVEMENT_SPEED *
             ticker.deltaTime *
-            speedMultiplier;
+            gameSpeedMultiplier;
         const nextY =
           spaceship.position.y -
           Math.cos(headingRef.current) *
             SPACESHIP_BASE_MOVEMENT_SPEED *
             ticker.deltaTime *
-            speedMultiplier;
+            gameSpeedMultiplier;
 
         spaceship.position.set(
           clamp(

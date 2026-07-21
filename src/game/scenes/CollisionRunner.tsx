@@ -4,15 +4,25 @@ import { useTick } from '@pixi/react';
 
 import { useGameContext } from '@/game/context';
 import { GameTickPriority, resolveCollisionEvent } from '@/game/systems';
+import { GamePhase, useGameStore } from '@/store';
 
 export function CollisionRunner() {
-  const { collisionWorldRef } = useGameContext();
+  const { collisionWorldRef, gameTimeMsRef } = useGameContext();
 
   const updateCollisions = useCallback(() => {
-    const collisionEvents = collisionWorldRef.current.checkAll();
+    if (useGameStore.getState().gamePhase !== GamePhase.Running) {
+      return;
+    }
 
-    collisionEvents.forEach(resolveCollisionEvent);
-  }, [collisionWorldRef]);
+    const collisionEvents = collisionWorldRef.current.checkAll();
+    const collisionResolutionParams = {
+      gameTimeMs: gameTimeMsRef.current,
+    };
+
+    collisionEvents.forEach((collision) => {
+      resolveCollisionEvent(collision, collisionResolutionParams);
+    });
+  }, [collisionWorldRef, gameTimeMsRef]);
 
   useTick({
     callback: updateCollisions,

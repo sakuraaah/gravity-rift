@@ -1,9 +1,13 @@
 import { CollisionKind } from '@/game/systems/collision';
 import type { CollisionEvent } from '@/game/systems/collision';
+import type { CollisionResolutionParams } from '@/game/systems/collision-resolution/collisionResolution.types';
 import { getCollisionParticipant } from '@/game/systems/collision-resolution/collisionResolution.utils';
 import { useGameStore } from '@/store';
 
-export function handleSpaceshipAsteroidCollision(collision: CollisionEvent) {
+export function handleSpaceshipAsteroidCollision(
+  collision: CollisionEvent,
+  params: CollisionResolutionParams
+) {
   const spaceship = getCollisionParticipant(collision, CollisionKind.Spaceship);
   const asteroid = getCollisionParticipant(collision, CollisionKind.Asteroid);
 
@@ -17,5 +21,7 @@ export function handleSpaceshipAsteroidCollision(collision: CollisionEvent) {
     return;
   }
 
-  useGameStore.getState().damagePlayer(asteroidActor.contactDamage);
+  useGameStore
+    .getState()
+    .damagePlayer(asteroidActor.contactDamage, params.gameTimeMs);
 }
