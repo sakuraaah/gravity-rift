@@ -12,12 +12,12 @@ export const ASTEROID_BASE_MOVEMENT_SPEED_BY_SIZE: Record<
   [AsteroidSize.Small]: 0.25 * GAME_SCALE,
 };
 
-// Source: concept asteroid sprite specifications. The values are radii in the
-// unscaled concept coordinate system, so they use the same scale as the sprites.
+// Source: Concept sprite manifest. The values are radii in the unscaled concept
+// coordinate system, so they use the same scale as the sprites.
 export const ASTEROID_HITBOX_RADIUS_BY_SIZE: Record<AsteroidSize, number> = {
   [AsteroidSize.Large]: 7.5 * GAME_SCALE,
   [AsteroidSize.Medium]: 4.5 * GAME_SCALE,
-  [AsteroidSize.Small]: 2.5 * GAME_SCALE,
+  [AsteroidSize.Small]: 3 * GAME_SCALE,
 };
 
 export const ASTEROID_MAX_HP_BY_SIZE: Record<AsteroidSize, number> = {
