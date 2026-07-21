@@ -1,6 +1,7 @@
 import { CollisionKind } from '@/game/systems/collision';
 import type { CollisionEvent } from '@/game/systems/collision';
 import { getCollisionParticipant } from '@/game/systems/collision-resolution/collisionResolution.utils';
+import { useGameStore } from '@/store';
 
 export function handleSpaceshipAsteroidCollision(collision: CollisionEvent) {
   const spaceship = getCollisionParticipant(collision, CollisionKind.Spaceship);
@@ -10,7 +11,11 @@ export function handleSpaceshipAsteroidCollision(collision: CollisionEvent) {
     return;
   }
 
-  console.log(
-    `[collision:${collision.phase}] Spaceship ${spaceship.id} hit asteroid ${asteroid.id}`
-  );
+  const asteroidActor = asteroid.actor;
+
+  if (!asteroidActor.isActive) {
+    return;
+  }
+
+  useGameStore.getState().damagePlayer(asteroidActor.contactDamage);
 }
