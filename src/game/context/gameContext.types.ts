@@ -12,6 +12,7 @@ export type SpaceshipLocation = {
 export type GameContextValue = {
   collisionWorldRef: RefObject<CollisionWorld>;
   controlsRef: RefObject<PlayerActions>;
+  gameTimeMsRef: RefObject<number>;
   spaceshipLocationRef: RefObject<SpaceshipLocation>;
 };
 

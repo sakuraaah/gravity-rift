@@ -21,6 +21,7 @@ function createInitialSpaceshipLocation(): SpaceshipLocation {
 export function GameProvider({ children }: GameProviderProps) {
   const collisionWorldRef = useRef(new CollisionWorld());
   const controlsRef = usePlayerControls();
+  const gameTimeMsRef = useRef(0);
   const spaceshipLocationRef = useRef<SpaceshipLocation>(
     createInitialSpaceshipLocation()
   );
@@ -29,9 +30,10 @@ export function GameProvider({ children }: GameProviderProps) {
     () => ({
       collisionWorldRef,
       controlsRef,
+      gameTimeMsRef,
       spaceshipLocationRef,
     }),
-    [collisionWorldRef, controlsRef, spaceshipLocationRef]
+    [collisionWorldRef, controlsRef, gameTimeMsRef, spaceshipLocationRef]
   );
 
   return (

@@ -8,15 +8,15 @@ import {
   DEFAULT_PLAYER_HP,
   PLAYER_INVINCIBILITY_DURATION_MS,
 } from './gameStore.constants';
+import { GamePhase } from './gameStore.enums';
 import type { GameStore } from './gameStore.types';
 
 export const useGameStore = create<GameStore>()((set, get) => ({
   bulletDamage: DEFAULT_BULLET_DAMAGE,
-  damagePlayer: (damage) => {
-    const now = performance.now();
-    const { playerHp, playerInvincibleUntilMs } = get();
+  damagePlayer: (damage, gameTimeMs) => {
+    const { playerHp, playerInvincibleUntilGameTimeMs } = get();
 
-    if (playerHp <= 0 || now < playerInvincibleUntilMs) {
+    if (playerHp <= 0 || gameTimeMs < playerInvincibleUntilGameTimeMs) {
       return null;
     }
 
@@ -25,15 +25,18 @@ export const useGameStore = create<GameStore>()((set, get) => ({
     if (result.appliedDamage > 0) {
       set({
         playerHp: result.remainingHp,
-        playerInvincibleUntilMs: now + PLAYER_INVINCIBILITY_DURATION_MS,
+        playerInvincibleUntilGameTimeMs:
+          gameTimeMs + PLAYER_INVINCIBILITY_DURATION_MS,
       });
     }
 
     return result;
   },
+  gamePhase: GamePhase.Running,
   gameSpeedMultiplier: DEFAULT_GAME_SPEED_MULTIPLIER,
   playerHp: DEFAULT_PLAYER_HP,
-  playerInvincibleUntilMs: 0,
+  playerInvincibleUntilGameTimeMs: 0,
   setBulletDamage: (bulletDamage) => set({ bulletDamage }),
+  setGamePhase: (gamePhase) => set({ gamePhase }),
   setGameSpeedMultiplier: (gameSpeedMultiplier) => set({ gameSpeedMultiplier }),
 }));
