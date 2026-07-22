@@ -1,0 +1,23 @@
+{
+  "frames": {
+    "asteroid_sm_a": {
+      "frame": { "x": 0, "y": 0, "w": 8, "h": 8 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "asteroid_sm_b": {
+      "frame": { "x": 9, "y": 0, "w": 8, "h": 8 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "asteroid_sm_c": {
+      "frame": { "x": 18, "y": 0, "w": 8, "h": 8 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    }
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "asteroid_sm-1x.png",
+    "scale": "1",
+    "size": { "w": 26, "h": 8 }
+  }
+}

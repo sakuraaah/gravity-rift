@@ -1,0 +1,27 @@
+{
+  "frames": {
+    "asteroid_lg_a": {
+      "frame": { "x": 0, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "asteroid_lg_b": {
+      "frame": { "x": 25, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "asteroid_lg_c": {
+      "frame": { "x": 50, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "asteroid_lg_cracked": {
+      "frame": { "x": 75, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    }
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "asteroid_lg-1x.png",
+    "scale": "1",
+    "size": { "w": 99, "h": 24 }
+  }
+}

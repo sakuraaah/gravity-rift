@@ -1,7 +1,7 @@
 import { DIRECTIONAL_FRAME_SUFFIXES } from '@/game/assets/constants';
 import type {
-  DirectionalTextureFrames,
-  TextureFrames,
+  DirectionalAnimationFrames,
+  DirectionalTextures,
 } from '@/game/assets/types';
 import {
   getSpritesheetAnimation,
@@ -15,9 +15,9 @@ const SPACESHIP_PARTICLES_ATLAS_URL =
   '/assets/sprites/spaceship-particles.atlas.json';
 
 export interface SpaceshipTextures {
-  flame: DirectionalTextureFrames;
-  hull: TextureFrames;
-  particles: DirectionalTextureFrames;
+  flame: DirectionalAnimationFrames;
+  hull: DirectionalTextures;
+  particles: DirectionalAnimationFrames;
 }
 
 let spaceshipTextures: SpaceshipTextures | null = null;
