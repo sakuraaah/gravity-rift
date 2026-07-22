@@ -1,0 +1,57 @@
+{
+  "frames": {
+    "hit_bullet_spark_0": {
+      "frame": { "x": 0, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_bullet_spark_1": {
+      "frame": { "x": 17, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_bullet_spark_2": {
+      "frame": { "x": 34, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_bullet_spark_3": {
+      "frame": { "x": 51, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_debris_burst_0": {
+      "frame": { "x": 68, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_debris_burst_1": {
+      "frame": { "x": 85, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_debris_burst_2": {
+      "frame": { "x": 102, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "hit_debris_burst_3": {
+      "frame": { "x": 119, "y": 0, "w": 16, "h": 16 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    }
+  },
+  "animations": {
+    "bullet_spark": [
+      "hit_bullet_spark_0",
+      "hit_bullet_spark_1",
+      "hit_bullet_spark_2",
+      "hit_bullet_spark_3"
+    ],
+    "debris_burst": [
+      "hit_debris_burst_0",
+      "hit_debris_burst_1",
+      "hit_debris_burst_2",
+      "hit_debris_burst_3"
+    ]
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "hit-1x.png",
+    "scale": "1",
+    "size": { "w": 135, "h": 16 }
+  }
+}

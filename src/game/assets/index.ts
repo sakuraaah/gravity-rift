@@ -1,5 +1,6 @@
 export * from './asteroid';
 export * from './constants';
+export * from './effects';
 export * from './game.assets';
 export * from './spaceship';
 export * from './types';

@@ -1,0 +1,151 @@
+{
+  "frames": {
+    "explosion_asteroid_sm_0": {
+      "frame": { "x": 0, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_sm_1": {
+      "frame": { "x": 25, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_sm_2": {
+      "frame": { "x": 50, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_sm_3": {
+      "frame": { "x": 75, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_sm_4": {
+      "frame": { "x": 100, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_0": {
+      "frame": { "x": 125, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_1": {
+      "frame": { "x": 150, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_2": {
+      "frame": { "x": 175, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_3": {
+      "frame": { "x": 200, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_4": {
+      "frame": { "x": 225, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_md_5": {
+      "frame": { "x": 250, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_0": {
+      "frame": { "x": 275, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_1": {
+      "frame": { "x": 300, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_2": {
+      "frame": { "x": 325, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_3": {
+      "frame": { "x": 350, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_4": {
+      "frame": { "x": 375, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_5": {
+      "frame": { "x": 400, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_asteroid_lg_6": {
+      "frame": { "x": 425, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_0": {
+      "frame": { "x": 450, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_1": {
+      "frame": { "x": 475, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_2": {
+      "frame": { "x": 500, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_3": {
+      "frame": { "x": 525, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_4": {
+      "frame": { "x": 550, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_5": {
+      "frame": { "x": 575, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_6": {
+      "frame": { "x": 600, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    },
+    "explosion_ship_7": {
+      "frame": { "x": 625, "y": 0, "w": 24, "h": 24 },
+      "anchor": { "x": 0.5, "y": 0.5 }
+    }
+  },
+  "animations": {
+    "asteroid_sm": [
+      "explosion_asteroid_sm_0",
+      "explosion_asteroid_sm_1",
+      "explosion_asteroid_sm_2",
+      "explosion_asteroid_sm_3",
+      "explosion_asteroid_sm_4"
+    ],
+    "asteroid_md": [
+      "explosion_asteroid_md_0",
+      "explosion_asteroid_md_1",
+      "explosion_asteroid_md_2",
+      "explosion_asteroid_md_3",
+      "explosion_asteroid_md_4",
+      "explosion_asteroid_md_5"
+    ],
+    "asteroid_lg": [
+      "explosion_asteroid_lg_0",
+      "explosion_asteroid_lg_1",
+      "explosion_asteroid_lg_2",
+      "explosion_asteroid_lg_3",
+      "explosion_asteroid_lg_4",
+      "explosion_asteroid_lg_5",
+      "explosion_asteroid_lg_6"
+    ],
+    "ship": [
+      "explosion_ship_0",
+      "explosion_ship_1",
+      "explosion_ship_2",
+      "explosion_ship_3",
+      "explosion_ship_4",
+      "explosion_ship_5",
+      "explosion_ship_6",
+      "explosion_ship_7"
+    ]
+  },
+  "meta": {
+    "app": "Gravity Rift",
+    "format": "RGBA8888",
+    "image": "explosion-1x.png",
+    "scale": "1",
+    "size": { "w": 649, "h": 24 }
+  }
+}
