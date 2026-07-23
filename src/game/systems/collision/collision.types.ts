@@ -1,10 +1,13 @@
 import type { Body } from 'check2d';
 
+import type { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 import type {
   Consumable,
   ContactDamageSource,
   Damageable,
+  PositionedEntity,
   ProjectileDamageSource,
+  SizedEntity,
 } from '@/game/systems/combat';
 
 import { CollisionKind } from './collision.enums';
@@ -12,12 +15,15 @@ import type { CollisionPhase } from './collision.enums';
 
 export type CollisionParticipant =
   | {
-      actor: Damageable & ContactDamageSource;
+      actor: Damageable &
+        ContactDamageSource &
+        PositionedEntity &
+        SizedEntity<AsteroidSize>;
       id: string;
       kind: typeof CollisionKind.Asteroid;
     }
   | {
-      actor: Consumable & ProjectileDamageSource;
+      actor: Consumable & PositionedEntity & ProjectileDamageSource;
       id: string;
       kind: typeof CollisionKind.Bullet;
     }

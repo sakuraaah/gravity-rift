@@ -1,8 +1,13 @@
+import { OneShotEffectKind } from '@/game/effects/one-shot-effect/oneShotEffect.enums';
 import { CollisionKind } from '@/game/systems/collision';
 import type { CollisionEvent } from '@/game/systems/collision';
+import type { CollisionResolutionParams } from '@/game/systems/collision-resolution/collisionResolution.types';
 import { getCollisionParticipant } from '@/game/systems/collision-resolution/collisionResolution.utils';
 
-export function handleBulletAsteroidCollision(collision: CollisionEvent) {
+export function handleBulletAsteroidCollision(
+  collision: CollisionEvent,
+  params: CollisionResolutionParams
+) {
   const bullet = getCollisionParticipant(collision, CollisionKind.Bullet);
   const asteroid = getCollisionParticipant(collision, CollisionKind.Asteroid);
 
@@ -18,10 +23,38 @@ export function handleBulletAsteroidCollision(collision: CollisionEvent) {
   }
 
   const bulletDamage = bulletActor.damage;
+  const bulletPosition = {
+    x: bulletActor.position.x,
+    y: bulletActor.position.y,
+  };
+  const asteroidPosition = {
+    x: asteroidActor.position.x,
+    y: asteroidActor.position.y,
+  };
+  const asteroidSize = asteroidActor.size;
 
   if (!bulletActor.consume()) {
     return;
   }
 
-  asteroidActor.takeDamage(bulletDamage);
+  const damageResult = asteroidActor.takeDamage(bulletDamage);
+
+  if (!damageResult) {
+    return;
+  }
+
+  if (damageResult.destroyed) {
+    params.playOneShotEffect({
+      kind: OneShotEffectKind.AsteroidExplosion,
+      position: asteroidPosition,
+      size: asteroidSize,
+    });
+
+    return;
+  }
+
+  params.playOneShotEffect({
+    kind: OneShotEffectKind.BulletSpark,
+    position: bulletPosition,
+  });
 }

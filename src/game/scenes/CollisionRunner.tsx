@@ -7,7 +7,8 @@ import { GameTickPriority, resolveCollisionEvent } from '@/game/systems';
 import { GamePhase, useGameStore } from '@/store';
 
 export function CollisionRunner() {
-  const { collisionWorldRef, gameTimeMsRef } = useGameContext();
+  const { collisionWorldRef, gameTimeMsRef, playOneShotEffect } =
+    useGameContext();
 
   const updateCollisions = useCallback(() => {
     if (useGameStore.getState().gamePhase !== GamePhase.Running) {
@@ -17,12 +18,13 @@ export function CollisionRunner() {
     const collisionEvents = collisionWorldRef.current.checkAll();
     const collisionResolutionParams = {
       gameTimeMs: gameTimeMsRef.current,
+      playOneShotEffect,
     };
 
     collisionEvents.forEach((collision) => {
       resolveCollisionEvent(collision, collisionResolutionParams);
     });
-  }, [collisionWorldRef, gameTimeMsRef]);
+  }, [collisionWorldRef, gameTimeMsRef, playOneShotEffect]);
 
   useTick({
     callback: updateCollisions,

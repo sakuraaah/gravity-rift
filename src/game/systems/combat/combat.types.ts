@@ -1,3 +1,5 @@
+import type { Vector2 } from '@/game/utils';
+
 export type DamageResult = {
   appliedDamage: number;
   destroyed: boolean;
@@ -7,6 +9,14 @@ export type DamageResult = {
 
 export type ActiveEntity = {
   readonly isActive: boolean;
+};
+
+export type PositionedEntity = {
+  readonly position: Readonly<Vector2>;
+};
+
+export type SizedEntity<TSize> = {
+  readonly size: TSize;
 };
 
 export type Damageable = ActiveEntity & {

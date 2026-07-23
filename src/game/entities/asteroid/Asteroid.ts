@@ -11,6 +11,8 @@ import type {
   ContactDamageSource,
   DamageResult,
   Damageable,
+  PositionedEntity,
+  SizedEntity,
 } from '@/game/systems';
 import { randomInteger } from '@/game/utils';
 import type { Vector2 } from '@/game/utils';
@@ -28,7 +30,11 @@ let asteroidViewId = 0;
 
 export class Asteroid
   extends Sprite
-  implements Damageable, ContactDamageSource
+  implements
+    Damageable,
+    ContactDamageSource,
+    PositionedEntity,
+    SizedEntity<AsteroidSize>
 {
   public contactDamage =
     ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
@@ -37,13 +43,13 @@ export class Asteroid
 
   private readonly collider: Circle<CollisionParticipant>;
 
-  private colliderSize: AsteroidSize | null = null;
-
   private entityId: string | null = null;
 
   private hasEnteredBounds = false;
 
   private hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+
+  private asteroidSize = ASTEROID_INITIAL_SPAWN.size;
 
   private velocity: Vector2 = { x: 0, y: 0 };
 
@@ -62,19 +68,25 @@ export class Asteroid
       ASTEROID_INITIAL_SPAWN.location,
       1
     );
+    this.syncColliderSize();
+  }
+
+  public get size(): AsteroidSize {
+    return this.asteroidSize;
   }
 
   public init(data?: AsteroidSpawnData) {
     const spawnData = data ?? ASTEROID_INITIAL_SPAWN;
 
     this.position.set(spawnData.location.x, spawnData.location.y);
-    this.contactDamage = ASTEROID_CONTACT_DAMAGE_BY_SIZE[spawnData.size];
+    this.asteroidSize = spawnData.size;
+    this.contactDamage = ASTEROID_CONTACT_DAMAGE_BY_SIZE[this.asteroidSize];
     this.entityId = crypto.randomUUID();
-    this.hp = ASTEROID_MAX_HP_BY_SIZE[spawnData.size];
+    this.hp = ASTEROID_MAX_HP_BY_SIZE[this.asteroidSize];
     this.velocity = { ...spawnData.velocity };
     this.hasEnteredBounds = false;
-    this.syncColliderSize(spawnData.size);
-    this.applyTexture(spawnData.size);
+    this.syncColliderSize();
+    this.applyTexture();
     this.visible = true;
     this.isActive = true;
   }
@@ -160,28 +172,24 @@ export class Asteroid
       ASTEROID_INITIAL_SPAWN.location.y
     );
     this.velocity = { x: 0, y: 0 };
-    this.contactDamage =
-      ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+    this.asteroidSize = ASTEROID_INITIAL_SPAWN.size;
+    this.contactDamage = ASTEROID_CONTACT_DAMAGE_BY_SIZE[this.asteroidSize];
     this.entityId = null;
-    this.hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+    this.hp = ASTEROID_MAX_HP_BY_SIZE[this.asteroidSize];
     this.hasEnteredBounds = false;
+    this.syncColliderSize();
     this.visible = false;
     this.isActive = false;
   }
 
-  private applyTexture(size: AsteroidSize) {
-    const textures = getLoadedAsteroidTextures()[size];
+  private applyTexture() {
+    const textures = getLoadedAsteroidTextures()[this.asteroidSize];
 
     this.texture = textures[randomInteger(textures.length)];
     this.scale.set(GAME_SCALE);
   }
 
-  private syncColliderSize(size: AsteroidSize) {
-    if (this.colliderSize === size) {
-      return;
-    }
-
-    this.collider.setScale(ASTEROID_HITBOX_RADIUS_BY_SIZE[size]);
-    this.colliderSize = size;
+  private syncColliderSize() {
+    this.collider.setScale(ASTEROID_HITBOX_RADIUS_BY_SIZE[this.asteroidSize]);
   }
 }

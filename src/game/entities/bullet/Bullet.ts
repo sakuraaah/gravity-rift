@@ -7,6 +7,7 @@ import type {
   CollisionParticipant,
   CollisionWorld,
   Consumable,
+  PositionedEntity,
   ProjectileDamageSource,
 } from '@/game/systems';
 import type { Vector2 } from '@/game/utils';
@@ -24,7 +25,7 @@ let bulletViewId = 0;
 
 export class Bullet
   extends Container
-  implements Consumable, ProjectileDamageSource
+  implements Consumable, PositionedEntity, ProjectileDamageSource
 {
   public damage = DEFAULT_BULLET_DAMAGE;
 
