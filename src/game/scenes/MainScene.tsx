@@ -1,5 +1,6 @@
 import { Background } from '@/game/background';
 import { GameProvider } from '@/game/context';
+import { OneShotEffectPool } from '@/game/effects';
 import { AsteroidPool, BulletPool, Spaceship } from '@/game/entities';
 
 import { CollisionRunner } from './CollisionRunner';
@@ -15,6 +16,7 @@ export function MainScene() {
       <AsteroidPool />
       <BulletPool />
       <Spaceship />
+      <OneShotEffectPool />
       <CollisionRunner />
     </GameProvider>
   );

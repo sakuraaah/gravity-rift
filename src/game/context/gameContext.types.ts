@@ -1,5 +1,6 @@
 import type { ReactNode, RefObject } from 'react';
 
+import type { OneShotEffectRequest } from '@/game/effects';
 import type { CollisionWorld, PlayerActions } from '@/game/systems';
 
 export type SpaceshipLocation = {
@@ -13,6 +14,8 @@ export type GameContextValue = {
   collisionWorldRef: RefObject<CollisionWorld>;
   controlsRef: RefObject<PlayerActions>;
   gameTimeMsRef: RefObject<number>;
+  pendingOneShotEffectsRef: RefObject<OneShotEffectRequest[]>;
+  playOneShotEffect: (request: OneShotEffectRequest) => void;
   spaceshipLocationRef: RefObject<SpaceshipLocation>;
 };
 
