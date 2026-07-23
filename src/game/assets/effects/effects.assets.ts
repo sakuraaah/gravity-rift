@@ -8,6 +8,7 @@ const EXPLOSION_ATLAS_URL = '/assets/sprites/explosion.atlas.json';
 export type OneShotEffectTextures = {
   asteroidExplosion: Record<AsteroidSize, AnimationFrames>;
   bulletSpark: AnimationFrames;
+  debrisBurst: AnimationFrames;
   shipExplosion: AnimationFrames;
 };
 
@@ -37,6 +38,7 @@ async function loadTextures(): Promise<OneShotEffectTextures> {
       ),
     },
     bulletSpark: getSpritesheetAnimation(hitSpritesheet, 'bullet_spark'),
+    debrisBurst: getSpritesheetAnimation(hitSpritesheet, 'debris_burst'),
     shipExplosion: getSpritesheetAnimation(explosionSpritesheet, 'ship'),
   };
 }

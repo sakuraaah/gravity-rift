@@ -16,6 +16,8 @@ export function getAnimationFramesForRequest(
       return textures.asteroidExplosion[request.size];
     case OneShotEffectKind.BulletSpark:
       return textures.bulletSpark;
+    case OneShotEffectKind.DebrisBurst:
+      return textures.debrisBurst;
     case OneShotEffectKind.ShipExplosion:
       return textures.shipExplosion;
   }

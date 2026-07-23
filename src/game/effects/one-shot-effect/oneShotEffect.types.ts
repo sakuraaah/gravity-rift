@@ -17,6 +17,9 @@ export type OneShotEffectRequest =
       kind: typeof OneShotEffectKind.BulletSpark;
     })
   | (OneShotEffectRequestBase & {
+      kind: typeof OneShotEffectKind.DebrisBurst;
+    })
+  | (OneShotEffectRequestBase & {
       kind: typeof OneShotEffectKind.ShipExplosion;
     });
 
