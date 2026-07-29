@@ -1,127 +1,148 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import {
-  PlayerControlByKey,
-  PlayerControlByMouseButton,
+  DEFAULT_PLAYER_ACTIONS,
+  PLAYER_CONTROL_BY_KEY,
+  PLAYER_CONTROL_BY_MOUSE_BUTTON,
 } from './playerControls.constants';
-import type { PlayerActionCounts, PlayerActions } from './playerControls.types';
+import type {
+  ActiveInputIdsByAction,
+  PlayerActions,
+  UsePlayerControlsOptions,
+} from './playerControls.types';
+import {
+  createActiveInputIdsByAction,
+  isGameCanvas,
+  isInteractiveElement,
+} from './playerControls.utils';
 
-function createDefaultPlayerActions(): PlayerActions {
-  return {
-    fire: false,
-    left: false,
-    right: false,
-    up: false,
-  };
-}
-
-function createDefaultPlayerActionCounts(): PlayerActionCounts {
-  return {
-    fire: 0,
-    left: 0,
-    right: 0,
-    up: 0,
-  };
-}
-
-function createPlayerActionsFromCounts(
-  controlCounts: PlayerActionCounts
-): PlayerActions {
-  return {
-    fire: controlCounts.fire > 0,
-    left: controlCounts.left > 0,
-    right: controlCounts.right > 0,
-    up: controlCounts.up > 0,
-  };
-}
-
-export function usePlayerControls() {
-  const controlsRef = useRef<PlayerActions>(createDefaultPlayerActions());
-  const controlCountsRef = useRef<PlayerActionCounts>(
-    createDefaultPlayerActionCounts()
+export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
+  const controlsRef = useRef<PlayerActions>({ ...DEFAULT_PLAYER_ACTIONS });
+  const activeInputIdsByActionRef = useRef<ActiveInputIdsByAction>(
+    createActiveInputIdsByAction()
   );
-  const activeInputControlsRef = useRef(new Map<string, keyof PlayerActions>());
 
-  useEffect(() => {
-    function setControlInputState(
-      inputId: string,
-      control: keyof PlayerActions,
-      isPressed: boolean
-    ) {
+  const resetControls = useCallback(() => {
+    activeInputIdsByActionRef.current = createActiveInputIdsByAction();
+    controlsRef.current = { ...DEFAULT_PLAYER_ACTIONS };
+  }, []);
+
+  const setControlInputState = useCallback(
+    (inputId: string, control: keyof PlayerActions, isPressed: boolean) => {
+      const activeInputIds = activeInputIdsByActionRef.current[control];
+
       if (isPressed) {
-        if (activeInputControlsRef.current.has(inputId)) {
-          return;
+        if (!activeInputIds.has(inputId)) {
+          activeInputIds.add(inputId);
+          controlsRef.current = {
+            ...controlsRef.current,
+            [control]: true,
+          };
         }
 
-        activeInputControlsRef.current.set(inputId, control);
-        controlCountsRef.current[control] += 1;
-      } else {
-        const activeControl = activeInputControlsRef.current.get(inputId);
-
-        if (!activeControl) {
-          return;
-        }
-
-        activeInputControlsRef.current.delete(inputId);
-        controlCountsRef.current[activeControl] = Math.max(
-          0,
-          controlCountsRef.current[activeControl] - 1
-        );
+        return true;
       }
 
-      controlsRef.current = createPlayerActionsFromCounts(
-        controlCountsRef.current
-      );
-    }
+      if (!activeInputIds.delete(inputId)) {
+        return false;
+      }
 
-    function setKeyboardControlState(event: KeyboardEvent, isPressed: boolean) {
-      const control = PlayerControlByKey[event.code];
+      controlsRef.current = {
+        ...controlsRef.current,
+        [control]: activeInputIds.size > 0,
+      };
+
+      return true;
+    },
+    []
+  );
+
+  const setKeyboardControlState = useCallback(
+    (event: KeyboardEvent, isPressed: boolean) => {
+      const inputId = `keyboard:${event.code}`;
+      const control = PLAYER_CONTROL_BY_KEY[event.code];
 
       if (!control) {
         return;
       }
 
-      event.preventDefault();
-      setControlInputState(`keyboard:${event.code}`, control, isPressed);
-    }
-
-    function setMouseControlState(event: MouseEvent, isPressed: boolean) {
-      const control = PlayerControlByMouseButton[event.button];
-
-      if (!control) {
+      if (isPressed && isInteractiveElement(event.target)) {
         return;
       }
 
-      event.preventDefault();
-      setControlInputState(`mouse:${event.button}`, control, isPressed);
-    }
+      const isHandled = setControlInputState(inputId, control, isPressed);
 
-    function handleKeyDown(event: KeyboardEvent) {
-      setKeyboardControlState(event, true);
-    }
-
-    function handleKeyUp(event: KeyboardEvent) {
-      setKeyboardControlState(event, false);
-    }
-
-    function handleMouseDown(event: MouseEvent) {
-      setMouseControlState(event, true);
-    }
-
-    function handleMouseUp(event: MouseEvent) {
-      setMouseControlState(event, false);
-    }
-
-    function handleContextMenu(event: MouseEvent) {
-      if (PlayerControlByMouseButton[event.button]) {
+      if (isHandled) {
         event.preventDefault();
       }
-    }
+    },
+    [setControlInputState]
+  );
 
-    function handleWindowBlur() {
-      activeInputControlsRef.current.clear();
-      controlCountsRef.current = createDefaultPlayerActionCounts();
-      controlsRef.current = createDefaultPlayerActions();
+  const setMouseControlState = useCallback(
+    (event: MouseEvent, isPressed: boolean) => {
+      const inputId = `mouse:${event.button}`;
+      const control = PLAYER_CONTROL_BY_MOUSE_BUTTON[event.button];
+
+      if (!control) {
+        return;
+      }
+
+      if (isPressed && !isGameCanvas(event.target)) {
+        return;
+      }
+
+      const isHandled = setControlInputState(inputId, control, isPressed);
+
+      if (isHandled) {
+        event.preventDefault();
+      }
+    },
+    [setControlInputState]
+  );
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      setKeyboardControlState(event, true);
+    },
+    [setKeyboardControlState]
+  );
+
+  const handleKeyUp = useCallback(
+    (event: KeyboardEvent) => {
+      setKeyboardControlState(event, false);
+    },
+    [setKeyboardControlState]
+  );
+
+  const handleMouseDown = useCallback(
+    (event: MouseEvent) => {
+      setMouseControlState(event, true);
+    },
+    [setMouseControlState]
+  );
+
+  const handleMouseUp = useCallback(
+    (event: MouseEvent) => {
+      setMouseControlState(event, false);
+    },
+    [setMouseControlState]
+  );
+
+  const handleContextMenu = useCallback((event: MouseEvent) => {
+    if (
+      isGameCanvas(event.target) &&
+      PLAYER_CONTROL_BY_MOUSE_BUTTON[event.button]
+    ) {
+      event.preventDefault();
+    }
+  }, []);
+
+  useEffect(() => {
+    resetControls();
+
+    if (disabled) {
+      return;
     }
 
     window.addEventListener('keydown', handleKeyDown);
@@ -129,7 +150,7 @@ export function usePlayerControls() {
     window.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('contextmenu', handleContextMenu);
-    window.addEventListener('blur', handleWindowBlur);
+    window.addEventListener('blur', resetControls);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -137,9 +158,18 @@ export function usePlayerControls() {
       window.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('contextmenu', handleContextMenu);
-      window.removeEventListener('blur', handleWindowBlur);
+      window.removeEventListener('blur', resetControls);
+      resetControls();
     };
-  }, []);
+  }, [
+    disabled,
+    handleContextMenu,
+    handleKeyDown,
+    handleKeyUp,
+    handleMouseDown,
+    handleMouseUp,
+    resetControls,
+  ]);
 
   return controlsRef;
 }

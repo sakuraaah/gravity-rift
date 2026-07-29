@@ -5,4 +5,8 @@ export type PlayerActions = {
   up: boolean;
 };
 
-export type PlayerActionCounts = Record<keyof PlayerActions, number>;
+export type ActiveInputIdsByAction = Record<keyof PlayerActions, Set<string>>;
+
+export type UsePlayerControlsOptions = {
+  disabled: boolean;
+};
