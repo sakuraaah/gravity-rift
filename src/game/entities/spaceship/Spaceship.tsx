@@ -10,7 +10,7 @@ import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 import { useGameContext } from '@/game/context';
 import {
   CollisionKind,
-  GameTickPriority,
+  GAME_TICK_PRIORITY,
   scaleHitboxPoints,
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
@@ -197,7 +197,7 @@ export function Spaceship() {
 
   useTick({
     callback: updateTransform,
-    priority: GameTickPriority.EntityUpdate,
+    priority: GAME_TICK_PRIORITY.EntityUpdate,
   });
 
   return (

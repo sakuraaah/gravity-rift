@@ -10,7 +10,7 @@ import { useGameContext } from '@/game/context';
 import {
   ASTEROID_SPAWN_CONFIG_BY_SIZE,
   ASTEROID_SPAWN_SIZES,
-  GameTickPriority,
+  GAME_TICK_PRIORITY,
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
@@ -176,12 +176,12 @@ export function AsteroidPool() {
 
   useTick({
     callback: updateAsteroids,
-    priority: GameTickPriority.EntityUpdate,
+    priority: GAME_TICK_PRIORITY.EntityUpdate,
   });
 
   useTick({
     callback: cleanupInactiveAsteroids,
-    priority: GameTickPriority.EntityCleanup,
+    priority: GAME_TICK_PRIORITY.EntityCleanup,
   });
 
   return <pixiContainer ref={asteroidLayerRef} label="asteroid-layer" />;

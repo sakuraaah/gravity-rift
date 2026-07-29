@@ -6,7 +6,7 @@ import type { Container, Pool, Ticker } from 'pixi.js';
 import { Pool as PixiPool } from 'pixi.js';
 
 import { useGameContext } from '@/game/context';
-import { GameTickPriority } from '@/game/systems';
+import { GAME_TICK_PRIORITY } from '@/game/systems';
 import { GamePhase, useGameStore } from '@/store';
 
 import { OneShotEffect } from './OneShotEffect';
@@ -102,7 +102,7 @@ export function OneShotEffectPool() {
 
   useTick({
     callback: updateEffects,
-    priority: GameTickPriority.EffectUpdate,
+    priority: GAME_TICK_PRIORITY.EffectUpdate,
   });
 
   return <pixiContainer ref={effectLayerRef} label="one-shot-effects-layer" />;

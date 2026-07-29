@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useTick } from '@pixi/react';
 
 import { useGameContext } from '@/game/context';
-import { GameTickPriority, resolveCollisionEvent } from '@/game/systems';
+import { GAME_TICK_PRIORITY, resolveCollisionEvent } from '@/game/systems';
 import { GamePhase, useGameStore } from '@/store';
 
 export function CollisionRunner() {
@@ -28,7 +28,7 @@ export function CollisionRunner() {
 
   useTick({
     callback: updateCollisions,
-    priority: GameTickPriority.CollisionResolution,
+    priority: GAME_TICK_PRIORITY.CollisionResolution,
   });
 
   return null;

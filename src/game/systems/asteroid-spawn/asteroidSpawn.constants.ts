@@ -5,12 +5,12 @@ import type {
   AsteroidSpawnSideWeights,
 } from './asteroidSpawn.types';
 
-export const ASTEROID_SPAWN_SIDE_WEIGHTS: AsteroidSpawnSideWeights = {
+export const ASTEROID_SPAWN_SIDE_WEIGHTS = {
   bottom: 0.75,
   left: 0.25,
   right: 5,
   top: 0.75,
-};
+} as const satisfies AsteroidSpawnSideWeights;
 
 export const ASTEROID_SPAWN_SIZES = [
   AsteroidSize.Small,
@@ -18,10 +18,7 @@ export const ASTEROID_SPAWN_SIZES = [
   AsteroidSize.Large,
 ] as const;
 
-export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
-  AsteroidSize,
-  AsteroidSpawnConfig
-> = {
+export const ASTEROID_SPAWN_CONFIG_BY_SIZE = {
   [AsteroidSize.Small]: {
     initialDelayMs: 1200,
     intervalJitterRatio: 0.35,
@@ -52,4 +49,4 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE: Record<
     minIntervalMs: 6800,
     minSpawnDistance: 68,
   },
-};
+} as const satisfies Record<AsteroidSize, AsteroidSpawnConfig>;

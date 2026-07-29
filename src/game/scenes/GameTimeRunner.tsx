@@ -5,7 +5,7 @@ import { useTick } from '@pixi/react';
 import type { Ticker } from 'pixi.js';
 
 import { useGameContext } from '@/game/context';
-import { GameTickPriority } from '@/game/systems';
+import { GAME_TICK_PRIORITY } from '@/game/systems';
 import { GamePhase, useGameStore } from '@/store';
 
 export function GameTimeRunner() {
@@ -24,7 +24,7 @@ export function GameTimeRunner() {
 
   useTick({
     callback: updateGameTime,
-    priority: GameTickPriority.GameTimeUpdate,
+    priority: GAME_TICK_PRIORITY.GameTimeUpdate,
   });
 
   return null;

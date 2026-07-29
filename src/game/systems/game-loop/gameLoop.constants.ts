@@ -1,7 +1,7 @@
 import { UPDATE_PRIORITY } from 'pixi.js';
 
 // higher priorities run first
-export const GameTickPriority = {
+export const GAME_TICK_PRIORITY = {
   GameTimeUpdate: UPDATE_PRIORITY.HIGH,
   EntityUpdate: UPDATE_PRIORITY.NORMAL,
   CollisionResolution: UPDATE_PRIORITY.LOW + 10,

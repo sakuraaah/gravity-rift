@@ -36,7 +36,7 @@ export class Asteroid
     PositionedEntity,
     SizedEntity<AsteroidSize>
 {
-  public contactDamage =
+  public contactDamage: number =
     ASTEROID_CONTACT_DAMAGE_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
 
   public isActive = false;
@@ -47,9 +47,9 @@ export class Asteroid
 
   private hasEnteredBounds = false;
 
-  private hp = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
+  private hp: number = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
 
-  private asteroidSize = ASTEROID_INITIAL_SPAWN.size;
+  private asteroidSize: AsteroidSize = ASTEROID_INITIAL_SPAWN.size;
 
   private velocity: Vector2 = { x: 0, y: 0 };
 

@@ -7,7 +7,7 @@ import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
-import { GameTickPriority } from '@/game/systems';
+import { GAME_TICK_PRIORITY } from '@/game/systems';
 import { GamePhase, useGameStore } from '@/store';
 
 import { Bullet } from './Bullet';
@@ -157,12 +157,12 @@ export function BulletPool() {
 
   useTick({
     callback: updateBullets,
-    priority: GameTickPriority.EntityUpdate,
+    priority: GAME_TICK_PRIORITY.EntityUpdate,
   });
 
   useTick({
     callback: cleanupInactiveBullets,
-    priority: GameTickPriority.EntityCleanup,
+    priority: GAME_TICK_PRIORITY.EntityCleanup,
   });
 
   return <pixiContainer ref={bulletLayerRef} label="bullet-layer" />;
