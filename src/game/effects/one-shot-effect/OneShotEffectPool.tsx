@@ -7,7 +7,7 @@ import { Pool as PixiPool } from 'pixi.js';
 
 import { useGameContext } from '@/game/context';
 import { GAME_TICK_PRIORITY } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 import { OneShotEffect } from './OneShotEffect';
 import { ONE_SHOT_EFFECT_FPS_BY_KIND } from './oneShotEffect.constants';
@@ -57,7 +57,7 @@ export function OneShotEffectPool() {
 
   const updateEffects = useCallback(
     (ticker: Ticker) => {
-      if (useGameStore.getState().gamePhase === GamePhase.Paused) {
+      if (useAppStore.getState().gamePhase !== GamePhase.Running) {
         return;
       }
 

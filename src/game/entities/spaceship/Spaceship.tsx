@@ -15,7 +15,7 @@ import {
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
 import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
@@ -30,7 +30,7 @@ import {
 import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
-  const gamePhase = useGameStore((state) => state.gamePhase);
+  const gamePhase = useAppStore((state) => state.gamePhase);
   const entityIdRef = useRef<string | null>(null);
 
   if (entityIdRef.current === null) {
@@ -143,7 +143,7 @@ export function Spaceship() {
   const updateTransform = useCallback(
     (ticker: Ticker) => {
       const spaceship = spaceshipRef.current;
-      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
 
       if (!spaceship || gamePhase !== GamePhase.Running) {
         return;

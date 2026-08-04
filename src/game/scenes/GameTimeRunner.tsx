@@ -6,14 +6,14 @@ import type { Ticker } from 'pixi.js';
 
 import { useGameContext } from '@/game/context';
 import { GAME_TICK_PRIORITY } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 export function GameTimeRunner() {
   const { gameTimeMsRef } = useGameContext();
 
   const updateGameTime = useCallback(
     (ticker: Ticker) => {
-      if (useGameStore.getState().gamePhase !== GamePhase.Running) {
+      if (useAppStore.getState().gamePhase !== GamePhase.Running) {
         return;
       }
 

@@ -1,15 +1,14 @@
 import type { DamageResult } from '@/game/systems/combat';
 
-import type { GamePhase } from './gameStore.enums';
-
-export type GameStore = {
+export type GameState = {
   bulletDamage: number;
-  damagePlayer: (damage: number, gameTimeMs: number) => DamageResult | null;
-  gamePhase: GamePhase;
   gameSpeedMultiplier: number;
   playerHp: number;
   playerInvincibleUntilGameTimeMs: number;
+};
+
+export type GameSlice = GameState & {
+  damagePlayer: (damage: number, gameTimeMs: number) => DamageResult | null;
   setBulletDamage: (damage: number) => void;
-  setGamePhase: (gamePhase: GamePhase) => void;
   setGameSpeedMultiplier: (multiplier: number) => void;
 };

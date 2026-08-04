@@ -14,7 +14,7 @@ import {
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 import { Asteroid } from './Asteroid';
 import { ASTEROID_DESPAWN_MARGIN } from './asteroid.constants';
@@ -80,7 +80,7 @@ export function AsteroidPool() {
 
   const updateAsteroids = useCallback(
     (ticker: Ticker) => {
-      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
 
       if (gamePhase !== GamePhase.Running) {
         return;

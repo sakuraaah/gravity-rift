@@ -8,7 +8,7 @@ import { Pool as PixiPool } from 'pixi.js';
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
 import { GAME_TICK_PRIORITY } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 import { Bullet } from './Bullet';
 import {
@@ -55,7 +55,7 @@ export function BulletPool() {
       y: -Math.cos(rotation) * BULLET_BASE_MOVEMENT_SPEED,
     };
     const bullet = bulletPool.get({
-      damage: useGameStore.getState().bulletDamage,
+      damage: useAppStore.getState().bulletDamage,
       location: {
         x,
         y,
@@ -73,7 +73,7 @@ export function BulletPool() {
 
   const updateBullets = useCallback(
     (ticker: Ticker) => {
-      const { gamePhase, gameSpeedMultiplier } = useGameStore.getState();
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
 
       if (gamePhase !== GamePhase.Running) {
         return;

@@ -2,7 +2,7 @@ import { CollisionKind } from '@/game/systems/collision';
 import type { CollisionEvent } from '@/game/systems/collision';
 import type { CollisionResolutionParams } from '@/game/systems/collision-resolution/collisionResolution.types';
 import { getCollisionParticipant } from '@/game/systems/collision-resolution/collisionResolution.utils';
-import { useGameStore } from '@/store';
+import { useAppStore } from '@/store';
 
 export function handleSpaceshipAsteroidCollision(
   collision: CollisionEvent,
@@ -21,7 +21,7 @@ export function handleSpaceshipAsteroidCollision(
     return;
   }
 
-  useGameStore
+  useAppStore
     .getState()
     .damagePlayer(asteroidActor.contactDamage, params.gameTimeMs);
 }

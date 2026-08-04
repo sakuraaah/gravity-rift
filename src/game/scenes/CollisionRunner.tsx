@@ -4,14 +4,14 @@ import { useTick } from '@pixi/react';
 
 import { useGameContext } from '@/game/context';
 import { GAME_TICK_PRIORITY, resolveCollisionEvent } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 export function CollisionRunner() {
   const { collisionWorldRef, gameTimeMsRef, playOneShotEffect } =
     useGameContext();
 
   const updateCollisions = useCallback(() => {
-    if (useGameStore.getState().gamePhase !== GamePhase.Running) {
+    if (useAppStore.getState().gamePhase !== GamePhase.Running) {
       return;
     }
 

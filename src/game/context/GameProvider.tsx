@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from 'react';
 
 import type { OneShotEffectRequest } from '@/game/effects';
 import { CollisionWorld, usePlayerControls } from '@/game/systems';
-import { GamePhase, useGameStore } from '@/store';
+import { GamePhase, useAppStore } from '@/store';
 
 import { GameContext } from './GameContext';
 import type {
@@ -21,7 +21,7 @@ function createInitialSpaceshipLocation(): SpaceshipLocation {
 }
 
 export function GameProvider({ children }: GameProviderProps) {
-  const gamePhase = useGameStore((state) => state.gamePhase);
+  const gamePhase = useAppStore((state) => state.gamePhase);
   const collisionWorldRef = useRef(new CollisionWorld());
   const controlsRef = usePlayerControls({
     disabled: gamePhase !== GamePhase.Running,

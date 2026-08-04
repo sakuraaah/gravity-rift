@@ -1,5 +1,13 @@
+export const AppScreen = {
+  Game: 'game',
+  MainMenu: 'main-menu',
+} as const;
+
+export type AppScreen = (typeof AppScreen)[keyof typeof AppScreen];
+
 export const GamePhase = {
   GameOver: 'game-over',
+  Idle: 'idle',
   Paused: 'paused',
   Running: 'running',
 } as const;
