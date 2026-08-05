@@ -1,11 +1,10 @@
-import GameCanvas from '@/game/GameCanvas';
-
+import { AppScreenRenderer } from './AppScreenRenderer';
 import { AppProviders } from './providers';
 
 export default function App() {
   return (
     <AppProviders>
-      <GameCanvas />
+      <AppScreenRenderer />
     </AppProviders>
   );
 }

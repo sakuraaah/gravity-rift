@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
 
-import App from '@/app/App';
+import { App } from '@/app';
 
 createRoot(document.getElementById('pixi-container')!).render(<App />);
