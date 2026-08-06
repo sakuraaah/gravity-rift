@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 
+import { MainMenu } from '@/features/main-menu';
 import { PauseGame } from '@/features/pause-game';
 import GameCanvas from '@/game/GameCanvas';
 import { useAppStore } from '@/store';
@@ -13,6 +14,7 @@ export function GamePage() {
   return (
     <GamePageRoot ref={gameSurfaceRef} tabIndex={-1}>
       <GameCanvas key={runId} />
+      <MainMenu gameSurfaceRef={gameSurfaceRef} />
       <PauseGame gameSurfaceRef={gameSurfaceRef} />
     </GamePageRoot>
   );
