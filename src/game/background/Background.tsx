@@ -17,5 +17,9 @@ export function Background() {
     [app.screen.height, app.screen.width]
   );
 
-  return <pixiGraphics draw={drawBackground} />;
+  return (
+    <pixiContainer label="background-layer">
+      <pixiGraphics draw={drawBackground} />
+    </pixiContainer>
+  );
 }

@@ -2,17 +2,13 @@ import { Background } from '@/game/background';
 import { GameProvider } from '@/game/context';
 import { OneShotEffectPool } from '@/game/effects';
 import { AsteroidPool, BulletPool, Spaceship } from '@/game/entities';
+import { CollisionRunner, GameTimeRunner } from '@/game/runners';
 
-import { CollisionRunner } from './CollisionRunner';
-import { GameTimeRunner } from './GameTimeRunner';
-
-export function MainScene() {
+export function GameplayScene() {
   return (
     <GameProvider>
       <GameTimeRunner />
-      <pixiContainer label="background-layer">
-        <Background />
-      </pixiContainer>
+      <Background />
       <AsteroidPool />
       <BulletPool />
       <Spaceship />

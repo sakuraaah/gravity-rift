@@ -4,11 +4,12 @@ import { Application } from '@pixi/react';
 
 import { loadGameAssets } from '@/game/assets';
 import { GAME_LAYOUT, LAYOUT_SCALE, RENDER_RESOLUTION } from '@/game/constants';
-import { MainScene } from '@/game/scenes';
+import { useScene } from '@/game/hooks';
 
 import './pixi-setup';
 
 export default function GameCanvas() {
+  const Scene = useScene();
   const [assetState, setAssetState] = useState<'error' | 'loading' | 'ready'>(
     'loading'
   );
@@ -38,15 +39,11 @@ export default function GameCanvas() {
     width: GAME_LAYOUT.Width * LAYOUT_SCALE,
   };
 
-  if (assetState !== 'ready') {
-    return (
-      <div className="game-viewport game-loading-state" style={viewportStyle}>
-        {assetState === 'error' ? 'ASSET LOAD ERROR' : 'LOADING'}
-      </div>
-    );
-  }
-
-  return (
+  return assetState !== 'ready' ? (
+    <div className="game-viewport game-loading-state" style={viewportStyle}>
+      {assetState === 'error' ? 'ASSET LOAD ERROR' : 'LOADING'}
+    </div>
+  ) : (
     <div className="game-viewport" style={viewportStyle}>
       <Application
         antialias={false}
@@ -57,7 +54,7 @@ export default function GameCanvas() {
         roundPixels
         width={GAME_LAYOUT.Width}
       >
-        <MainScene />
+        <Scene />
       </Application>
     </div>
   );
