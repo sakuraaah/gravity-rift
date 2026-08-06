@@ -1,28 +1,47 @@
-import { GameDialog, PixelButton, PixelIconButton } from '@/shared/ui';
+import { useCallback } from 'react';
+
+import {
+  ControlFieldType,
+  ControlGrid,
+  Modal,
+  PixelIconButton,
+  useModal,
+} from '@/shared/ui';
+import type { ControlGridField } from '@/shared/ui';
 import { GamePhase, useAppStore } from '@/store';
 
-import { PauseButtonPosition, PauseDialogActions } from './PauseGame.styles';
+import { PauseButtonPosition, PauseControls } from './PauseGame.styles';
 import type { PauseGameProps } from './PauseGame.types';
 import { PauseIcon } from './PauseIcon';
 import { usePauseGameHotkey } from './usePauseGameHotkey';
 
 export function PauseGame({ gameSurfaceRef }: PauseGameProps) {
   const gamePhase = useAppStore((state) => state.gamePhase);
+
   const pauseGame = useAppStore((state) => state.pauseGame);
   const resumeGame = useAppStore((state) => state.resumeGame);
+
   const isPaused = gamePhase === GamePhase.Paused;
   const isPauseAvailable = gamePhase === GamePhase.Running || isPaused;
 
-  usePauseGameHotkey();
+  const handleModalOpenChange = useCallback(
+    (open: boolean) => {
+      if (open) {
+        pauseGame();
+        return;
+      }
 
-  const handleOpenChange = (open: boolean) => {
-    if (open) {
-      pauseGame();
-      return;
-    }
+      resumeGame();
+    },
+    [pauseGame, resumeGame]
+  );
 
-    resumeGame();
-  };
+  const modal = useModal({
+    onOpenChange: handleModalOpenChange,
+    open: isPaused,
+  });
+
+  usePauseGameHotkey({ handlePause: modal.open });
 
   const handleOpenChangeComplete = (open: boolean) => {
     if (!open) {
@@ -30,42 +49,46 @@ export function PauseGame({ gameSurfaceRef }: PauseGameProps) {
     }
   };
 
+  const fields = [
+    {
+      buttonProps: {
+        children: 'Resume',
+        fullWidth: true,
+        onClick: modal.close,
+        variant: 'primary',
+      },
+      id: 'resume',
+      type: ControlFieldType.Button,
+    },
+  ] satisfies ControlGridField[];
+
   return isPauseAvailable ? (
-    <GameDialog.Root
-      disablePointerDismissal
-      onOpenChange={handleOpenChange}
-      onOpenChangeComplete={handleOpenChangeComplete}
-      open={isPaused}
-    >
+    <>
       <PauseButtonPosition>
-        <GameDialog.Trigger
-          render={
-            <PixelIconButton aria-label="Pause game" variant="secondary">
-              <PauseIcon />
-            </PixelIconButton>
-          }
-        />
+        <PixelIconButton
+          aria-label="Pause game"
+          onClick={modal.open}
+          variant="secondary"
+        >
+          <PauseIcon />
+        </PixelIconButton>
       </PauseButtonPosition>
 
-      <GameDialog.Portal container={gameSurfaceRef}>
-        <GameDialog.Backdrop />
-        <GameDialog.Viewport>
-          <GameDialog.Popup finalFocus={false}>
-            <GameDialog.Title>// SYSTEM HALT</GameDialog.Title>
-            <GameDialog.Description>Game paused</GameDialog.Description>
-
-            <PauseDialogActions>
-              <GameDialog.Close
-                render={
-                  <PixelButton fullWidth variant="primary">
-                    Continue
-                  </PixelButton>
-                }
-              />
-            </PauseDialogActions>
-          </GameDialog.Popup>
-        </GameDialog.Viewport>
-      </GameDialog.Portal>
-    </GameDialog.Root>
+      <Modal
+        closable={false}
+        description="Press Resume to continue."
+        disablePointerDismissal
+        finalFocus={false}
+        onOpenChange={modal.setOpen}
+        onOpenChangeComplete={handleOpenChangeComplete}
+        open={modal.isOpen}
+        portalContainer={gameSurfaceRef}
+        title="Game Paused"
+      >
+        <PauseControls>
+          <ControlGrid fields={fields} />
+        </PauseControls>
+      </Modal>
+    </>
   ) : null;
 }

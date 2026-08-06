@@ -2,9 +2,10 @@ import { useEffect } from 'react';
 
 import { GamePhase, useAppStore } from '@/store';
 
-export function usePauseGameHotkey() {
+import type { UsePauseGameHotkeyOptions } from './PauseGame.types';
+
+export function usePauseGameHotkey({ handlePause }: UsePauseGameHotkeyOptions) {
   const gamePhase = useAppStore((state) => state.gamePhase);
-  const pauseGame = useAppStore((state) => state.pauseGame);
 
   useEffect(() => {
     if (gamePhase !== GamePhase.Running) {
@@ -17,7 +18,7 @@ export function usePauseGameHotkey() {
       }
 
       event.preventDefault();
-      pauseGame();
+      handlePause();
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -25,5 +26,5 @@ export function usePauseGameHotkey() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [gamePhase, pauseGame]);
+  }, [gamePhase, handlePause]);
 }

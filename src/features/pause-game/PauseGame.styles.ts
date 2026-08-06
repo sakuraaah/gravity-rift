@@ -7,7 +7,7 @@ export const PauseButtonPosition = styled.div(({ theme }) => ({
   right: '16px',
 }));
 
-export const PauseDialogActions = styled.div({
+export const PauseControls = styled.div({
   width: 'min(100%, 220px)',
-  margin: '24px auto 0',
+  margin: '0 auto',
 });
