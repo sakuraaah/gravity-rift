@@ -1,6 +1,6 @@
 import type { RefObject } from 'react';
 
-export type PauseGameProps = {
+export type GameOverlayProps = {
   gameSurfaceRef: RefObject<HTMLElement | null>;
 };
 

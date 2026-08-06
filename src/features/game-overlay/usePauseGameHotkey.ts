@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { GamePhase, useAppStore } from '@/store';
 
-import type { UsePauseGameHotkeyOptions } from './PauseGame.types';
+import type { UsePauseGameHotkeyOptions } from './GameOverlay.types';
 
 export function usePauseGameHotkey({ handlePause }: UsePauseGameHotkeyOptions) {
   const gamePhase = useAppStore((state) => state.gamePhase);
