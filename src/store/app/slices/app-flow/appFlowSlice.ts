@@ -28,7 +28,7 @@ export const createAppFlowSlice: StateCreator<
   endGame: () => {
     const { gamePhase, screen } = get();
 
-    if (screen !== AppScreen.Game || gamePhase !== GamePhase.Running) {
+    if (screen !== AppScreen.Game || gamePhase !== GamePhase.Dying) {
       return;
     }
 

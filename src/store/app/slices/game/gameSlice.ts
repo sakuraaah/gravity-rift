@@ -30,7 +30,7 @@ export const createGameSlice: StateCreator<AppStore, [], [], GameSlice> = (
 
     if (result.appliedDamage > 0) {
       set({
-        ...(result.destroyed ? { gamePhase: GamePhase.GameOver } : {}),
+        ...(result.destroyed ? { gamePhase: GamePhase.Dying } : {}),
         playerHp: result.remainingHp,
         playerInvincibleUntilGameTimeMs:
           gameTimeMs + PLAYER_INVINCIBILITY_DURATION_MS,

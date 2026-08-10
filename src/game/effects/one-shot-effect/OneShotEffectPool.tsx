@@ -57,7 +57,9 @@ export function OneShotEffectPool() {
 
   const updateEffects = useCallback(
     (ticker: Ticker) => {
-      if (useAppStore.getState().gamePhase !== GamePhase.Running) {
+      const { gamePhase } = useAppStore.getState();
+
+      if (gamePhase !== GamePhase.Running && gamePhase !== GamePhase.Dying) {
         return;
       }
 

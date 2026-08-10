@@ -6,6 +6,7 @@ export const AppScreen = {
 export type AppScreen = (typeof AppScreen)[keyof typeof AppScreen];
 
 export const GamePhase = {
+  Dying: 'dying',
   GameOver: 'game-over',
   Idle: 'idle',
   Paused: 'paused',

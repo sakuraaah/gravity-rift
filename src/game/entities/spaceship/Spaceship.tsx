@@ -31,6 +31,8 @@ import { useSpaceshipAnimation } from './hooks';
 
 export function Spaceship() {
   const gamePhase = useAppStore((state) => state.gamePhase);
+  const isVisible =
+    gamePhase === GamePhase.Running || gamePhase === GamePhase.Paused;
   const entityIdRef = useRef<string | null>(null);
 
   if (entityIdRef.current === null) {
@@ -201,7 +203,7 @@ export function Spaceship() {
   });
 
   return (
-    <pixiContainer ref={setSpaceshipRef} label="spaceship">
+    <pixiContainer ref={setSpaceshipRef} label="spaceship" visible={isVisible}>
       <pixiAnimatedSprite
         ref={particlesRef}
         anchor={0.5}
