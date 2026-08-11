@@ -1,4 +1,5 @@
 export * from './asteroid';
+export * from './background';
 export * from './constants';
 export * from './effects';
 export * from './game.assets';
