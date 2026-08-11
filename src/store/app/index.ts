@@ -7,5 +7,6 @@ export {
   DEFAULT_GAME_SPEED_MULTIPLIER,
   DEFAULT_PLAYER_HP,
   PLAYER_INVINCIBILITY_DURATION_MS,
+  PLAYER_INVINCIBILITY_FAST_BLINK_DURATION_MS,
 } from './slices/game';
 export type { GameSlice, GameState } from './slices/game';

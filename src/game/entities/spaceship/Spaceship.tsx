@@ -27,7 +27,7 @@ import {
   SPACESHIP_PARTICLES_ANIMATION_SPEED,
   getSpaceshipInitialPosition,
 } from './constants';
-import { useSpaceshipAnimation } from './hooks';
+import { useSpaceshipAnimation, useSpaceshipEffects } from './hooks';
 
 export function Spaceship() {
   const gamePhase = useAppStore((state) => state.gamePhase);
@@ -48,6 +48,7 @@ export function Spaceship() {
   const flameRef = useRef<AnimatedSprite>(null);
   const particlesRef = useRef<AnimatedSprite>(null);
   const headingRef = useRef(0);
+  useSpaceshipEffects(hullRef);
   const { flameTextures, hullTexture, particlesTextures, updateAnimation } =
     useSpaceshipAnimation({
       flameRef,
