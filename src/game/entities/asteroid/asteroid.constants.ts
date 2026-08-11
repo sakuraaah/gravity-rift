@@ -1,3 +1,5 @@
+import { ColorMatrixFilter } from 'pixi.js';
+
 import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 
 import { AsteroidSize } from './asteroid.enums';
@@ -28,6 +30,35 @@ export const ASTEROID_CONTACT_DAMAGE_BY_SIZE = {
   [AsteroidSize.Medium]: 1,
   [AsteroidSize.Small]: 1,
 } as const satisfies Record<AsteroidSize, number>;
+
+export const ASTEROID_HIT_FLASH_FILTER = new ColorMatrixFilter();
+
+ASTEROID_HIT_FLASH_FILTER.matrix = [
+  0,
+  0,
+  0,
+  0,
+  1, // red = 1
+  0,
+  0,
+  0,
+  0,
+  1, // green = 1
+  0,
+  0,
+  0,
+  0,
+  1, // blue = 1
+  0,
+  0,
+  0,
+  1,
+  0, // preserve source alpha
+];
+
+export const ASTEROID_HIT_FLASH_FILTERS = [ASTEROID_HIT_FLASH_FILTER];
+
+export const ASTEROID_HIT_FLASH_DURATION_MS = 50;
 
 export const ASTEROID_DESPAWN_MARGIN = 12 * GAME_SCALE;
 

@@ -4,6 +4,7 @@ export type {
   ContactDamageSource,
   Damageable,
   DamageResult,
+  Flashable,
   PositionedEntity,
   ProjectileDamageSource,
   SizedEntity,

@@ -53,6 +53,10 @@ export function handleBulletAsteroidCollision(
     return;
   }
 
+  if (damageResult.appliedDamage > 0) {
+    asteroidActor.flash();
+  }
+
   params.playOneShotEffect({
     kind: OneShotEffectKind.BulletSpark,
     position: bulletPosition,

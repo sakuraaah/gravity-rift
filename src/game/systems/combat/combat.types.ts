@@ -23,6 +23,10 @@ export type Damageable = ActiveEntity & {
   takeDamage: (damage: number) => DamageResult | null;
 };
 
+export interface Flashable {
+  flash: () => void;
+}
+
 export type Consumable = ActiveEntity & {
   consume: () => boolean;
 };

@@ -11,6 +11,7 @@ import type {
   ContactDamageSource,
   DamageResult,
   Damageable,
+  Flashable,
   PositionedEntity,
   SizedEntity,
 } from '@/game/systems';
@@ -20,6 +21,8 @@ import type { Vector2 } from '@/game/utils';
 import {
   ASTEROID_CONTACT_DAMAGE_BY_SIZE,
   ASTEROID_HITBOX_RADIUS_BY_SIZE,
+  ASTEROID_HIT_FLASH_DURATION_MS,
+  ASTEROID_HIT_FLASH_FILTERS,
   ASTEROID_INITIAL_SPAWN,
   ASTEROID_MAX_HP_BY_SIZE,
 } from './asteroid.constants';
@@ -31,6 +34,7 @@ let asteroidViewId = 0;
 export class Asteroid
   extends Sprite
   implements
+    Flashable,
     Damageable,
     ContactDamageSource,
     PositionedEntity,
@@ -46,6 +50,8 @@ export class Asteroid
   private entityId: string | null = null;
 
   private hasEnteredBounds = false;
+
+  private hitFlashTimeoutId: number | null = null;
 
   private hp: number = ASTEROID_MAX_HP_BY_SIZE[ASTEROID_INITIAL_SPAWN.size];
 
@@ -115,6 +121,22 @@ export class Asteroid
     return result;
   }
 
+  public flash() {
+    if (!this.isActive) {
+      return;
+    }
+
+    if (this.hitFlashTimeoutId !== null) {
+      window.clearTimeout(this.hitFlashTimeoutId);
+    }
+
+    this.filters = ASTEROID_HIT_FLASH_FILTERS;
+    this.hitFlashTimeoutId = window.setTimeout(() => {
+      this.filters = null;
+      this.hitFlashTimeoutId = null;
+    }, ASTEROID_HIT_FLASH_DURATION_MS);
+  }
+
   public registerCollider(collisionWorld: CollisionWorld) {
     if (this.entityId === null) {
       throw new Error(
@@ -166,6 +188,12 @@ export class Asteroid
   }
 
   public reset() {
+    if (this.hitFlashTimeoutId !== null) {
+      window.clearTimeout(this.hitFlashTimeoutId);
+      this.hitFlashTimeoutId = null;
+    }
+
+    this.filters = null;
     this.removeFromParent();
     this.position.set(
       ASTEROID_INITIAL_SPAWN.location.x,

@@ -5,6 +5,7 @@ import type {
   Consumable,
   ContactDamageSource,
   Damageable,
+  Flashable,
   PositionedEntity,
   ProjectileDamageSource,
   SizedEntity,
@@ -16,6 +17,7 @@ import type { CollisionPhase } from './collision.enums';
 export type CollisionParticipant =
   | {
       actor: Damageable &
+        Flashable &
         ContactDamageSource &
         PositionedEntity &
         SizedEntity<AsteroidSize>;
