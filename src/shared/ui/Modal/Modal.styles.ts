@@ -95,8 +95,14 @@ export const ModalDescription = styled(Dialog.Description)(({ theme }) => ({
   textAlign: 'center',
 }));
 
+export const ModalDivider = styled.div(({ theme }) => ({
+  height: '1px',
+  margin: '16px -28px 18px',
+  backgroundColor: theme.palette.border.soft,
+}));
+
 export const ModalContent = styled.div({
-  marginTop: '24px',
+  width: '100%',
 });
 
 export const ModalClosePosition = styled.div({

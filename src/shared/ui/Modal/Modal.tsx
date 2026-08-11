@@ -7,6 +7,7 @@ import {
   ModalClosePosition,
   ModalContent,
   ModalDescription,
+  ModalDivider,
   ModalPopup,
   ModalTitle,
   ModalViewport,
@@ -58,6 +59,7 @@ export function Modal({
             {description ? (
               <ModalDescription>{description}</ModalDescription>
             ) : null}
+            <ModalDivider />
             <ModalContent>{children}</ModalContent>
           </ModalPopup>
         </ModalViewport>
