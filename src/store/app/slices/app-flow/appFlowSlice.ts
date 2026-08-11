@@ -51,8 +51,10 @@ export const createAppFlowSlice: StateCreator<
   },
   restartGame: () => {
     const { gamePhase, screen } = get();
+    const isRestartable =
+      gamePhase === GamePhase.GameOver || gamePhase === GamePhase.Paused;
 
-    if (screen !== AppScreen.Game || gamePhase !== GamePhase.GameOver) {
+    if (screen !== AppScreen.Game || !isRestartable) {
       return;
     }
 

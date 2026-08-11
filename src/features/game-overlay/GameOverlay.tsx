@@ -21,6 +21,7 @@ import { usePauseGameHotkey } from './usePauseGameHotkey';
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
   const screen = useAppStore((state) => state.screen);
   const gamePhase = useAppStore((state) => state.gamePhase);
+  const goToMainMenu = useAppStore((state) => state.goToMainMenu);
   const pauseGame = useAppStore((state) => state.pauseGame);
   const restartGame = useAppStore((state) => state.restartGame);
   const resumeGame = useAppStore((state) => state.resumeGame);
@@ -64,6 +65,26 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
         variant: 'primary',
       },
       id: 'resume',
+      type: ControlFieldType.Button,
+    },
+    {
+      buttonProps: {
+        children: 'Restart',
+        fullWidth: true,
+        onClick: restartGame,
+        variant: 'secondary',
+      },
+      id: 'restart-game',
+      type: ControlFieldType.Button,
+    },
+    {
+      buttonProps: {
+        children: 'Main Menu',
+        fullWidth: true,
+        onClick: goToMainMenu,
+        variant: 'danger',
+      },
+      id: 'main-menu',
       type: ControlFieldType.Button,
     },
   ] satisfies ControlGridField[];
