@@ -34,6 +34,7 @@ export const appTheme = {
     },
     border: {
       soft: 'rgba(255, 255, 255, 0.1)',
+      selected: 'rgba(255, 255, 255, 0.6)',
       neon: 'rgba(255, 100, 168, 0.26)',
       amber: 'rgba(255, 178, 77, 0.34)',
     },

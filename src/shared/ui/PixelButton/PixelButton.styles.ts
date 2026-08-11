@@ -92,18 +92,22 @@ export const ButtonRoot = styled(Button, {
     `box-shadow ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
     `transform ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
   ].join(', '),
-  '&::before': {
-    width: '8px',
-    color: theme.palette.secondary.main,
-    content: '"►"',
-    opacity: 0,
-  },
+  ...($variant === 'primary'
+    ? {
+        '&::before': {
+          width: '1.1em',
+          height: '1em',
+          flex: '0 0 1.1em',
+          backgroundColor: 'currentColor',
+          clipPath: 'polygon(8% 0, 100% 50%, 8% 100%)',
+          color: theme.palette.primary.contrastText,
+          content: '""',
+        },
+      }
+    : {}),
   '&:focus-visible': {
-    outline: `2px solid ${theme.palette.secondary.main}`,
+    outline: `2px solid ${theme.palette.border.selected}`,
     outlineOffset: '3px',
-  },
-  '&:focus-visible::before': {
-    opacity: 1,
   },
   ...getVariantStyles(theme, $variant),
   '&[data-disabled]': {
