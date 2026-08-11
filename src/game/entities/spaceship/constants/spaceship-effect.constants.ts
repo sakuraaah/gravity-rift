@@ -13,3 +13,5 @@ export const SPACESHIP_DEFAULT_ALPHA = 1;
 export const SPACESHIP_DEFAULT_TINT = 0xffffff;
 
 export const SPACESHIP_FLASH_TINT = 0xff5c7a;
+
+export const SPACESHIP_DEATH_DURATION_MS = 2000;
