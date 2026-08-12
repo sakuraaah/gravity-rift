@@ -11,12 +11,18 @@ import { GAME_TICK_PRIORITY } from '@/game/systems';
 import { GamePhase, useAppStore } from '@/store';
 
 import { Bullet } from './Bullet';
+import { BulletTrail } from './BulletTrail';
 import {
   BULLET_BASE_MOVEMENT_SPEED,
   BULLET_DESPAWN_MARGIN,
   BULLET_FIRE_DEBOUNCE_MS,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
+
+type ActiveBullet = {
+  bullet: Bullet;
+  trail: BulletTrail;
+};
 
 export function BulletPool() {
   const {
@@ -26,10 +32,16 @@ export function BulletPool() {
     spaceshipLocationRef,
   } = useGameContext();
   const bulletLayerRef = useRef<Container>(null);
-  const activeBulletsRef = useRef<Bullet[]>([]);
+  const trailLayerRef = useRef<Container>(null);
+  const activeBulletsRef = useRef<ActiveBullet[]>([]);
+  const fadingTrailsRef = useRef<BulletTrail[]>([]);
   const lastBulletFiredAtRef = useRef<number | null>(null);
   const bulletPool = useMemo<Pool<Bullet, BulletSpawnData>>(
     () => new PixiPool(Bullet),
+    []
+  );
+  const trailPool = useMemo<Pool<BulletTrail>>(
+    () => new PixiPool(BulletTrail),
     []
   );
 
@@ -41,10 +53,19 @@ export function BulletPool() {
     [bulletPool, collisionWorldRef]
   );
 
+  const despawnActiveBullet = useCallback(
+    (activeBullet: ActiveBullet) => {
+      releaseBullet(activeBullet.bullet);
+      fadingTrailsRef.current.push(activeBullet.trail);
+    },
+    [releaseBullet]
+  );
+
   const spawnBullet = useCallback(() => {
     const bulletLayer = bulletLayerRef.current;
+    const trailLayer = trailLayerRef.current;
 
-    if (!bulletLayer) {
+    if (!bulletLayer || !trailLayer) {
       return false;
     }
 
@@ -63,13 +84,15 @@ export function BulletPool() {
       },
       velocity,
     });
+    const trail = trailPool.get(bullet.position);
 
     bullet.registerCollider(collisionWorld);
+    trailLayer.addChild(trail);
     bulletLayer.addChild(bullet);
-    activeBulletsRef.current.push(bullet);
+    activeBulletsRef.current.push({ bullet, trail });
 
     return true;
-  }, [bulletPool, collisionWorldRef, spaceshipLocationRef]);
+  }, [bulletPool, collisionWorldRef, spaceshipLocationRef, trailPool]);
 
   const updateBullets = useCallback(
     (ticker: Ticker) => {
@@ -80,13 +103,30 @@ export function BulletPool() {
       }
 
       for (
+        let index = fadingTrailsRef.current.length - 1;
+        index >= 0;
+        index -= 1
+      ) {
+        const trail = fadingTrailsRef.current[index];
+
+        if (!trail.fade(ticker.deltaMS)) {
+          continue;
+        }
+
+        trailPool.return(trail);
+        fadingTrailsRef.current.splice(index, 1);
+      }
+
+      for (
         let index = activeBulletsRef.current.length - 1;
         index >= 0;
         index -= 1
       ) {
-        const bullet = activeBulletsRef.current[index];
+        const activeBullet = activeBulletsRef.current[index];
+        const { bullet, trail } = activeBullet;
 
         bullet.update(ticker.deltaTime, gameSpeedMultiplier);
+        trail.recordPosition(bullet.position);
 
         if (
           bullet.isOutsideBounds(
@@ -95,7 +135,7 @@ export function BulletPool() {
             BULLET_DESPAWN_MARGIN
           )
         ) {
-          releaseBullet(bullet);
+          despawnActiveBullet(activeBullet);
           activeBulletsRef.current.splice(index, 1);
           continue;
         }
@@ -124,7 +164,14 @@ export function BulletPool() {
         }
       }
     },
-    [collisionWorldRef, controlsRef, gameTimeMsRef, releaseBullet, spawnBullet]
+    [
+      collisionWorldRef,
+      controlsRef,
+      despawnActiveBullet,
+      gameTimeMsRef,
+      spawnBullet,
+      trailPool,
+    ]
   );
 
   const cleanupInactiveBullets = useCallback(() => {
@@ -133,27 +180,34 @@ export function BulletPool() {
       index >= 0;
       index -= 1
     ) {
-      const bullet = activeBulletsRef.current[index];
+      const activeBullet = activeBulletsRef.current[index];
 
-      if (bullet.isActive) {
+      if (activeBullet.bullet.isActive) {
         continue;
       }
 
-      releaseBullet(bullet);
+      despawnActiveBullet(activeBullet);
       activeBulletsRef.current.splice(index, 1);
     }
-  }, [releaseBullet]);
+  }, [despawnActiveBullet]);
 
   useEffect(() => {
     return () => {
-      activeBulletsRef.current.forEach((bullet) => {
+      activeBulletsRef.current.forEach(({ bullet, trail }) => {
         releaseBullet(bullet);
+        trailPool.return(trail);
       });
       activeBulletsRef.current = [];
 
+      fadingTrailsRef.current.forEach((trail) => {
+        trailPool.return(trail);
+      });
+      fadingTrailsRef.current = [];
+
       bulletPool.clear();
+      trailPool.clear();
     };
-  }, [bulletPool, releaseBullet]);
+  }, [bulletPool, releaseBullet, trailPool]);
 
   useTick({
     callback: updateBullets,
@@ -165,5 +219,10 @@ export function BulletPool() {
     priority: GAME_TICK_PRIORITY.EntityCleanup,
   });
 
-  return <pixiContainer ref={bulletLayerRef} label="bullet-layer" />;
+  return (
+    <pixiContainer label="bullet-root">
+      <pixiContainer ref={trailLayerRef} label="bullet-trail-layer" />
+      <pixiContainer ref={bulletLayerRef} label="bullet-layer" />
+    </pixiContainer>
+  );
 }
