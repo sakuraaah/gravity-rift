@@ -1,0 +1,12 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="12"
+  height="1"
+  viewBox="0 0 12 1"
+  shape-rendering="crispEdges"
+>
+  <path d="M0 0H3V1H0Z" fill="#ffffff" fill-opacity="0.8" />
+  <path d="M3 0H6V1H3Z" fill="#ffffff" fill-opacity="0.55" />
+  <path d="M6 0H9V1H6Z" fill="#ffffff" fill-opacity="0.3" />
+  <path d="M9 0H11V1H9Z" fill="#ffffff" fill-opacity="0.12" />
+</svg>
