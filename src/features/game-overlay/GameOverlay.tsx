@@ -100,6 +100,16 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       id: 'restart-game',
       type: ControlFieldType.Button,
     },
+    {
+      buttonProps: {
+        children: 'Main Menu',
+        fullWidth: true,
+        onClick: goToMainMenu,
+        variant: 'secondary',
+      },
+      id: 'main-menu',
+      type: ControlFieldType.Button,
+    },
   ] satisfies ControlGridField[];
 
   return (
