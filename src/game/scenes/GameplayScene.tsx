@@ -3,12 +3,17 @@ import { GameProvider } from '@/game/context';
 import { OneShotEffectPool } from '@/game/effects';
 import { AsteroidPool, BulletPool, Spaceship } from '@/game/entities';
 import { CollisionRunner, GameTimeRunner } from '@/game/runners';
+import { GamePhase, useAppStore } from '@/store';
 
 export function GameplayScene() {
+  const isBackgroundAnimated = useAppStore(
+    (state) => state.gamePhase === GamePhase.Running
+  );
+
   return (
     <GameProvider>
       <GameTimeRunner />
-      <Background />
+      <Background isAnimated={isBackgroundAnimated} />
       <AsteroidPool />
       <BulletPool />
       <Spaceship />

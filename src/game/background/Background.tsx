@@ -4,22 +4,57 @@ import { useApplication } from '@pixi/react';
 
 import type { Graphics } from 'pixi.js';
 
-export function Background() {
-  const { app } = useApplication();
+import { getLoadedBackgroundTextures } from '@/game/assets';
 
-  const drawBackground = useCallback(
+import { ParallaxLayer } from './ParallaxLayer';
+import {
+  BACKGROUND_LAYERS,
+  BACKGROUND_SCRIM_ALPHA,
+  BACKGROUND_SCRIM_COLOR,
+} from './background.constants';
+
+type BackgroundProps = {
+  isAnimated: boolean;
+};
+
+export function Background({ isAnimated }: BackgroundProps) {
+  const { app } = useApplication();
+  const textures = getLoadedBackgroundTextures();
+  const backgroundHeight = app.screen.height;
+  const backgroundWidth = app.screen.width;
+
+  const drawScrim = useCallback(
     (graphics: Graphics) => {
       graphics.clear();
-      graphics.setFillStyle({ color: 0x050714 });
-      graphics.rect(0, 0, app.screen.width, app.screen.height);
+      graphics.setFillStyle({
+        alpha: BACKGROUND_SCRIM_ALPHA,
+        color: BACKGROUND_SCRIM_COLOR,
+      });
+      graphics.rect(0, 0, backgroundWidth, backgroundHeight);
       graphics.fill();
     },
-    [app.screen.height, app.screen.width]
+    [backgroundHeight, backgroundWidth]
   );
 
   return (
     <pixiContainer label="background-layer">
-      <pixiGraphics draw={drawBackground} />
+      {BACKGROUND_LAYERS.map((layer) => (
+        <ParallaxLayer
+          key={layer.texture}
+          alpha={layer.alpha}
+          height={backgroundHeight}
+          isAnimated={isAnimated}
+          label={`background-${layer.texture}`}
+          parallax={layer.parallax}
+          texture={textures[layer.texture]}
+          width={backgroundWidth}
+        />
+      ))}
+      <pixiGraphics
+        draw={drawScrim}
+        eventMode="none"
+        label="background-dimming-scrim"
+      />
     </pixiContainer>
   );
 }

@@ -7,4 +7,5 @@ export const GAME_TICK_PRIORITY = {
   CollisionResolution: UPDATE_PRIORITY.LOW + 10,
   EffectUpdate: UPDATE_PRIORITY.LOW + 8,
   EntityCleanup: UPDATE_PRIORITY.LOW + 5,
+  BackgroundUpdate: UPDATE_PRIORITY.LOW + 1,
 } as const;
