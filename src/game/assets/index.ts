@@ -1,5 +1,6 @@
 export * from './asteroid';
 export * from './background';
+export * from './black-hole';
 export * from './bullet';
 export * from './constants';
 export * from './effects';
