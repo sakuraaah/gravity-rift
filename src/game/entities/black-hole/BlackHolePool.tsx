@@ -6,7 +6,12 @@ import type { Container, Pool, Ticker } from 'pixi.js';
 import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
-import { GAME_TICK_PRIORITY } from '@/game/systems';
+import {
+  BLACK_HOLE_MAX_ACTIVE_COUNT,
+  GAME_TICK_PRIORITY,
+  createBlackHoleSpawnData,
+  sampleNextBlackHoleSpawnDelayMs,
+} from '@/game/systems';
 import { GamePhase, useAppStore } from '@/store';
 
 import { BlackHole } from './BlackHole';
@@ -22,6 +27,8 @@ function getActiveBlackHoleLocations(blackHoles: BlackHole[]) {
 export function BlackHolePool() {
   const blackHoleLayerRef = useRef<Container>(null);
   const activeBlackHolesRef = useRef<BlackHole[]>([]);
+  const blockedSpawnActiveCountRef = useRef<number | null>(null);
+  const nextSpawnDelayMsRef = useRef(sampleNextBlackHoleSpawnDelayMs());
   const blackHolePool = useMemo<Pool<BlackHole, BlackHoleSpawnData>>(
     () => new PixiPool(BlackHole),
     []
@@ -62,13 +69,45 @@ export function BlackHolePool() {
         blackHole.update(ticker);
       });
 
-      if (activeBlackHolesRef.current.length) {
+      const activeBlackHoleCount = activeBlackHolesRef.current.length;
+
+      if (activeBlackHoleCount >= BLACK_HOLE_MAX_ACTIVE_COUNT) {
         return;
       }
 
-      if (!spawnBlackHole({ location: { x: 22, y: 22 } })) {
+      if (blockedSpawnActiveCountRef.current === activeBlackHoleCount) {
         return;
       }
+
+      blockedSpawnActiveCountRef.current = null;
+
+      const nextDelay = nextSpawnDelayMsRef.current - ticker.deltaMS;
+
+      if (nextDelay > 0) {
+        nextSpawnDelayMsRef.current = nextDelay;
+        return;
+      }
+
+      const spawnData = createBlackHoleSpawnData({
+        bounds: {
+          height: GAME_LAYOUT.Height,
+          width: GAME_LAYOUT.Width,
+        },
+        occupiedLocations: getActiveBlackHoleLocations(
+          activeBlackHolesRef.current
+        ),
+      });
+
+      if (!spawnData) {
+        blockedSpawnActiveCountRef.current = activeBlackHoleCount;
+        return;
+      }
+
+      if (!spawnBlackHole(spawnData)) {
+        return;
+      }
+
+      nextSpawnDelayMsRef.current = sampleNextBlackHoleSpawnDelayMs();
     },
     [spawnBlackHole]
   );
