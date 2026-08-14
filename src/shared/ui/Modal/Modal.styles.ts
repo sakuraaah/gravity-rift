@@ -25,8 +25,8 @@ export const ModalBackdrop = styled(Dialog.Backdrop, {
   inset: 0,
   background:
     $strength === 'strong'
-      ? 'radial-gradient(ellipse at center, rgba(8, 3, 15, 0.76), rgba(8, 3, 15, 0.96))'
-      : 'radial-gradient(ellipse at center, rgba(8, 3, 15, 0.52), rgba(8, 3, 15, 0.86))',
+      ? 'radial-gradient(ellipse at center, rgba(8, 3, 15, 0.3), rgba(8, 3, 15, 0.58))'
+      : 'radial-gradient(ellipse at center, rgba(8, 3, 15, 0.18), rgba(8, 3, 15, 0.42))',
   opacity: 1,
   transition: `opacity ${theme.transitions.duration.normal} ${theme.transitions.easing.standard}`,
   '&[data-starting-style], &[data-ending-style]': {
