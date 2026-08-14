@@ -16,3 +16,14 @@ export const BlackHoleAnimation = {
 
 export type BlackHoleAnimation =
   (typeof BlackHoleAnimation)[keyof typeof BlackHoleAnimation];
+
+export const BlackHolePhase = {
+  Spawn: 'spawn',
+  Idle: 'idle',
+  Active: 'active',
+  Danger: 'danger',
+  Collapse: 'collapse',
+} as const;
+
+export type BlackHolePhase =
+  (typeof BlackHolePhase)[keyof typeof BlackHolePhase];
