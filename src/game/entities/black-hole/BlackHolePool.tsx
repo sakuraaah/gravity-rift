@@ -65,9 +65,22 @@ export function BlackHolePool() {
         return;
       }
 
-      activeBlackHolesRef.current.forEach((blackHole) => {
+      for (
+        let index = activeBlackHolesRef.current.length - 1;
+        index >= 0;
+        index -= 1
+      ) {
+        const blackHole = activeBlackHolesRef.current[index];
+
         blackHole.update(ticker);
-      });
+
+        if (!blackHole.isLifecycleComplete) {
+          continue;
+        }
+
+        activeBlackHolesRef.current.splice(index, 1);
+        releaseBlackHole(blackHole);
+      }
 
       const activeBlackHoleCount = activeBlackHolesRef.current.length;
 
@@ -109,7 +122,7 @@ export function BlackHolePool() {
 
       nextSpawnDelayMsRef.current = sampleNextBlackHoleSpawnDelayMs();
     },
-    [spawnBlackHole]
+    [releaseBlackHole, spawnBlackHole]
   );
 
   useEffect(() => {
