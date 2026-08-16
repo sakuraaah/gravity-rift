@@ -46,6 +46,16 @@ export function getCollisionInteraction(
     return CollisionInteraction.SpaceshipAsteroid;
   }
 
+  if (
+    isCollisionBetween(
+      collision,
+      CollisionKind.Spaceship,
+      CollisionKind.BlackHole
+    )
+  ) {
+    return CollisionInteraction.SpaceshipBlackHole;
+  }
+
   return null;
 }
 

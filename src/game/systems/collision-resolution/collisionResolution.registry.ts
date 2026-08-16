@@ -6,6 +6,7 @@ import {
   handleAsteroidAsteroidCollision,
   handleBulletAsteroidCollision,
   handleSpaceshipAsteroidCollision,
+  handleSpaceshipBlackHoleCollision,
 } from './handlers';
 
 export const collisionHandlerRegistry: CollisionHandlerRegistry = {
@@ -13,6 +14,8 @@ export const collisionHandlerRegistry: CollisionHandlerRegistry = {
     [CollisionInteraction.AsteroidAsteroid]: handleAsteroidAsteroidCollision,
     [CollisionInteraction.BulletAsteroid]: handleBulletAsteroidCollision,
     [CollisionInteraction.SpaceshipAsteroid]: handleSpaceshipAsteroidCollision,
+    [CollisionInteraction.SpaceshipBlackHole]:
+      handleSpaceshipBlackHoleCollision,
   },
   [CollisionPhase.Exit]: {},
   [CollisionPhase.Stay]: {},
