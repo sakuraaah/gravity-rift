@@ -39,6 +39,18 @@ export const createGameSlice: StateCreator<AppStore, [], [], GameSlice> = (
 
     return result;
   },
+  defeatPlayer: () => {
+    const { gamePhase, playerHp } = get();
+
+    if (gamePhase !== GamePhase.Running || playerHp <= 0) {
+      return;
+    }
+
+    set({
+      gamePhase: GamePhase.Dying,
+      playerHp: 0,
+    });
+  },
   setBulletDamage: (bulletDamage) => set({ bulletDamage }),
   setGameSpeedMultiplier: (gameSpeedMultiplier) => set({ gameSpeedMultiplier }),
 });

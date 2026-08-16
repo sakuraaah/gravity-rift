@@ -9,6 +9,7 @@ export type GameState = {
 
 export type GameSlice = GameState & {
   damagePlayer: (damage: number, gameTimeMs: number) => DamageResult | null;
+  defeatPlayer: () => void;
   setBulletDamage: (damage: number) => void;
   setGameSpeedMultiplier: (multiplier: number) => void;
 };
