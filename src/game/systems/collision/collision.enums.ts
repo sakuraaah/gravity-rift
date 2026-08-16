@@ -1,5 +1,6 @@
 export const CollisionKind = {
   Asteroid: 'asteroid',
+  BlackHole: 'black-hole',
   Bullet: 'bullet',
   Spaceship: 'spaceship',
 } as const;

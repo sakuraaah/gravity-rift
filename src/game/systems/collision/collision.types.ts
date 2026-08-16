@@ -31,6 +31,10 @@ export type CollisionParticipant =
     }
   | {
       id: string;
+      kind: typeof CollisionKind.BlackHole;
+    }
+  | {
+      id: string;
       kind: typeof CollisionKind.Spaceship;
     };
 

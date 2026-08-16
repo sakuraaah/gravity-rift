@@ -6,6 +6,7 @@ import type { Container, Pool, Ticker } from 'pixi.js';
 import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
+import { useGameContext } from '@/game/context';
 import {
   BLACK_HOLE_MAX_ACTIVE_COUNT,
   GAME_TICK_PRIORITY,
@@ -25,6 +26,7 @@ function getActiveBlackHoleLocations(blackHoles: BlackHole[]) {
 }
 
 export function BlackHolePool() {
+  const { collisionWorldRef } = useGameContext();
   const blackHoleLayerRef = useRef<Container>(null);
   const activeBlackHolesRef = useRef<BlackHole[]>([]);
   const blockedSpawnActiveCountRef = useRef<number | null>(null);
@@ -36,9 +38,10 @@ export function BlackHolePool() {
 
   const releaseBlackHole = useCallback(
     (blackHole: BlackHole) => {
+      blackHole.unregisterCollider(collisionWorldRef.current);
       blackHolePool.return(blackHole);
     },
-    [blackHolePool]
+    [blackHolePool, collisionWorldRef]
   );
 
   const spawnBlackHole = useCallback(
@@ -73,6 +76,7 @@ export function BlackHolePool() {
         const blackHole = activeBlackHolesRef.current[index];
 
         blackHole.update(ticker);
+        blackHole.syncCollider(collisionWorldRef.current);
 
         if (!blackHole.isLifecycleComplete) {
           continue;
@@ -122,7 +126,7 @@ export function BlackHolePool() {
 
       nextSpawnDelayMsRef.current = sampleNextBlackHoleSpawnDelayMs();
     },
-    [releaseBlackHole, spawnBlackHole]
+    [collisionWorldRef, releaseBlackHole, spawnBlackHole]
   );
 
   useEffect(() => {
