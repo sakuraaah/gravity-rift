@@ -5,6 +5,7 @@ export type {
   Damageable,
   DamageResult,
   Flashable,
+  PhasedEntity,
   PositionedEntity,
   ProjectileDamageSource,
   SizedEntity,

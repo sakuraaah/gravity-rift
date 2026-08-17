@@ -16,6 +16,7 @@ import type {
   CollisionParticipant,
   CollisionWorld,
 } from '@/game/systems/collision';
+import type { PhasedEntity, PositionedEntity } from '@/game/systems/combat';
 
 import {
   BLACK_HOLE_ANIMATION_FPS,
@@ -28,7 +29,10 @@ import type { BlackHoleSpawnData } from './blackHole.types';
 
 let blackHoleViewId = 0;
 
-export class BlackHole extends AnimatedSprite {
+export class BlackHole
+  extends AnimatedSprite
+  implements PositionedEntity, PhasedEntity<BlackHolePhase>
+{
   public isActive = false;
 
   public isLifecycleComplete = false;

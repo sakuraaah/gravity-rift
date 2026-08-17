@@ -15,6 +15,10 @@ export type PositionedEntity = {
   readonly position: Readonly<Vector2>;
 };
 
+export type PhasedEntity<TPhase> = {
+  readonly phase: TPhase;
+};
+
 export type SizedEntity<TSize> = {
   readonly size: TSize;
 };
