@@ -5,4 +5,5 @@ export * from './collision';
 export * from './collision-resolution';
 export * from './combat';
 export * from './game-loop';
+export * from './gravity';
 export * from './player-controls';
