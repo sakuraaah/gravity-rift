@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react';
 
 import type { OneShotEffectRequest } from '@/game/effects';
+import type { BlackHole } from '@/game/entities';
 import { CollisionWorld, usePlayerControls } from '@/game/systems';
 import { GamePhase, useAppStore } from '@/store';
 
@@ -22,6 +23,7 @@ function createInitialSpaceshipLocation(): SpaceshipLocation {
 
 export function GameProvider({ children }: GameProviderProps) {
   const gamePhase = useAppStore((state) => state.gamePhase);
+  const activeBlackHolesRef = useRef<BlackHole[]>([]);
   const collisionWorldRef = useRef(new CollisionWorld());
   const controlsRef = usePlayerControls({
     disabled: gamePhase !== GamePhase.Running,
@@ -41,6 +43,7 @@ export function GameProvider({ children }: GameProviderProps) {
 
   const gameContextValue = useMemo<GameContextValue>(
     () => ({
+      activeBlackHolesRef,
       collisionWorldRef,
       controlsRef,
       gameTimeMsRef,
@@ -49,6 +52,7 @@ export function GameProvider({ children }: GameProviderProps) {
       spaceshipLocationRef,
     }),
     [
+      activeBlackHolesRef,
       collisionWorldRef,
       controlsRef,
       gameTimeMsRef,

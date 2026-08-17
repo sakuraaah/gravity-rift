@@ -1,6 +1,7 @@
 import type { ReactNode, RefObject } from 'react';
 
 import type { OneShotEffectRequest } from '@/game/effects';
+import type { BlackHole } from '@/game/entities';
 import type { CollisionWorld, PlayerActions } from '@/game/systems';
 
 export type SpaceshipLocation = {
@@ -11,6 +12,7 @@ export type SpaceshipLocation = {
 };
 
 export type GameContextValue = {
+  activeBlackHolesRef: RefObject<BlackHole[]>;
   collisionWorldRef: RefObject<CollisionWorld>;
   controlsRef: RefObject<PlayerActions>;
   gameTimeMsRef: RefObject<number>;

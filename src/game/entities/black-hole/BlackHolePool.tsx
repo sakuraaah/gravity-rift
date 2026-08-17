@@ -26,9 +26,8 @@ function getActiveBlackHoleLocations(blackHoles: BlackHole[]) {
 }
 
 export function BlackHolePool() {
-  const { collisionWorldRef } = useGameContext();
+  const { activeBlackHolesRef, collisionWorldRef } = useGameContext();
   const blackHoleLayerRef = useRef<Container>(null);
-  const activeBlackHolesRef = useRef<BlackHole[]>([]);
   const blockedSpawnActiveCountRef = useRef<number | null>(null);
   const nextSpawnDelayMsRef = useRef(sampleNextBlackHoleSpawnDelayMs());
   const blackHolePool = useMemo<Pool<BlackHole, BlackHoleSpawnData>>(
@@ -59,7 +58,7 @@ export function BlackHolePool() {
 
       return true;
     },
-    [blackHolePool]
+    [activeBlackHolesRef, blackHolePool]
   );
 
   const updateBlackHoles = useCallback(
@@ -126,7 +125,7 @@ export function BlackHolePool() {
 
       nextSpawnDelayMsRef.current = sampleNextBlackHoleSpawnDelayMs();
     },
-    [collisionWorldRef, releaseBlackHole, spawnBlackHole]
+    [activeBlackHolesRef, collisionWorldRef, releaseBlackHole, spawnBlackHole]
   );
 
   useEffect(() => {
@@ -135,7 +134,7 @@ export function BlackHolePool() {
       activeBlackHolesRef.current = [];
       blackHolePool.clear();
     };
-  }, [blackHolePool, releaseBlackHole]);
+  }, [activeBlackHolesRef, blackHolePool, releaseBlackHole]);
 
   useTick({
     callback: updateBlackHoles,
