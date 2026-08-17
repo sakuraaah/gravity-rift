@@ -138,7 +138,7 @@ export function BlackHolePool() {
 
   useTick({
     callback: updateBlackHoles,
-    priority: GAME_TICK_PRIORITY.EntityUpdate,
+    priority: GAME_TICK_PRIORITY.BlackHoleUpdate,
   });
 
   return <pixiContainer ref={blackHoleLayerRef} label="black-hole-layer" />;
