@@ -24,6 +24,16 @@ export function getCollisionInteraction(
     isCollisionBetween(
       collision,
       CollisionKind.Asteroid,
+      CollisionKind.BlackHole
+    )
+  ) {
+    return CollisionInteraction.AsteroidBlackHole;
+  }
+
+  if (
+    isCollisionBetween(
+      collision,
+      CollisionKind.Asteroid,
       CollisionKind.Asteroid
     )
   ) {
@@ -34,6 +44,12 @@ export function getCollisionInteraction(
     isCollisionBetween(collision, CollisionKind.Bullet, CollisionKind.Asteroid)
   ) {
     return CollisionInteraction.BulletAsteroid;
+  }
+
+  if (
+    isCollisionBetween(collision, CollisionKind.Bullet, CollisionKind.BlackHole)
+  ) {
+    return CollisionInteraction.BulletBlackHole;
   }
 
   if (
