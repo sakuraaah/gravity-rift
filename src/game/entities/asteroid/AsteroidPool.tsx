@@ -178,15 +178,16 @@ export function AsteroidPool() {
         return;
       }
 
-      const deltaTime = ticker.deltaTime * gameSpeedMultiplier;
-
       activeAsteroidsRef.current.forEach((asteroid) => {
         const acceleration = calculateBlackHoleGravityAcceleration(
           asteroid.position,
           activeBlackHoles
         );
 
-        asteroid.applyGravity(acceleration, deltaTime);
+        asteroid.applyGravity(
+          acceleration,
+          ticker.deltaTime * gameSpeedMultiplier
+        );
       });
     },
     [activeBlackHolesRef]

@@ -209,15 +209,16 @@ export function BulletPool() {
         return;
       }
 
-      const deltaTime = ticker.deltaTime * gameSpeedMultiplier;
-
       activeBulletsRef.current.forEach(({ bullet }) => {
         const acceleration = calculateBlackHoleGravityAcceleration(
           bullet.position,
           activeBlackHoles
         );
 
-        bullet.applyGravity(acceleration, deltaTime);
+        bullet.applyGravity(
+          acceleration,
+          ticker.deltaTime * gameSpeedMultiplier
+        );
       });
     },
     [activeBlackHolesRef]
