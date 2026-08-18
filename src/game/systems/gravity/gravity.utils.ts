@@ -7,15 +7,16 @@ import {
   MIN_GRAVITY_DISTANCE_SQUARED,
   ZERO_GRAVITY_ACCELERATION,
 } from './gravity.constants';
+import type { BlackHoleGravityAccelerationResult } from './gravity.types';
 
 function calculateGravityAccelerationFromSource(
   targetPosition: Readonly<Vector2>,
   source: PositionedEntity & PhasedEntity<BlackHolePhase>
-): Readonly<Vector2> {
+): Readonly<Vector2> | null {
   const profile = BLACK_HOLE_GRAVITY_PROFILE_BY_PHASE[source.phase];
 
   if (!profile) {
-    return ZERO_GRAVITY_ACCELERATION;
+    return null;
   }
 
   const dx = source.position.x - targetPosition.x;
@@ -24,7 +25,11 @@ function calculateGravityAccelerationFromSource(
   const influenceRadiusSquared =
     profile.influenceRadius * profile.influenceRadius;
 
-  if (distanceSquared === 0 || distanceSquared > influenceRadiusSquared) {
+  if (distanceSquared >= influenceRadiusSquared) {
+    return null;
+  }
+
+  if (distanceSquared === 0) {
     return ZERO_GRAVITY_ACCELERATION;
   }
 
@@ -44,9 +49,10 @@ function calculateGravityAccelerationFromSource(
 export function calculateBlackHoleGravityAcceleration(
   targetPosition: Readonly<Vector2>,
   sources: readonly (PositionedEntity & PhasedEntity<BlackHolePhase>)[]
-): Vector2 {
+): BlackHoleGravityAccelerationResult {
   let accelerationX = 0;
   let accelerationY = 0;
+  let isInfluenced = false;
 
   for (const source of sources) {
     const sourceAcceleration = calculateGravityAccelerationFromSource(
@@ -54,12 +60,20 @@ export function calculateBlackHoleGravityAcceleration(
       source
     );
 
+    if (!sourceAcceleration) {
+      continue;
+    }
+
     accelerationX += sourceAcceleration.x;
     accelerationY += sourceAcceleration.y;
+    isInfluenced = true;
   }
 
   return {
-    x: accelerationX,
-    y: accelerationY,
+    acceleration: {
+      x: accelerationX,
+      y: accelerationY,
+    },
+    isInfluenced,
   };
 }

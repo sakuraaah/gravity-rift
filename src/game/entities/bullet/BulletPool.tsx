@@ -210,7 +210,7 @@ export function BulletPool() {
       }
 
       activeBulletsRef.current.forEach(({ bullet }) => {
-        const acceleration = calculateBlackHoleGravityAcceleration(
+        const { acceleration } = calculateBlackHoleGravityAcceleration(
           bullet.position,
           activeBlackHoles
         );

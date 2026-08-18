@@ -179,7 +179,7 @@ export function AsteroidPool() {
       }
 
       activeAsteroidsRef.current.forEach((asteroid) => {
-        const acceleration = calculateBlackHoleGravityAcceleration(
+        const { acceleration } = calculateBlackHoleGravityAcceleration(
           asteroid.position,
           activeBlackHoles
         );
