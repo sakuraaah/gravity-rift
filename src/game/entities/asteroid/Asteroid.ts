@@ -126,6 +126,23 @@ export class Asteroid
     return result;
   }
 
+  public destroyEntity(): DamageResult | null {
+    if (!this.isActive) {
+      return null;
+    }
+
+    const result = applyDamage(this.hp, this.hp);
+
+    this.hp = result.remainingHp;
+
+    if (result.destroyed) {
+      this.isActive = false;
+      this.visible = false;
+    }
+
+    return result;
+  }
+
   public flash() {
     if (!this.isActive) {
       return;

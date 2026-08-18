@@ -24,6 +24,7 @@ export type SizedEntity<TSize> = {
 };
 
 export type Damageable = ActiveEntity & {
+  destroyEntity: () => DamageResult | null;
   takeDamage: (damage: number) => DamageResult | null;
 };
 
