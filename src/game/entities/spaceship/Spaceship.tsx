@@ -11,10 +11,12 @@ import { useGameContext } from '@/game/context';
 import {
   CollisionKind,
   GAME_TICK_PRIORITY,
+  calculateBlackHoleGravityAcceleration,
   scaleHitboxPoints,
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
 import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
+import type { Vector2 } from '@/game/utils';
 import { GamePhase, useAppStore } from '@/store';
 
 import {
@@ -23,6 +25,7 @@ import {
   SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_ENGINE_OFFSET,
   SPACESHIP_FLAME_ANIMATION_SPEED,
+  SPACESHIP_GRAVITY_VELOCITY_RETENTION_PER_TICK,
   SPACESHIP_HITBOX_LOCAL_POINTS,
   SPACESHIP_PARTICLES_ANIMATION_SPEED,
   getSpaceshipInitialPosition,
@@ -48,6 +51,7 @@ export function Spaceship() {
   const flameRef = useRef<AnimatedSprite>(null);
   const particlesRef = useRef<AnimatedSprite>(null);
   const headingRef = useRef(0);
+  const gravityVelocityRef = useRef<Vector2>({ x: 0, y: 0 });
   useSpaceshipEffects(hullRef);
   const { flameTextures, hullTexture, particlesTextures, updateAnimation } =
     useSpaceshipAnimation({
@@ -56,8 +60,12 @@ export function Spaceship() {
       isPlaying: gamePhase === GamePhase.Running,
       particlesRef,
     });
-  const { collisionWorldRef, controlsRef, spaceshipLocationRef } =
-    useGameContext();
+  const {
+    activeBlackHolesRef,
+    collisionWorldRef,
+    controlsRef,
+    spaceshipLocationRef,
+  } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
     (spaceship: Container, facingIndex: number) => {
@@ -133,6 +141,7 @@ export function Spaceship() {
       spaceship.position.set(initialPosition.x, initialPosition.y);
       spaceship.rotation = 0;
       headingRef.current = 0;
+      gravityVelocityRef.current = { x: 0, y: 0 };
 
       const facingIndex = getFacingIndex(headingRef.current);
 
@@ -161,33 +170,38 @@ export function Spaceship() {
         ticker.deltaTime *
         gameSpeedMultiplier;
 
-      if (up) {
-        const nextX =
-          spaceship.position.x +
-          Math.sin(headingRef.current) *
-            SPACESHIP_BASE_MOVEMENT_SPEED *
-            ticker.deltaTime *
-            gameSpeedMultiplier;
-        const nextY =
-          spaceship.position.y -
-          Math.cos(headingRef.current) *
-            SPACESHIP_BASE_MOVEMENT_SPEED *
-            ticker.deltaTime *
-            gameSpeedMultiplier;
+      let nextX =
+        spaceship.position.x +
+        gravityVelocityRef.current.x * ticker.deltaTime * gameSpeedMultiplier;
+      let nextY =
+        spaceship.position.y +
+        gravityVelocityRef.current.y * ticker.deltaTime * gameSpeedMultiplier;
 
-        spaceship.position.set(
-          clamp(
-            nextX,
-            SPACESHIP_BOUNDARY_RADIUS,
-            GAME_LAYOUT.Width - SPACESHIP_BOUNDARY_RADIUS
-          ),
-          clamp(
-            nextY,
-            SPACESHIP_BOUNDARY_RADIUS,
-            GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
-          )
-        );
+      if (up) {
+        nextX +=
+          Math.sin(headingRef.current) *
+          SPACESHIP_BASE_MOVEMENT_SPEED *
+          ticker.deltaTime *
+          gameSpeedMultiplier;
+        nextY -=
+          Math.cos(headingRef.current) *
+          SPACESHIP_BASE_MOVEMENT_SPEED *
+          ticker.deltaTime *
+          gameSpeedMultiplier;
       }
+
+      spaceship.position.set(
+        clamp(
+          nextX,
+          SPACESHIP_BOUNDARY_RADIUS,
+          GAME_LAYOUT.Width - SPACESHIP_BOUNDARY_RADIUS
+        ),
+        clamp(
+          nextY,
+          SPACESHIP_BOUNDARY_RADIUS,
+          GAME_LAYOUT.Height - SPACESHIP_BOUNDARY_RADIUS
+        )
+      );
 
       const facingIndex = getFacingIndex(headingRef.current);
 
@@ -197,6 +211,45 @@ export function Spaceship() {
     },
     [controlsRef, syncCollider, syncSpaceshipLocation, updateAnimation]
   );
+
+  const updateGravity = useCallback(
+    (ticker: Ticker) => {
+      const spaceship = spaceshipRef.current;
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
+
+      if (!spaceship || gamePhase !== GamePhase.Running) {
+        return;
+      }
+
+      const { acceleration, isInfluenced } =
+        calculateBlackHoleGravityAcceleration(
+          spaceship.position,
+          activeBlackHolesRef.current
+        );
+
+      const gravityVelocity = gravityVelocityRef.current;
+
+      if (!isInfluenced) {
+        const gravityVelocityRetention =
+          SPACESHIP_GRAVITY_VELOCITY_RETENTION_PER_TICK **
+          (ticker.deltaTime * gameSpeedMultiplier);
+
+        gravityVelocity.x *= gravityVelocityRetention;
+        gravityVelocity.y *= gravityVelocityRetention;
+      }
+
+      gravityVelocity.x +=
+        acceleration.x * ticker.deltaTime * gameSpeedMultiplier;
+      gravityVelocity.y +=
+        acceleration.y * ticker.deltaTime * gameSpeedMultiplier;
+    },
+    [activeBlackHolesRef]
+  );
+
+  useTick({
+    callback: updateGravity,
+    priority: GAME_TICK_PRIORITY.GravityUpdate,
+  });
 
   useTick({
     callback: updateTransform,
