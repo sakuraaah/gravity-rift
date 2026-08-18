@@ -78,6 +78,11 @@ export class Bullet
     );
   }
 
+  public applyGravity(acceleration: Readonly<Vector2>, deltaTime: number) {
+    this.velocity.x += acceleration.x * deltaTime;
+    this.velocity.y += acceleration.y * deltaTime;
+  }
+
   public consume(): boolean {
     if (!this.isActive) {
       return false;

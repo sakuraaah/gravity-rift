@@ -104,6 +104,11 @@ export class Asteroid
     );
   }
 
+  public applyGravity(acceleration: Readonly<Vector2>, deltaTime: number) {
+    this.velocity.x += acceleration.x * deltaTime;
+    this.velocity.y += acceleration.y * deltaTime;
+  }
+
   public takeDamage(damage: number): DamageResult | null {
     if (!this.isActive) {
       return null;

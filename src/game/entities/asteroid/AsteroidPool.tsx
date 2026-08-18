@@ -11,6 +11,7 @@ import {
   ASTEROID_SPAWN_CONFIG_BY_SIZE,
   ASTEROID_SPAWN_SIZES,
   GAME_TICK_PRIORITY,
+  calculateBlackHoleGravityAcceleration,
   createAsteroidSpawnData,
   sampleNextAsteroidSpawnDelayMs,
 } from '@/game/systems';
@@ -39,7 +40,7 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
-  const { collisionWorldRef } = useGameContext();
+  const { activeBlackHolesRef, collisionWorldRef } = useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
   const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
@@ -163,6 +164,34 @@ export function AsteroidPool() {
     }
   }, [releaseAsteroid]);
 
+  const updateAsteroidGravity = useCallback(
+    (ticker: Ticker) => {
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
+
+      if (gamePhase !== GamePhase.Running) {
+        return;
+      }
+
+      const activeBlackHoles = activeBlackHolesRef.current;
+
+      if (activeBlackHoles.length === 0) {
+        return;
+      }
+
+      const deltaTime = ticker.deltaTime * gameSpeedMultiplier;
+
+      activeAsteroidsRef.current.forEach((asteroid) => {
+        const acceleration = calculateBlackHoleGravityAcceleration(
+          asteroid.position,
+          activeBlackHoles
+        );
+
+        asteroid.applyGravity(acceleration, deltaTime);
+      });
+    },
+    [activeBlackHolesRef]
+  );
+
   useEffect(() => {
     return () => {
       activeAsteroidsRef.current.forEach((asteroid) => {
@@ -173,6 +202,11 @@ export function AsteroidPool() {
       asteroidPool.clear();
     };
   }, [asteroidPool, releaseAsteroid]);
+
+  useTick({
+    callback: updateAsteroidGravity,
+    priority: GAME_TICK_PRIORITY.GravityUpdate,
+  });
 
   useTick({
     callback: updateAsteroids,

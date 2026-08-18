@@ -7,7 +7,10 @@ import { Pool as PixiPool } from 'pixi.js';
 
 import { GAME_LAYOUT } from '@/game/constants';
 import { useGameContext } from '@/game/context';
-import { GAME_TICK_PRIORITY } from '@/game/systems';
+import {
+  GAME_TICK_PRIORITY,
+  calculateBlackHoleGravityAcceleration,
+} from '@/game/systems';
 import { GamePhase, useAppStore } from '@/store';
 
 import { Bullet } from './Bullet';
@@ -26,6 +29,7 @@ type ActiveBullet = {
 
 export function BulletPool() {
   const {
+    activeBlackHolesRef,
     collisionWorldRef,
     controlsRef,
     gameTimeMsRef,
@@ -191,6 +195,34 @@ export function BulletPool() {
     }
   }, [despawnActiveBullet]);
 
+  const updateBulletGravity = useCallback(
+    (ticker: Ticker) => {
+      const { gamePhase, gameSpeedMultiplier } = useAppStore.getState();
+
+      if (gamePhase !== GamePhase.Running) {
+        return;
+      }
+
+      const activeBlackHoles = activeBlackHolesRef.current;
+
+      if (activeBlackHoles.length === 0) {
+        return;
+      }
+
+      const deltaTime = ticker.deltaTime * gameSpeedMultiplier;
+
+      activeBulletsRef.current.forEach(({ bullet }) => {
+        const acceleration = calculateBlackHoleGravityAcceleration(
+          bullet.position,
+          activeBlackHoles
+        );
+
+        bullet.applyGravity(acceleration, deltaTime);
+      });
+    },
+    [activeBlackHolesRef]
+  );
+
   useEffect(() => {
     return () => {
       activeBulletsRef.current.forEach(({ bullet, trail }) => {
@@ -208,6 +240,11 @@ export function BulletPool() {
       trailPool.clear();
     };
   }, [bulletPool, releaseBullet, trailPool]);
+
+  useTick({
+    callback: updateBulletGravity,
+    priority: GAME_TICK_PRIORITY.GravityUpdate,
+  });
 
   useTick({
     callback: updateBullets,
