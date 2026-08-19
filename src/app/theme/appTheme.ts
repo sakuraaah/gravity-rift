@@ -60,7 +60,7 @@ export const appTheme = {
       body: '12px',
       hudValue: '14px',
       title: '22px',
-      wordmark: '40px',
+      wordmark: '44px',
     },
     fontWeight: {
       regular: 400,
