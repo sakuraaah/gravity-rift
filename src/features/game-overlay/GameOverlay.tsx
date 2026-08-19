@@ -4,6 +4,7 @@ import {
   ControlFieldType,
   ControlGrid,
   Modal,
+  ModalHeaderTone,
   PixelIconButton,
   useModal,
 } from '@/shared/ui';
@@ -127,15 +128,16 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       )}
 
       <Modal
+        title="Game Paused"
+        subtitle="Resume to continue"
+        headerTone={ModalHeaderTone.Default}
         closable={false}
-        description="Press Resume to continue."
         disablePointerDismissal
         finalFocus={false}
         onOpenChange={pauseModal.setOpen}
         onOpenChangeComplete={handleOpenChangeComplete}
         open={pauseModal.isOpen}
         portalContainer={gameSurfaceRef}
-        title="Game Paused"
       >
         <GameOverlayControls>
           <ControlGrid fields={pauseFields} />
@@ -143,13 +145,15 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       </Modal>
 
       <Modal
+        title="Game Over"
+        subtitle="Signal Lost"
+        headerTone={ModalHeaderTone.Critical}
         closable={false}
         disablePointerDismissal
         finalFocus={false}
         onOpenChangeComplete={handleOpenChangeComplete}
         open={isGameOver}
         portalContainer={gameSurfaceRef}
-        title="Game Over"
       >
         <GameOverlayControls>
           <ControlGrid fields={gameOverFields} />

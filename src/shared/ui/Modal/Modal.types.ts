@@ -2,6 +2,8 @@ import type { CSSProperties, ComponentProps, ReactNode } from 'react';
 
 import type { Dialog } from '@base-ui/react/dialog';
 
+import type { ModalHeaderTone } from './Modal.enums';
+
 type DialogRootProps = ComponentProps<typeof Dialog.Root>;
 type DialogPopupProps = ComponentProps<typeof Dialog.Popup>;
 type DialogPortalProps = ComponentProps<typeof Dialog.Portal>;
@@ -9,16 +11,17 @@ type DialogPortalProps = ComponentProps<typeof Dialog.Portal>;
 export type ModalBackdropStrength = 'default' | 'strong';
 
 export type ModalProps = Omit<DialogRootProps, 'children' | 'modal'> & {
+  title: ReactNode;
+  subtitle?: ReactNode;
+  headerTone?: ModalHeaderTone;
   backdropStrength?: ModalBackdropStrength;
   children: ReactNode;
   closable?: boolean;
   closeLabel?: string;
-  description?: ReactNode;
   finalFocus?: DialogPopupProps['finalFocus'];
   initialFocus?: DialogPopupProps['initialFocus'];
   maxWidth?: CSSProperties['maxWidth'];
   portalContainer?: DialogPortalProps['container'];
-  title: ReactNode;
 };
 
 export type UseModalOptions = {

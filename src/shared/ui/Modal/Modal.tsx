@@ -2,13 +2,15 @@ import { Dialog } from '@base-ui/react/dialog';
 
 import { PixelIconButton } from '@/shared/ui/PixelButton';
 
+import { ModalHeaderTone } from './Modal.enums';
 import {
   ModalBackdrop,
   ModalClosePosition,
   ModalContent,
-  ModalDescription,
   ModalDivider,
+  ModalHeader,
   ModalPopup,
+  ModalSubtitle,
   ModalTitle,
   ModalViewport,
 } from './Modal.styles';
@@ -16,16 +18,17 @@ import type { ModalProps } from './Modal.types';
 import { ModalCloseIcon } from './ModalCloseIcon';
 
 export function Modal({
+  title,
+  subtitle,
+  headerTone = ModalHeaderTone.Default,
   backdropStrength = 'default',
   children,
   closable = true,
   closeLabel = 'Close modal',
-  description,
   finalFocus,
   initialFocus,
   maxWidth = '440px',
   portalContainer,
-  title,
   ...rootProps
 }: ModalProps) {
   const isContained = portalContainer !== undefined;
@@ -55,10 +58,10 @@ export function Modal({
               </ModalClosePosition>
             ) : null}
 
-            <ModalTitle>{title}</ModalTitle>
-            {description ? (
-              <ModalDescription>{description}</ModalDescription>
-            ) : null}
+            <ModalHeader $tone={headerTone}>
+              {subtitle ? <ModalSubtitle>{subtitle}</ModalSubtitle> : null}
+              <ModalTitle>{title}</ModalTitle>
+            </ModalHeader>
             <ModalDivider />
             <ModalContent>{children}</ModalContent>
           </ModalPopup>

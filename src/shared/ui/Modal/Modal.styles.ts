@@ -3,6 +3,7 @@ import type { CSSProperties } from 'react';
 import { Dialog } from '@base-ui/react/dialog';
 import styled from '@emotion/styled';
 
+import { ModalHeaderTone } from './Modal.enums';
 import type { ModalBackdropStrength } from './Modal.types';
 
 type ModalOverlayProps = {
@@ -15,6 +16,10 @@ type ModalBackdropProps = ModalOverlayProps & {
 
 type ModalPopupProps = {
   $maxWidth: CSSProperties['maxWidth'];
+};
+
+type ModalHeaderProps = {
+  $tone: ModalHeaderTone;
 };
 
 export const ModalBackdrop = styled(Dialog.Backdrop, {
@@ -72,10 +77,34 @@ export const ModalPopup = styled(Dialog.Popup, {
   },
 }));
 
+export const ModalHeader = styled.div<ModalHeaderProps>(({ $tone, theme }) => {
+  const colors = {
+    [ModalHeaderTone.Critical]: {
+      subtitleGap: '12px',
+      subtitle: theme.palette.text.dim,
+      subtitleShadow: 'none',
+      title: theme.palette.danger.main,
+    },
+    [ModalHeaderTone.Default]: {
+      subtitleGap: '14px',
+      subtitle: theme.palette.primary.main,
+      subtitleShadow: `0 0 8px ${theme.palette.glow.magenta}`,
+      title: theme.palette.text.high,
+    },
+  }[$tone];
+
+  return {
+    '--modal-subtitle-color': colors.subtitle,
+    '--modal-subtitle-gap': colors.subtitleGap,
+    '--modal-subtitle-shadow': colors.subtitleShadow,
+    '--modal-title-color': colors.title,
+  };
+});
+
 export const ModalTitle = styled(Dialog.Title)(({ theme }) => ({
   margin: 0,
   padding: '0 38px',
-  color: theme.palette.text.high,
+  color: 'var(--modal-title-color)',
   fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.title,
   fontWeight: theme.typography.fontWeight.regular,
@@ -86,13 +115,16 @@ export const ModalTitle = styled(Dialog.Title)(({ theme }) => ({
   textTransform: 'uppercase',
 }));
 
-export const ModalDescription = styled(Dialog.Description)(({ theme }) => ({
-  margin: '16px 0 0',
-  color: theme.palette.text.mid,
-  fontFamily: theme.typography.fontFamily.body,
-  fontSize: theme.typography.fontSize.body,
-  lineHeight: 1.7,
+export const ModalSubtitle = styled(Dialog.Description)(({ theme }) => ({
+  margin: '0 0 var(--modal-subtitle-gap)',
+  color: 'var(--modal-subtitle-color)',
+  fontFamily: theme.typography.fontFamily.display,
+  fontSize: '9px',
+  lineHeight: 1.4,
+  letterSpacing: '4px',
   textAlign: 'center',
+  textShadow: 'var(--modal-subtitle-shadow)',
+  textTransform: 'uppercase',
 }));
 
 export const ModalDivider = styled.div(({ theme }) => ({
