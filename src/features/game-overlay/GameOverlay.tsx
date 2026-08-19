@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useState } from 'react';
 
 import {
   ControlFieldType,
@@ -6,7 +6,6 @@ import {
   Modal,
   ModalHeaderTone,
   PixelIconButton,
-  useModal,
 } from '@/shared/ui';
 import type { ControlGridField } from '@/shared/ui';
 import { AppScreen, GamePhase, useAppStore } from '@/store';
@@ -15,11 +14,15 @@ import {
   GameOverlayControls,
   GameOverlayPauseButtonPosition,
 } from './GameOverlay.styles';
-import type { GameOverlayProps } from './GameOverlay.types';
+import type {
+  GameOverlayExitIntent,
+  GameOverlayProps,
+} from './GameOverlay.types';
 import { PauseIcon } from './PauseIcon';
 import { usePauseGameHotkey } from './usePauseGameHotkey';
 
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
+  const [exitIntent, setExitIntent] = useState<GameOverlayExitIntent>(null);
   const screen = useAppStore((state) => state.screen);
   const gamePhase = useAppStore((state) => state.gamePhase);
   const goToMainMenu = useAppStore((state) => state.goToMainMenu);
@@ -31,28 +34,42 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
   const isRunning = isGameScreen && gamePhase === GamePhase.Running;
   const isPaused = isGameScreen && gamePhase === GamePhase.Paused;
   const isGameOver = isGameScreen && gamePhase === GamePhase.GameOver;
+  const isPauseModalOpen = isPaused && exitIntent?.modal !== 'pause';
+  const isGameOverModalOpen = isGameOver && exitIntent?.modal !== 'game-over';
 
-  const handlePauseModalOpenChange = useCallback(
-    (open: boolean) => {
-      if (open) {
-        pauseGame();
-        return;
-      }
+  usePauseGameHotkey({ handlePause: pauseGame });
 
-      resumeGame();
-    },
-    [pauseGame, resumeGame]
-  );
+  const requestExit = (intent: NonNullable<GameOverlayExitIntent>) => {
+    setExitIntent((currentIntent) => currentIntent ?? intent);
+  };
 
-  const pauseModal = useModal({
-    onOpenChange: handlePauseModalOpenChange,
-    open: isPaused,
-  });
-
-  usePauseGameHotkey({ handlePause: pauseModal.open });
-
-  const handleOpenChangeComplete = (open: boolean) => {
+  const handlePauseModalOpenChange = (open: boolean) => {
     if (!open) {
+      requestExit({ action: 'resume', modal: 'pause' });
+    }
+  };
+
+  const handleModalOpenChangeComplete = (
+    modal: NonNullable<GameOverlayExitIntent>['modal'],
+    open: boolean
+  ) => {
+    if (open || exitIntent?.modal !== modal) {
+      return;
+    }
+
+    const { action } = exitIntent;
+
+    if (action === 'main-menu') {
+      goToMainMenu();
+    } else if (action === 'restart') {
+      restartGame();
+    } else {
+      resumeGame();
+    }
+
+    setExitIntent(null);
+
+    if (action !== 'main-menu') {
       gameSurfaceRef.current?.focus({ preventScroll: true });
     }
   };
@@ -62,7 +79,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       buttonProps: {
         children: 'Resume',
         fullWidth: true,
-        onClick: pauseModal.close,
+        onClick: () => requestExit({ action: 'resume', modal: 'pause' }),
         variant: 'primary',
       },
       id: 'resume',
@@ -72,7 +89,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       buttonProps: {
         children: 'Restart',
         fullWidth: true,
-        onClick: restartGame,
+        onClick: () => requestExit({ action: 'restart', modal: 'pause' }),
         variant: 'secondary',
       },
       id: 'restart-game',
@@ -82,7 +99,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       buttonProps: {
         children: 'Main Menu',
         fullWidth: true,
-        onClick: goToMainMenu,
+        onClick: () => requestExit({ action: 'main-menu', modal: 'pause' }),
         variant: 'danger',
       },
       id: 'main-menu',
@@ -95,7 +112,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       buttonProps: {
         children: 'Restart',
         fullWidth: true,
-        onClick: restartGame,
+        onClick: () => requestExit({ action: 'restart', modal: 'game-over' }),
         variant: 'primary',
       },
       id: 'restart-game',
@@ -105,7 +122,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       buttonProps: {
         children: 'Main Menu',
         fullWidth: true,
-        onClick: goToMainMenu,
+        onClick: () => requestExit({ action: 'main-menu', modal: 'game-over' }),
         variant: 'secondary',
       },
       id: 'main-menu',
@@ -119,7 +136,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
         <GameOverlayPauseButtonPosition>
           <PixelIconButton
             aria-label="Pause game"
-            onClick={pauseModal.open}
+            onClick={pauseGame}
             variant="secondary"
           >
             <PauseIcon />
@@ -134,9 +151,11 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
         closable={false}
         disablePointerDismissal
         finalFocus={false}
-        onOpenChange={pauseModal.setOpen}
-        onOpenChangeComplete={handleOpenChangeComplete}
-        open={pauseModal.isOpen}
+        onOpenChange={handlePauseModalOpenChange}
+        onOpenChangeComplete={(open) =>
+          handleModalOpenChangeComplete('pause', open)
+        }
+        open={isPauseModalOpen}
         portalContainer={gameSurfaceRef}
       >
         <GameOverlayControls>
@@ -151,8 +170,10 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
         closable={false}
         disablePointerDismissal
         finalFocus={false}
-        onOpenChangeComplete={handleOpenChangeComplete}
-        open={isGameOver}
+        onOpenChangeComplete={(open) =>
+          handleModalOpenChangeComplete('game-over', open)
+        }
+        open={isGameOverModalOpen}
         portalContainer={gameSurfaceRef}
       >
         <GameOverlayControls>
