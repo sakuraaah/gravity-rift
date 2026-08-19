@@ -6,7 +6,10 @@ import type { Texture, Ticker, TilingSprite } from 'pixi.js';
 
 import { GAME_TICK_PRIORITY } from '@/game/systems';
 
-import { BACKGROUND_DRIFT_PIXELS_PER_SECOND } from './background.constants';
+import {
+  BACKGROUND_DRIFT_PIXELS_PER_SECOND,
+  BACKGROUND_TILE_SCALE,
+} from './background.constants';
 
 type ParallaxLayerProps = {
   alpha?: number;
@@ -62,6 +65,7 @@ export function ParallaxLayer({
       height={height}
       label={label}
       texture={texture}
+      tileScale={BACKGROUND_TILE_SCALE}
       width={width}
     />
   );

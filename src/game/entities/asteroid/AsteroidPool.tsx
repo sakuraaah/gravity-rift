@@ -88,7 +88,8 @@ export function AsteroidPool() {
       }
 
       ASTEROID_SPAWN_SIZES.forEach((size) => {
-        const nextDelay = spawnDelaysRef.current[size] - ticker.deltaMS;
+        const nextDelay =
+          spawnDelaysRef.current[size] - ticker.deltaMS * gameSpeedMultiplier;
 
         if (nextDelay > 0) {
           spawnDelaysRef.current[size] = nextDelay;

@@ -9,6 +9,7 @@ import {
   BULLET_TRAIL_FADE_DURATION_MS,
   BULLET_TRAIL_POINT_COUNT,
   BULLET_TRAIL_POINT_SPACING,
+  BULLET_TRAIL_WIDTH,
 } from './bullet.constants';
 
 let bulletTrailViewId = 0;
@@ -30,6 +31,7 @@ export class BulletTrail extends MeshRope {
       points: trailPoints,
       texture: getLoadedBulletTrailTexture(),
       textureScale: 0,
+      width: BULLET_TRAIL_WIDTH,
     });
 
     this.trailPoints = trailPoints;

@@ -13,7 +13,7 @@ export const BLACK_HOLE_HITBOX_RADIUS = 1 * GAME_SCALE;
 export const BLACK_HOLE_ANIMATION_FPS = 6;
 
 export const BLACK_HOLE_INITIAL_SPAWN = {
-  location: { x: 24, y: 24 },
+  location: { x: 24 * GAME_SCALE, y: 24 * GAME_SCALE },
 } as const;
 
 export const BLACK_HOLE_PHASE_BY_ANIMATION = {

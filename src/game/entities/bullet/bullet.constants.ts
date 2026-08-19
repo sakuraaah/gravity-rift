@@ -16,6 +16,8 @@ export const BULLET_TRAIL_POINT_COUNT = 7;
 
 export const BULLET_TRAIL_POINT_SPACING = 2 * GAME_SCALE;
 
+export const BULLET_TRAIL_WIDTH = 1 * GAME_SCALE;
+
 export const BULLET_TRAIL_FADE_DURATION_MS = 120;
 
 export const BULLET_INITIAL_LOCATION = {

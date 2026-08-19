@@ -1,3 +1,4 @@
+import { GAME_SCALE } from '@/game/constants';
 import { AsteroidSize } from '@/game/entities/asteroid/asteroid.enums';
 
 import type {
@@ -27,7 +28,7 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE = {
     maxSpawnAttempts: 8,
     meanIntervalMs: 3000,
     minIntervalMs: 1900,
-    minSpawnDistance: 42,
+    minSpawnDistance: 42 * GAME_SCALE,
   },
   [AsteroidSize.Medium]: {
     initialDelayMs: 2400,
@@ -37,7 +38,7 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE = {
     maxSpawnAttempts: 8,
     meanIntervalMs: 5500,
     minIntervalMs: 3600,
-    minSpawnDistance: 54,
+    minSpawnDistance: 54 * GAME_SCALE,
   },
   [AsteroidSize.Large]: {
     initialDelayMs: 4200,
@@ -47,6 +48,6 @@ export const ASTEROID_SPAWN_CONFIG_BY_SIZE = {
     maxSpawnAttempts: 8,
     meanIntervalMs: 9000,
     minIntervalMs: 6800,
-    minSpawnDistance: 68,
+    minSpawnDistance: 68 * GAME_SCALE,
   },
 } as const satisfies Record<AsteroidSize, AsteroidSpawnConfig>;

@@ -1,4 +1,5 @@
 import type { BackgroundTextures } from '@/game/assets';
+import { GAME_SCALE } from '@/game/constants';
 
 type BackgroundLayerConfig = {
   alpha: number;
@@ -15,8 +16,13 @@ export const BACKGROUND_LAYERS = [
 ] as const satisfies readonly BackgroundLayerConfig[];
 
 export const BACKGROUND_DRIFT_PIXELS_PER_SECOND = {
-  x: 1.5,
-  y: 0.35,
+  x: 1.5 * GAME_SCALE,
+  y: 0.35 * GAME_SCALE,
+} as const;
+
+export const BACKGROUND_TILE_SCALE = {
+  x: GAME_SCALE,
+  y: GAME_SCALE,
 } as const;
 
 export const BACKGROUND_SCRIM_ALPHA = 0.45;

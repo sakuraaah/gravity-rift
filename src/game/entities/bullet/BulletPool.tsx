@@ -156,9 +156,10 @@ export function BulletPool() {
 
       const gameTimeMs = gameTimeMsRef.current;
       const lastBulletFiredAt = lastBulletFiredAtRef.current;
+      const fireDebounceMs = BULLET_FIRE_DEBOUNCE_MS / gameSpeedMultiplier;
       const canFire =
         lastBulletFiredAt === null ||
-        gameTimeMs - lastBulletFiredAt >= BULLET_FIRE_DEBOUNCE_MS;
+        gameTimeMs - lastBulletFiredAt >= fireDebounceMs;
 
       if (canFire) {
         const spawnBulletSuccess = spawnBullet();
