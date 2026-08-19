@@ -22,11 +22,18 @@ import { ASTEROID_DESPAWN_MARGIN } from './asteroid.constants';
 import type { AsteroidSize } from './asteroid.enums';
 import type { AsteroidSpawnData } from './asteroid.types';
 
-function createInitialSpawnDelays(): Record<AsteroidSize, number> {
+function createInitialNextSpawnAtGameTimeMs(
+  gameTimeMs: number,
+  gameSpeedMultiplier: number
+): Record<AsteroidSize, number> {
   return ASTEROID_SPAWN_SIZES.reduce(
-    (spawnDelays, size) => {
-      spawnDelays[size] = ASTEROID_SPAWN_CONFIG_BY_SIZE[size].initialDelayMs;
-      return spawnDelays;
+    (nextSpawnAtGameTimeMs, size) => {
+      nextSpawnAtGameTimeMs[size] =
+        gameTimeMs +
+        ASTEROID_SPAWN_CONFIG_BY_SIZE[size].initialDelayMs /
+          gameSpeedMultiplier;
+
+      return nextSpawnAtGameTimeMs;
     },
     {} as Record<AsteroidSize, number>
   );
@@ -40,11 +47,15 @@ function getActiveAsteroidLocations(asteroids: Asteroid[]) {
 }
 
 export function AsteroidPool() {
-  const { activeBlackHolesRef, collisionWorldRef } = useGameContext();
+  const { activeBlackHolesRef, collisionWorldRef, gameTimeMsRef } =
+    useGameContext();
   const asteroidLayerRef = useRef<Container>(null);
   const activeAsteroidsRef = useRef<Asteroid[]>([]);
-  const spawnDelaysRef = useRef<Record<AsteroidSize, number>>(
-    createInitialSpawnDelays()
+  const nextSpawnAtGameTimeMsRef = useRef<Record<AsteroidSize, number>>(
+    createInitialNextSpawnAtGameTimeMs(
+      gameTimeMsRef.current,
+      useAppStore.getState().gameSpeedMultiplier
+    )
   );
   const asteroidPool = useMemo<Pool<Asteroid, AsteroidSpawnData>>(
     () => new PixiPool(Asteroid),
@@ -87,12 +98,10 @@ export function AsteroidPool() {
         return;
       }
 
-      ASTEROID_SPAWN_SIZES.forEach((size) => {
-        const nextDelay =
-          spawnDelaysRef.current[size] - ticker.deltaMS * gameSpeedMultiplier;
+      const gameTimeMs = gameTimeMsRef.current;
 
-        if (nextDelay > 0) {
-          spawnDelaysRef.current[size] = nextDelay;
+      ASTEROID_SPAWN_SIZES.forEach((size) => {
+        if (gameTimeMs < nextSpawnAtGameTimeMsRef.current[size]) {
           return;
         }
 
@@ -116,9 +125,10 @@ export function AsteroidPool() {
           })
         );
 
-        spawnDelaysRef.current[size] = spawnSuccess
-          ? sampleNextAsteroidSpawnDelayMs(size)
-          : 0;
+        nextSpawnAtGameTimeMsRef.current[size] = spawnSuccess
+          ? gameTimeMs +
+            sampleNextAsteroidSpawnDelayMs(size) / gameSpeedMultiplier
+          : gameTimeMs;
       });
 
       for (
@@ -145,7 +155,7 @@ export function AsteroidPool() {
         asteroid.syncCollider(collisionWorldRef.current);
       }
     },
-    [collisionWorldRef, releaseAsteroid, spawnAsteroid]
+    [collisionWorldRef, gameTimeMsRef, releaseAsteroid, spawnAsteroid]
   );
 
   const cleanupInactiveAsteroids = useCallback(() => {

@@ -58,8 +58,9 @@ export function BulletPool() {
   );
 
   const despawnActiveBullet = useCallback(
-    (activeBullet: ActiveBullet) => {
+    (activeBullet: ActiveBullet, gameTimeMs: number) => {
       releaseBullet(activeBullet.bullet);
+      activeBullet.trail.startFade(gameTimeMs);
       fadingTrailsRef.current.push(activeBullet.trail);
     },
     [releaseBullet]
@@ -106,6 +107,8 @@ export function BulletPool() {
         return;
       }
 
+      const gameTimeMs = gameTimeMsRef.current;
+
       for (
         let index = fadingTrailsRef.current.length - 1;
         index >= 0;
@@ -113,7 +116,7 @@ export function BulletPool() {
       ) {
         const trail = fadingTrailsRef.current[index];
 
-        if (!trail.fade(ticker.deltaMS)) {
+        if (!trail.updateFade(gameTimeMs)) {
           continue;
         }
 
@@ -139,7 +142,7 @@ export function BulletPool() {
             BULLET_DESPAWN_MARGIN
           )
         ) {
-          despawnActiveBullet(activeBullet);
+          despawnActiveBullet(activeBullet, gameTimeMs);
           activeBulletsRef.current.splice(index, 1);
           continue;
         }
@@ -154,7 +157,6 @@ export function BulletPool() {
         return;
       }
 
-      const gameTimeMs = gameTimeMsRef.current;
       const lastBulletFiredAt = lastBulletFiredAtRef.current;
       const fireDebounceMs = BULLET_FIRE_DEBOUNCE_MS / gameSpeedMultiplier;
       const canFire =
@@ -180,6 +182,8 @@ export function BulletPool() {
   );
 
   const cleanupInactiveBullets = useCallback(() => {
+    const gameTimeMs = gameTimeMsRef.current;
+
     for (
       let index = activeBulletsRef.current.length - 1;
       index >= 0;
@@ -191,10 +195,10 @@ export function BulletPool() {
         continue;
       }
 
-      despawnActiveBullet(activeBullet);
+      despawnActiveBullet(activeBullet, gameTimeMs);
       activeBulletsRef.current.splice(index, 1);
     }
-  }, [despawnActiveBullet]);
+  }, [despawnActiveBullet, gameTimeMsRef]);
 
   const updateBulletGravity = useCallback(
     (ticker: Ticker) => {

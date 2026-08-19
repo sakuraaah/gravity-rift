@@ -25,7 +25,7 @@ import {
   BLACK_HOLE_PHASE_BY_ANIMATION,
 } from './blackHole.constants';
 import { BlackHoleAnimation, BlackHolePhase } from './blackHole.enums';
-import type { BlackHoleSpawnData } from './blackHole.types';
+import type { BlackHoleInitData } from './blackHole.types';
 
 let blackHoleViewId = 0;
 
@@ -49,7 +49,7 @@ export class BlackHole
 
   private isColliderRegistered = false;
 
-  private remainingAnimationDurationMs = 0;
+  private animationActiveUntilGameTimeMs = 0;
 
   public get isLethal(): boolean {
     return (
@@ -81,34 +81,31 @@ export class BlackHole
     );
   }
 
-  public init(data?: BlackHoleSpawnData) {
-    const spawnData = data ?? BLACK_HOLE_INITIAL_SPAWN;
+  public init(data?: BlackHoleInitData) {
+    const location = data?.location ?? BLACK_HOLE_INITIAL_SPAWN.location;
+    const gameTimeMs = data?.gameTimeMs ?? 0;
 
     this.stop();
     this.animationQueue.length = 0;
     this.entityId = crypto.randomUUID();
     this.growthChance = BLACK_HOLE_GROWTH_CONFIG.initialChance;
-    this.remainingAnimationDurationMs = 0;
+    this.animationActiveUntilGameTimeMs = 0;
     this.isLifecycleComplete = false;
     this.animationSpeed = BLACK_HOLE_ANIMATION_FPS / (Ticker.targetFPMS * 1000);
     this.loop = true;
-    this.position.set(spawnData.location.x, spawnData.location.y);
+    this.position.set(location.x, location.y);
     this.scale.set(GAME_SCALE);
     this.visible = true;
     this.isActive = true;
-    this.activateAnimation(BlackHoleAnimation.Spawn, 0);
+    this.activateAnimation(BlackHoleAnimation.Spawn, 0, gameTimeMs);
   }
 
-  public update(ticker: Ticker) {
+  public updateLifecycle(gameTimeMs: number) {
     if (!this.isActive) {
       return;
     }
 
-    super.update(ticker);
-
-    this.remainingAnimationDurationMs -= ticker.deltaMS;
-
-    if (this.remainingAnimationDurationMs > 0) {
+    if (gameTimeMs < this.animationActiveUntilGameTimeMs) {
       return;
     }
 
@@ -121,9 +118,14 @@ export class BlackHole
       return;
     }
 
-    const elapsedOverflowMs = -this.remainingAnimationDurationMs;
+    const nextAnimationStartedAtGameTimeMs =
+      this.animationActiveUntilGameTimeMs;
 
-    this.activateAnimation(nextAnimation, this.currentFrame, elapsedOverflowMs);
+    this.activateAnimation(
+      nextAnimation,
+      this.currentFrame,
+      nextAnimationStartedAtGameTimeMs
+    );
   }
 
   public registerCollider(collisionWorld: CollisionWorld) {
@@ -176,7 +178,7 @@ export class BlackHole
     this.entityId = null;
     this.growthChance = BLACK_HOLE_GROWTH_CONFIG.initialChance;
     this.isColliderRegistered = false;
-    this.remainingAnimationDurationMs = 0;
+    this.animationActiveUntilGameTimeMs = 0;
     this.isLifecycleComplete = false;
     this.loop = true;
     this.position.set(
@@ -191,14 +193,15 @@ export class BlackHole
   private activateAnimation(
     animation: BlackHoleAnimation,
     frame: number,
-    elapsedOverflowMs = 0
+    animationStartedAtGameTimeMs: number
   ) {
     const textures = getLoadedBlackHoleAnimations()[animation];
 
     this.animation = animation;
     this.textures = textures;
-    this.remainingAnimationDurationMs =
-      sampleBlackHoleAnimationDurationMs(animation) - elapsedOverflowMs;
+    this.animationActiveUntilGameTimeMs =
+      animationStartedAtGameTimeMs +
+      sampleBlackHoleAnimationDurationMs(animation);
     this.gotoAndPlay(frame % textures.length);
   }
 

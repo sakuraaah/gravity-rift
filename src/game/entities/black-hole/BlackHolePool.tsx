@@ -16,7 +16,7 @@ import {
 import { GamePhase, useAppStore } from '@/store';
 
 import { BlackHole } from './BlackHole';
-import type { BlackHoleSpawnData } from './blackHole.types';
+import type { BlackHoleInitData, BlackHoleSpawnData } from './blackHole.types';
 
 function getActiveBlackHoleLocations(blackHoles: BlackHole[]) {
   return blackHoles.map((blackHole) => ({
@@ -26,11 +26,14 @@ function getActiveBlackHoleLocations(blackHoles: BlackHole[]) {
 }
 
 export function BlackHolePool() {
-  const { activeBlackHolesRef, collisionWorldRef } = useGameContext();
+  const { activeBlackHolesRef, collisionWorldRef, gameTimeMsRef } =
+    useGameContext();
   const blackHoleLayerRef = useRef<Container>(null);
   const blockedSpawnActiveCountRef = useRef<number | null>(null);
-  const nextSpawnDelayMsRef = useRef(sampleNextBlackHoleSpawnDelayMs());
-  const blackHolePool = useMemo<Pool<BlackHole, BlackHoleSpawnData>>(
+  const nextSpawnAtGameTimeMsRef = useRef(
+    gameTimeMsRef.current + sampleNextBlackHoleSpawnDelayMs()
+  );
+  const blackHolePool = useMemo<Pool<BlackHole, BlackHoleInitData>>(
     () => new PixiPool(BlackHole),
     []
   );
@@ -44,14 +47,17 @@ export function BlackHolePool() {
   );
 
   const spawnBlackHole = useCallback(
-    (spawnData: BlackHoleSpawnData) => {
+    (spawnData: BlackHoleSpawnData, gameTimeMs: number) => {
       const blackHoleLayer = blackHoleLayerRef.current;
 
       if (!blackHoleLayer) {
         return false;
       }
 
-      const blackHole = blackHolePool.get(spawnData);
+      const blackHole = blackHolePool.get({
+        ...spawnData,
+        gameTimeMs,
+      });
 
       blackHoleLayer.addChild(blackHole);
       activeBlackHolesRef.current.push(blackHole);
@@ -67,6 +73,8 @@ export function BlackHolePool() {
         return;
       }
 
+      const gameTimeMs = gameTimeMsRef.current;
+
       for (
         let index = activeBlackHolesRef.current.length - 1;
         index >= 0;
@@ -75,6 +83,7 @@ export function BlackHolePool() {
         const blackHole = activeBlackHolesRef.current[index];
 
         blackHole.update(ticker);
+        blackHole.updateLifecycle(gameTimeMs);
         blackHole.syncCollider(collisionWorldRef.current);
 
         if (!blackHole.isLifecycleComplete) {
@@ -97,10 +106,7 @@ export function BlackHolePool() {
 
       blockedSpawnActiveCountRef.current = null;
 
-      const nextDelay = nextSpawnDelayMsRef.current - ticker.deltaMS;
-
-      if (nextDelay > 0) {
-        nextSpawnDelayMsRef.current = nextDelay;
+      if (gameTimeMs < nextSpawnAtGameTimeMsRef.current) {
         return;
       }
 
@@ -119,13 +125,20 @@ export function BlackHolePool() {
         return;
       }
 
-      if (!spawnBlackHole(spawnData)) {
+      if (!spawnBlackHole(spawnData, gameTimeMs)) {
         return;
       }
 
-      nextSpawnDelayMsRef.current = sampleNextBlackHoleSpawnDelayMs();
+      nextSpawnAtGameTimeMsRef.current =
+        gameTimeMs + sampleNextBlackHoleSpawnDelayMs();
     },
-    [activeBlackHolesRef, collisionWorldRef, releaseBlackHole, spawnBlackHole]
+    [
+      activeBlackHolesRef,
+      collisionWorldRef,
+      gameTimeMsRef,
+      releaseBlackHole,
+      spawnBlackHole,
+    ]
   );
 
   useEffect(() => {

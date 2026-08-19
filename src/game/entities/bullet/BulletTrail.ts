@@ -21,6 +21,8 @@ export class BulletTrail extends MeshRope {
 
   private distanceSinceLastSample = 0;
 
+  private fadeActiveUntilGameTimeMs: number | null = null;
+
   public constructor() {
     const trailPoints = Array.from(
       { length: BULLET_TRAIL_POINT_COUNT },
@@ -54,6 +56,7 @@ export class BulletTrail extends MeshRope {
 
     this.previousPosition.copyFrom(initialPosition);
     this.distanceSinceLastSample = 0;
+    this.fadeActiveUntilGameTimeMs = null;
     this.alpha = 1;
     this.visible = true;
   }
@@ -99,17 +102,27 @@ export class BulletTrail extends MeshRope {
     this.trailPoints[1].set(Math.round(x), Math.round(y));
   }
 
-  public fade(deltaMS: number) {
-    this.alpha = Math.max(
-      0,
-      this.alpha - deltaMS / BULLET_TRAIL_FADE_DURATION_MS
-    );
+  public startFade(gameTimeMs: number) {
+    this.fadeActiveUntilGameTimeMs = gameTimeMs + BULLET_TRAIL_FADE_DURATION_MS;
+  }
 
-    return this.alpha === 0;
+  public updateFade(gameTimeMs: number) {
+    const fadeActiveUntilGameTimeMs = this.fadeActiveUntilGameTimeMs;
+
+    if (fadeActiveUntilGameTimeMs === null) {
+      return false;
+    }
+
+    const remainingFadeMs = Math.max(0, fadeActiveUntilGameTimeMs - gameTimeMs);
+
+    this.alpha = remainingFadeMs / BULLET_TRAIL_FADE_DURATION_MS;
+
+    return remainingFadeMs === 0;
   }
 
   public reset() {
     this.removeFromParent();
+    this.fadeActiveUntilGameTimeMs = null;
     this.alpha = 1;
     this.visible = false;
   }
