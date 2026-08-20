@@ -11,17 +11,17 @@ export const DEFAULT_PLAYER_ACTIONS = {
 export const PLAYER_CONTROL_BY_KEY: Readonly<
   Partial<Record<string, keyof PlayerActions>>
 > = {
-  [PlayerControl.Fire]: 'fire',
-  [PlayerControl.MoveUpPrimary]: 'up',
-  [PlayerControl.MoveUpSecondary]: 'up',
-  [PlayerControl.MoveLeftPrimary]: 'left',
-  [PlayerControl.MoveLeftSecondary]: 'left',
-  [PlayerControl.MoveRightPrimary]: 'right',
-  [PlayerControl.MoveRightSecondary]: 'right',
+  [PlayerControl.ArrowLeft]: 'left',
+  [PlayerControl.ArrowRight]: 'right',
+  [PlayerControl.ArrowUp]: 'up',
+  [PlayerControl.KeyA]: 'left',
+  [PlayerControl.KeyD]: 'right',
+  [PlayerControl.KeyW]: 'up',
+  [PlayerControl.Space]: 'fire',
 };
 
 export const PLAYER_CONTROL_BY_MOUSE_BUTTON: Readonly<
   Partial<Record<number, keyof PlayerActions>>
 > = {
-  [PlayerMouseButton.Fire]: 'fire',
+  [PlayerMouseButton.Left]: 'fire',
 };

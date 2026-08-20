@@ -1,17 +1,17 @@
 export const PlayerControl = {
-  Fire: 'Space',
-  MoveUpPrimary: 'KeyW',
-  MoveUpSecondary: 'ArrowUp',
-  MoveLeftPrimary: 'KeyA',
-  MoveLeftSecondary: 'ArrowLeft',
-  MoveRightPrimary: 'KeyD',
-  MoveRightSecondary: 'ArrowRight',
+  ArrowLeft: 'ArrowLeft',
+  ArrowRight: 'ArrowRight',
+  ArrowUp: 'ArrowUp',
+  KeyA: 'KeyA',
+  KeyD: 'KeyD',
+  KeyW: 'KeyW',
+  Space: 'Space',
 } as const;
 
 export type PlayerControl = (typeof PlayerControl)[keyof typeof PlayerControl];
 
 export const PlayerMouseButton = {
-  Fire: 0,
+  Left: 0,
 } as const;
 
 export type PlayerMouseButton =
