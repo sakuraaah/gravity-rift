@@ -8,7 +8,7 @@ import {
   GameHudMetrics,
   GameHudRoot,
 } from './GameHud.styles';
-import { LifeBar, Score, Wave } from './components';
+import { HudControls, LifeBar, Score, Wave } from './components';
 
 export function GameHud() {
   const pauseGame = useAppStore((state) => state.pauseGame);
@@ -34,6 +34,8 @@ export function GameHud() {
 
         <LifeBar currentLives={playerHp} totalLives={DEFAULT_PLAYER_HP} />
       </GameHudActions>
+
+      <HudControls />
     </GameHudRoot>
   );
 }
