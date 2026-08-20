@@ -2,7 +2,7 @@ import { GAME_LAYOUT, GAME_SCALE } from '@/game/constants';
 
 const SPACESHIP_BASE_SIZE = 10;
 
-export const SPACESHIP_BASE_ROTATION_SPEED = 0.06;
+export const SPACESHIP_TURN_INTERVAL_MS = 110;
 
 export const SPACESHIP_BASE_MOVEMENT_SPEED = 0.65 * GAME_SCALE;
 

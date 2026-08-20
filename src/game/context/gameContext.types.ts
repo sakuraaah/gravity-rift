@@ -8,7 +8,6 @@ export type SpaceshipLocation = {
   facingIndex: number;
   x: number;
   y: number;
-  rotation: number;
 };
 
 export type GameContextValue = {

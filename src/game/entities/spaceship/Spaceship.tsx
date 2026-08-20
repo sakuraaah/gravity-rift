@@ -15,19 +15,23 @@ import {
   scaleHitboxPoints,
 } from '@/game/systems';
 import type { CollisionParticipant } from '@/game/systems';
-import { DIRECTIONAL_FACING_ANGLE, clamp, getFacingIndex } from '@/game/utils';
+import {
+  DIRECTIONAL_FACING_COUNT,
+  clamp,
+  getRotationByFacingIndex,
+} from '@/game/utils';
 import type { Vector2 } from '@/game/utils';
 import { GamePhase, useAppStore } from '@/store';
 
 import {
   SPACESHIP_BASE_MOVEMENT_SPEED,
-  SPACESHIP_BASE_ROTATION_SPEED,
   SPACESHIP_BOUNDARY_RADIUS,
   SPACESHIP_ENGINE_OFFSET,
   SPACESHIP_FLAME_ANIMATION_SPEED,
   SPACESHIP_GRAVITY_VELOCITY_RETENTION_PER_TICK,
   SPACESHIP_HITBOX_LOCAL_POINTS,
   SPACESHIP_PARTICLES_ANIMATION_SPEED,
+  SPACESHIP_TURN_INTERVAL_MS,
   getSpaceshipInitialPosition,
 } from './constants';
 import { useSpaceshipAnimation, useSpaceshipEffects } from './hooks';
@@ -50,7 +54,8 @@ export function Spaceship() {
   const hullRef = useRef<Sprite>(null);
   const flameRef = useRef<AnimatedSprite>(null);
   const particlesRef = useRef<AnimatedSprite>(null);
-  const headingRef = useRef(0);
+  const facingIndexRef = useRef(0);
+  const nextTurnAtGameTimeMsRef = useRef<number | null>(null);
   const gravityVelocityRef = useRef<Vector2>({ x: 0, y: 0 });
   useSpaceshipEffects(hullRef);
   const { flameTextures, hullTexture, particlesTextures, updateAnimation } =
@@ -64,15 +69,15 @@ export function Spaceship() {
     activeBlackHolesRef,
     collisionWorldRef,
     controlsRef,
+    gameTimeMsRef,
     spaceshipLocationRef,
   } = useGameContext();
 
   const syncSpaceshipLocation = useCallback(
-    (spaceship: Container, facingIndex: number) => {
+    (spaceship: Container) => {
+      spaceshipLocationRef.current.facingIndex = facingIndexRef.current;
       spaceshipLocationRef.current.x = spaceship.position.x;
       spaceshipLocationRef.current.y = spaceship.position.y;
-      spaceshipLocationRef.current.rotation = headingRef.current;
-      spaceshipLocationRef.current.facingIndex = facingIndex;
     },
     [spaceshipLocationRef]
   );
@@ -91,7 +96,7 @@ export function Spaceship() {
   }, [collisionWorldRef]);
 
   const syncCollider = useCallback(
-    (spaceship: Container, facingIndex: number) => {
+    (spaceship: Container) => {
       const collider = spaceshipColliderRef.current;
 
       if (!collider) {
@@ -101,7 +106,7 @@ export function Spaceship() {
       const collisionWorld = collisionWorldRef.current;
 
       collisionWorld.sync(collider, {
-        angle: facingIndex * DIRECTIONAL_FACING_ANGLE,
+        angle: getRotationByFacingIndex(facingIndexRef.current),
         x: spaceship.position.x,
         y: spaceship.position.y,
       });
@@ -110,7 +115,7 @@ export function Spaceship() {
   );
 
   const registerCollider = useCallback(
-    (spaceship: Container, facingIndex: number) => {
+    (spaceship: Container) => {
       const collider = new Polygon<CollisionParticipant>(
         spaceship.position,
         scaleHitboxPoints(SPACESHIP_HITBOX_LOCAL_POINTS, GAME_SCALE)
@@ -123,7 +128,7 @@ export function Spaceship() {
         kind: CollisionKind.Spaceship,
       });
 
-      syncCollider(spaceship, facingIndex);
+      syncCollider(spaceship);
     },
     [collisionWorldRef, entityId, syncCollider]
   );
@@ -139,17 +144,45 @@ export function Spaceship() {
       const initialPosition = getSpaceshipInitialPosition();
 
       spaceship.position.set(initialPosition.x, initialPosition.y);
-      spaceship.rotation = 0;
-      headingRef.current = 0;
+      facingIndexRef.current = 0;
+      nextTurnAtGameTimeMsRef.current = null;
       gravityVelocityRef.current = { x: 0, y: 0 };
 
-      const facingIndex = getFacingIndex(headingRef.current);
-
       spaceshipRef.current = spaceship;
-      registerCollider(spaceship, facingIndex);
-      syncSpaceshipLocation(spaceship, facingIndex);
+      registerCollider(spaceship);
+      syncSpaceshipLocation(spaceship);
     },
     [registerCollider, syncSpaceshipLocation, unregisterCollider]
+  );
+
+  const updateFacingIndex = useCallback(
+    (left: boolean, right: boolean, gameSpeedMultiplier: number) => {
+      const rotationDirection = Number(right) - Number(left);
+
+      if (rotationDirection === 0) {
+        nextTurnAtGameTimeMsRef.current = null;
+        return;
+      }
+
+      const gameTimeMs = gameTimeMsRef.current;
+      const nextTurnAtGameTimeMs = nextTurnAtGameTimeMsRef.current;
+      const canTurn =
+        nextTurnAtGameTimeMs === null || gameTimeMs >= nextTurnAtGameTimeMs;
+
+      if (!canTurn) {
+        return;
+      }
+
+      facingIndexRef.current =
+        (facingIndexRef.current +
+          rotationDirection +
+          DIRECTIONAL_FACING_COUNT) %
+        DIRECTIONAL_FACING_COUNT;
+
+      nextTurnAtGameTimeMsRef.current =
+        gameTimeMs + SPACESHIP_TURN_INTERVAL_MS / gameSpeedMultiplier;
+    },
+    [gameTimeMsRef]
   );
 
   const updateTransform = useCallback(
@@ -162,13 +195,10 @@ export function Spaceship() {
       }
 
       const { left, right, up } = controlsRef.current;
-      const rotationDirection = Number(right) - Number(left);
 
-      headingRef.current +=
-        rotationDirection *
-        SPACESHIP_BASE_ROTATION_SPEED *
-        ticker.deltaTime *
-        gameSpeedMultiplier;
+      updateFacingIndex(left, right, gameSpeedMultiplier);
+
+      const rotation = getRotationByFacingIndex(facingIndexRef.current);
 
       let nextX =
         spaceship.position.x +
@@ -179,12 +209,12 @@ export function Spaceship() {
 
       if (up) {
         nextX +=
-          Math.sin(headingRef.current) *
+          Math.sin(rotation) *
           SPACESHIP_BASE_MOVEMENT_SPEED *
           ticker.deltaTime *
           gameSpeedMultiplier;
         nextY -=
-          Math.cos(headingRef.current) *
+          Math.cos(rotation) *
           SPACESHIP_BASE_MOVEMENT_SPEED *
           ticker.deltaTime *
           gameSpeedMultiplier;
@@ -203,13 +233,17 @@ export function Spaceship() {
         )
       );
 
-      const facingIndex = getFacingIndex(headingRef.current);
-
-      updateAnimation(facingIndex);
-      syncCollider(spaceship, facingIndex);
-      syncSpaceshipLocation(spaceship, facingIndex);
+      updateAnimation(facingIndexRef.current);
+      syncCollider(spaceship);
+      syncSpaceshipLocation(spaceship);
     },
-    [controlsRef, syncCollider, syncSpaceshipLocation, updateAnimation]
+    [
+      controlsRef,
+      syncCollider,
+      syncSpaceshipLocation,
+      updateAnimation,
+      updateFacingIndex,
+    ]
   );
 
   const updateGravity = useCallback(
@@ -253,7 +287,7 @@ export function Spaceship() {
 
   useTick({
     callback: updateTransform,
-    priority: GAME_TICK_PRIORITY.EntityUpdate,
+    priority: GAME_TICK_PRIORITY.SpaceshipUpdate,
   });
 
   return (

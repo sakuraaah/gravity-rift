@@ -5,7 +5,7 @@ import type { AnimatedSprite, Sprite } from 'pixi.js';
 
 import { getLoadedSpaceshipTextures } from '@/game/assets';
 import { SPACESHIP_ENGINE_OFFSET } from '@/game/entities/spaceship/constants';
-import { DIRECTIONAL_FACING_ANGLE } from '@/game/utils';
+import { getRotationByFacingIndex } from '@/game/utils';
 
 interface UseSpaceshipAnimationOptions {
   flameRef: RefObject<AnimatedSprite | null>;
@@ -68,9 +68,9 @@ export function useSpaceshipAnimation({
           particles.gotoAndStop(particlesFrame);
         }
 
-        const snappedHeading = facingIndex * DIRECTIONAL_FACING_ANGLE;
-        const flameX = -Math.sin(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
-        const flameY = Math.cos(snappedHeading) * SPACESHIP_ENGINE_OFFSET;
+        const rotation = getRotationByFacingIndex(facingIndex);
+        const flameX = -Math.sin(rotation) * SPACESHIP_ENGINE_OFFSET;
+        const flameY = Math.cos(rotation) * SPACESHIP_ENGINE_OFFSET;
 
         flame.position.set(flameX, flameY);
         particles.position.set(flameX, flameY);

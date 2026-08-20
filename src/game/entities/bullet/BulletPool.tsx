@@ -11,6 +11,7 @@ import {
   GAME_TICK_PRIORITY,
   calculateBlackHoleGravityAcceleration,
 } from '@/game/systems';
+import { getRotationByFacingIndex } from '@/game/utils';
 import { GamePhase, useAppStore } from '@/store';
 
 import { Bullet } from './Bullet';
@@ -75,7 +76,8 @@ export function BulletPool() {
     }
 
     const collisionWorld = collisionWorldRef.current;
-    const { x, y, rotation } = spaceshipLocationRef.current;
+    const { facingIndex, x, y } = spaceshipLocationRef.current;
+    const rotation = getRotationByFacingIndex(facingIndex);
     const velocity = {
       x: Math.sin(rotation) * BULLET_BASE_MOVEMENT_SPEED,
       y: -Math.cos(rotation) * BULLET_BASE_MOVEMENT_SPEED,
