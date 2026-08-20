@@ -7,3 +7,4 @@ export * from './combat';
 export * from './game-loop';
 export * from './gravity';
 export * from './player-controls';
+export * from './scoring';
