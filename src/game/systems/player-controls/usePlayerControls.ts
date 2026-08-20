@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 
+import { useAppStore } from '@/store';
+
 import {
   DEFAULT_PLAYER_ACTIONS,
   PLAYER_CONTROL_BY_KEY,
   PLAYER_CONTROL_BY_MOUSE_BUTTON,
 } from './playerControls.constants';
+import type { PlayerControl, PlayerMouseButton } from './playerControls.enums';
 import type {
   ActiveInputIdsByAction,
   PlayerActions,
@@ -25,6 +28,7 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
   const resetControls = useCallback(() => {
     activeInputIdsByActionRef.current = createActiveInputIdsByAction();
     controlsRef.current = { ...DEFAULT_PLAYER_ACTIONS };
+    useAppStore.getState().resetPressedInputs();
   }, []);
 
   const setControlInputState = useCallback(
@@ -73,6 +77,9 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
       const isHandled = setControlInputState(inputId, control, isPressed);
 
       if (isHandled) {
+        useAppStore
+          .getState()
+          .setPressedKey(event.code as PlayerControl, isPressed);
         event.preventDefault();
       }
     },
@@ -95,6 +102,9 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
       const isHandled = setControlInputState(inputId, control, isPressed);
 
       if (isHandled) {
+        useAppStore
+          .getState()
+          .setPressedMouseButton(event.button as PlayerMouseButton, isPressed);
         event.preventDefault();
       }
     },

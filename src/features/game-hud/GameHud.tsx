@@ -13,12 +13,16 @@ import { HudControls, LifeBar, Score, Wave } from './components';
 export function GameHud() {
   const pauseGame = useAppStore((state) => state.pauseGame);
   const playerHp = useAppStore((state) => state.playerHp);
+  const pressedKeys = useAppStore((state) => state.pressedKeys);
+  const pressedMouseButtons = useAppStore((state) => state.pressedMouseButtons);
+  const score = useAppStore((state) => state.score);
+  const wave = useAppStore((state) => state.wave);
 
   return (
     <GameHudRoot aria-label="Game HUD">
       <GameHudMetrics>
-        <Score value={0} />
-        <Wave value={0} />
+        <Score value={score} />
+        <Wave value={wave} />
       </GameHudMetrics>
 
       <GameHudActions>
@@ -35,7 +39,10 @@ export function GameHud() {
         <LifeBar currentLives={playerHp} totalLives={DEFAULT_PLAYER_HP} />
       </GameHudActions>
 
-      <HudControls />
+      <HudControls
+        pressedKeys={pressedKeys}
+        pressedMouseButtons={pressedMouseButtons}
+      />
     </GameHudRoot>
   );
 }

@@ -1,8 +1,10 @@
 import { OneShotEffectKind } from '@/game/effects/one-shot-effect/oneShotEffect.enums';
+import { ASTEROID_MAX_HP_BY_SIZE } from '@/game/entities/asteroid/asteroid.constants';
 import { CollisionKind } from '@/game/systems/collision';
 import type { CollisionEvent } from '@/game/systems/collision';
 import type { CollisionResolutionParams } from '@/game/systems/collision-resolution/collisionResolution.types';
 import { getCollisionParticipant } from '@/game/systems/collision-resolution/collisionResolution.utils';
+import { increaseScore } from '@/game/systems/scoring';
 
 export function handleBulletAsteroidCollision(
   collision: CollisionEvent,
@@ -44,6 +46,8 @@ export function handleBulletAsteroidCollision(
   }
 
   if (damageResult.destroyed) {
+    increaseScore(ASTEROID_MAX_HP_BY_SIZE[asteroidSize]);
+
     params.playOneShotEffect({
       kind: OneShotEffectKind.AsteroidExplosion,
       position: asteroidPosition,

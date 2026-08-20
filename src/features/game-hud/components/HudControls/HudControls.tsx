@@ -1,75 +1,20 @@
-import type { ArrowIconDirection } from '@/shared/icons';
 import { HudButton } from '@/shared/ui/HudButton';
 import { TypographyVariant } from '@/shared/ui/Typography';
 
+import { HUD_CONTROL_HINTS } from './HudControls.constants';
 import {
   HudControlArrowIcon,
   HudControlHint,
   HudControlLabel,
   HudControlsRoot,
 } from './HudControls.styles';
+import type { HudControlsProps } from './HudControls.types';
+import { isHudControlActive } from './HudControls.utils';
 
-type HudControlHintConfig = {
-  id: string;
-  keys: readonly {
-    ariaLabel: string;
-    content:
-      | { direction: ArrowIconDirection; kind: 'arrow' }
-      | { kind: 'text'; value: string };
-    id: string;
-    wide?: boolean;
-  }[];
-  label: string;
-};
-
-const HUD_CONTROL_HINTS = [
-  {
-    id: 'rotate',
-    keys: [
-      {
-        ariaLabel: 'Rotate left',
-        content: { direction: 'left', kind: 'arrow' },
-        id: 'left',
-      },
-      {
-        ariaLabel: 'Rotate right',
-        content: { direction: 'right', kind: 'arrow' },
-        id: 'right',
-      },
-    ],
-    label: 'Rotate',
-  },
-  {
-    id: 'thrust',
-    keys: [
-      {
-        ariaLabel: 'Thrust',
-        content: { direction: 'up', kind: 'arrow' },
-        id: 'up',
-      },
-    ],
-    label: 'Thrust',
-  },
-  {
-    id: 'fire',
-    keys: [
-      {
-        ariaLabel: 'Fire',
-        content: { kind: 'text', value: 'Space' },
-        id: 'space',
-        wide: true,
-      },
-      {
-        ariaLabel: 'Fire with left mouse button',
-        content: { kind: 'text', value: 'LMB' },
-        id: 'left-mouse-button',
-      },
-    ],
-    label: 'Fire',
-  },
-] as const satisfies readonly HudControlHintConfig[];
-
-export function HudControls() {
+export function HudControls({
+  pressedKeys,
+  pressedMouseButtons,
+}: HudControlsProps) {
   return (
     <HudControlsRoot aria-label="Game controls" role="group">
       {HUD_CONTROL_HINTS.map((hint) => (
@@ -77,7 +22,7 @@ export function HudControls() {
           {hint.keys.map((key) => (
             <HudButton
               key={key.id}
-              active={false}
+              active={isHudControlActive(key, pressedKeys, pressedMouseButtons)}
               aria-label={key.ariaLabel}
               size="small"
               wide={'wide' in key && key.wide}
