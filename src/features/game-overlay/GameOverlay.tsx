@@ -28,6 +28,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
 
   const isGameScreen = screen === AppScreen.Game;
   const isRunning = isGameScreen && gamePhase === GamePhase.Running;
+  const isDying = isGameScreen && gamePhase === GamePhase.Dying;
   const isPaused = isGameScreen && gamePhase === GamePhase.Paused;
   const isGameOver = isGameScreen && gamePhase === GamePhase.GameOver;
   const isPauseModalOpen = isPaused && exitIntent?.modal !== 'pause';
@@ -128,7 +129,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
 
   return (
     <>
-      {isRunning && <GameHud />}
+      {(isRunning || isDying) && <GameHud />}
 
       <Modal
         title="Game Paused"
