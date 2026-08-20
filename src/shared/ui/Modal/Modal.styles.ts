@@ -3,6 +3,8 @@ import type { CSSProperties } from 'react';
 import { Dialog } from '@base-ui/react/dialog';
 import styled from '@emotion/styled';
 
+import { Typography } from '@/shared/ui/Typography';
+
 import { ModalHeaderTone } from './Modal.enums';
 import type { ModalBackdropStrength } from './Modal.types';
 
@@ -101,31 +103,19 @@ export const ModalHeader = styled.div<ModalHeaderProps>(({ $tone, theme }) => {
   };
 });
 
-export const ModalTitle = styled(Dialog.Title)(({ theme }) => ({
-  margin: 0,
+export const ModalTitle = styled(Typography)(({ theme }) => ({
   padding: '0 38px',
   color: 'var(--modal-title-color)',
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.title,
-  fontWeight: theme.typography.fontWeight.regular,
-  lineHeight: 1.4,
-  letterSpacing: '3px',
   textAlign: 'center',
-  textShadow: `3px 3px 0 ${theme.palette.shadow.hard}`,
-  textTransform: 'uppercase',
 }));
 
-export const ModalSubtitle = styled(Dialog.Description)(({ theme }) => ({
+export const ModalSubtitle = styled(Typography)({
   margin: '0 0 var(--modal-subtitle-gap)',
   color: 'var(--modal-subtitle-color)',
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: '9px',
-  lineHeight: 1.4,
-  letterSpacing: '4px',
   textAlign: 'center',
-  textShadow: 'var(--modal-subtitle-shadow)',
-  textTransform: 'uppercase',
-}));
+});
 
 export const ModalDivider = styled.div(({ theme }) => ({
   height: '1px',

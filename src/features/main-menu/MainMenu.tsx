@@ -1,5 +1,6 @@
 import { ControlFieldType, ControlGrid } from '@/shared/ui';
 import type { ControlGridField } from '@/shared/ui';
+import { TypographyVariant } from '@/shared/ui/Typography';
 import { AppScreen, useAppStore } from '@/store';
 
 import {
@@ -39,8 +40,19 @@ export function MainMenu({ gameSurfaceRef }: MainMenuProps) {
     <>
       {isOpen ? (
         <MainMenuRoot aria-labelledby="main-menu-title">
-          <MainMenuSubtitle>Pixel arcade shooter</MainMenuSubtitle>
-          <MainMenuTitle id="main-menu-title">Gravity Rift</MainMenuTitle>
+          <MainMenuSubtitle
+            component="p"
+            variant={TypographyVariant.MainMenuSubtitle}
+          >
+            Pixel arcade shooter
+          </MainMenuSubtitle>
+          <MainMenuTitle
+            id="main-menu-title"
+            component="h1"
+            variant={TypographyVariant.MainMenuTitle}
+          >
+            Gravity Rift
+          </MainMenuTitle>
           <MainMenuDivider />
           <MainMenuControls>
             <ControlGrid fields={fields} gap="13px" />

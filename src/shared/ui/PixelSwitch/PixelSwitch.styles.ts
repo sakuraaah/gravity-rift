@@ -1,16 +1,14 @@
 import { Switch } from '@base-ui/react/switch';
 import styled from '@emotion/styled';
 
-export const SwitchLabel = styled.label(({ theme }) => ({
+import { Typography } from '@/shared/ui/Typography';
+
+export const SwitchLabel = styled(Typography)(({ theme }) => ({
   display: 'inline-flex',
   alignItems: 'center',
   gap: '12px',
   color: theme.palette.text.high,
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.control,
-  lineHeight: 1.4,
-  letterSpacing: '0.5px',
-  textTransform: 'uppercase',
   cursor: 'pointer',
   '&:has([data-disabled])': {
     cursor: 'not-allowed',

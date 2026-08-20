@@ -3,6 +3,8 @@ import type { ComponentType } from 'react';
 import { Slider } from '@base-ui/react/slider';
 import styled from '@emotion/styled';
 
+import { Typography } from '@/shared/ui/Typography';
+
 const NumberSliderRoot = Slider.Root as ComponentType<
   Slider.Root.Props<number>
 >;
@@ -23,13 +25,9 @@ export const SliderHeader = styled.div({
   gap: '12px',
 });
 
-export const SliderLabel = styled(Slider.Label)(({ theme }) => ({
+export const SliderLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.high,
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.control,
-  lineHeight: 1.4,
-  letterSpacing: '0.5px',
-  textTransform: 'uppercase',
 }));
 
 export const SliderValue = styled(Slider.Value)(({ theme }) => ({

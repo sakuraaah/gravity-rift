@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 import { Slider } from '@base-ui/react/slider';
 
+import { TypographyVariant } from '@/shared/ui/Typography';
+
 import {
   SliderControl,
   SliderHeader,
@@ -26,7 +28,12 @@ export function PixelSlider({
   return (
     <SliderRoot {...sliderProps}>
       <SliderHeader>
-        <SliderLabel>{label}</SliderLabel>
+        <SliderLabel
+          component={Slider.Label}
+          variant={TypographyVariant.ControlLabel}
+        >
+          {label}
+        </SliderLabel>
         <SliderValue />
       </SliderHeader>
       <SliderControl>

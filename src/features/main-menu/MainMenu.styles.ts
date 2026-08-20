@@ -1,5 +1,7 @@
 import styled from '@emotion/styled';
 
+import { Typography } from '@/shared/ui/Typography';
+
 export const MainMenuRoot = styled.section(({ theme }) => ({
   position: 'absolute',
   zIndex: theme.zIndex.dialog,
@@ -13,31 +15,15 @@ export const MainMenuRoot = styled.section(({ theme }) => ({
   textAlign: 'center',
 }));
 
-export const MainMenuSubtitle = styled.p(({ theme }) => ({
-  margin: 0,
+export const MainMenuSubtitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.secondary.main,
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: '9px',
-  lineHeight: 1.4,
-  letterSpacing: '4px',
-  textShadow: `0 0 8px ${theme.palette.glow.amber}`,
-  textTransform: 'uppercase',
 }));
 
-export const MainMenuTitle = styled.h1(({ theme }) => ({
+export const MainMenuTitle = styled(Typography)(({ theme }) => ({
   margin: '18px 0 0',
   color: theme.palette.primary.main,
-  fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.wordmark,
-  fontWeight: theme.typography.fontWeight.regular,
-  lineHeight: 1.4,
-  letterSpacing: '5px',
-  textShadow: [
-    `4px 4px 0 ${theme.palette.shadow.hard}`,
-    '8px 8px 0 rgba(0, 0, 0, 0.4)',
-    `0 0 28px ${theme.palette.glow.magenta}`,
-  ].join(', '),
-  textTransform: 'uppercase',
 }));
 
 export const MainMenuDivider = styled.div(({ theme }) => ({

@@ -1,24 +1,20 @@
 import { useState } from 'react';
 
+import { GameHud } from '@/features/game-hud';
 import {
   ControlFieldType,
   ControlGrid,
   Modal,
   ModalHeaderTone,
-  PixelIconButton,
 } from '@/shared/ui';
 import type { ControlGridField } from '@/shared/ui';
 import { AppScreen, GamePhase, useAppStore } from '@/store';
 
-import {
-  GameOverlayControls,
-  GameOverlayPauseButtonPosition,
-} from './GameOverlay.styles';
+import { GameOverlayControls } from './GameOverlay.styles';
 import type {
   GameOverlayExitIntent,
   GameOverlayProps,
 } from './GameOverlay.types';
-import { PauseIcon } from './PauseIcon';
 import { usePauseGameHotkey } from './usePauseGameHotkey';
 
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
@@ -132,17 +128,7 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
 
   return (
     <>
-      {isRunning && (
-        <GameOverlayPauseButtonPosition>
-          <PixelIconButton
-            aria-label="Pause game"
-            onClick={pauseGame}
-            variant="secondary"
-          >
-            <PauseIcon />
-          </PixelIconButton>
-        </GameOverlayPauseButtonPosition>
-      )}
+      {isRunning && <GameHud />}
 
       <Modal
         title="Game Paused"

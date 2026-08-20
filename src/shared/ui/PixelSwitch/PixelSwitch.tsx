@@ -2,6 +2,8 @@ import type { ComponentProps, ReactNode } from 'react';
 
 import { Switch } from '@base-ui/react/switch';
 
+import { TypographyVariant } from '@/shared/ui/Typography';
+
 import { SwitchLabel, SwitchRoot, SwitchThumb } from './PixelSwitch.styles';
 
 export type PixelSwitchProps = Omit<
@@ -18,7 +20,11 @@ export function PixelSwitch({
   ...switchProps
 }: PixelSwitchProps) {
   return (
-    <SwitchLabel className={className}>
+    <SwitchLabel
+      className={className}
+      component="label"
+      variant={TypographyVariant.ControlLabel}
+    >
       <SwitchRoot {...switchProps}>
         <SwitchThumb />
       </SwitchRoot>

@@ -1,6 +1,7 @@
 import { Dialog } from '@base-ui/react/dialog';
 
 import { PixelIconButton } from '@/shared/ui/PixelButton';
+import { TypographyVariant } from '@/shared/ui/Typography';
 
 import { ModalHeaderTone } from './Modal.enums';
 import {
@@ -59,8 +60,20 @@ export function Modal({
             ) : null}
 
             <ModalHeader $tone={headerTone}>
-              {subtitle ? <ModalSubtitle>{subtitle}</ModalSubtitle> : null}
-              <ModalTitle>{title}</ModalTitle>
+              {subtitle ? (
+                <ModalSubtitle
+                  component={Dialog.Description}
+                  variant={TypographyVariant.ModalSubtitle}
+                >
+                  {subtitle}
+                </ModalSubtitle>
+              ) : null}
+              <ModalTitle
+                component={Dialog.Title}
+                variant={TypographyVariant.ModalTitle}
+              >
+                {title}
+              </ModalTitle>
             </ModalHeader>
             <ModalDivider />
             <ModalContent>{children}</ModalContent>

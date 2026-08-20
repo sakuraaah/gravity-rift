@@ -54,11 +54,11 @@ export const appTheme = {
       body: "'Silkscreen', monospace",
     },
     fontSize: {
-      hudLabel: '7px',
+      hudLabel: '14px',
       small: '8px',
       control: '9px',
       body: '12px',
-      hudValue: '14px',
+      hudValue: '24px',
       title: '22px',
       wordmark: '44px',
     },
