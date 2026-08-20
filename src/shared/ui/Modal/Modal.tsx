@@ -1,5 +1,6 @@
 import { Dialog } from '@base-ui/react/dialog';
 
+import { CloseIcon } from '@/shared/icons';
 import { PixelIconButton } from '@/shared/ui/PixelButton';
 import { TypographyVariant } from '@/shared/ui/Typography';
 
@@ -16,7 +17,6 @@ import {
   ModalViewport,
 } from './Modal.styles';
 import type { ModalProps } from './Modal.types';
-import { ModalCloseIcon } from './ModalCloseIcon';
 
 export function Modal({
   title,
@@ -52,7 +52,7 @@ export function Modal({
                       aria-label={closeLabel}
                       variant="secondary"
                     >
-                      <ModalCloseIcon />
+                      <CloseIcon />
                     </PixelIconButton>
                   }
                 />

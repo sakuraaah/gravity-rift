@@ -1,8 +1,9 @@
+import { PauseIcon } from '@/shared/icons';
 import { PixelIconButton } from '@/shared/ui';
 import { useAppStore } from '@/store';
 
 import { GameHudActions, GameHudMetrics, GameHudRoot } from './GameHud.styles';
-import { PauseIcon, Score, Wave } from './components';
+import { Score, Wave } from './components';
 
 export function GameHud() {
   const pauseGame = useAppStore((state) => state.pauseGame);

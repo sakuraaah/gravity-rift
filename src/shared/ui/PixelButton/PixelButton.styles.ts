@@ -66,19 +66,33 @@ function getVariantStyles(theme: Theme, variant: PixelButtonVariant) {
   };
 }
 
+function getButtonBaseStyles(theme: Theme, variant: PixelButtonVariant) {
+  return {
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: '2px',
+    borderStyle: 'solid',
+    cursor: 'pointer',
+    ...getVariantStyles(theme, variant),
+    '&[data-disabled]': {
+      filter: 'grayscale(0.4)',
+      boxShadow: 'none',
+      opacity: theme.opacity.disabled,
+      transform: 'none',
+      cursor: 'not-allowed',
+    },
+  };
+}
+
 export const ButtonRoot = styled(Button, {
   shouldForwardProp: (prop) => prop !== '$fullWidth' && prop !== '$variant',
 })<ButtonRootProps>(({ $fullWidth, $variant, theme }) => ({
   position: 'relative',
-  display: 'inline-flex',
   width: $fullWidth ? '100%' : 'auto',
   minHeight: '34px',
-  alignItems: 'center',
-  justifyContent: 'center',
   gap: '9px',
   padding: '11px 15px',
-  borderWidth: '2px',
-  borderStyle: 'solid',
   borderRadius: theme.radii.button,
   fontFamily: theme.typography.fontFamily.display,
   fontSize: theme.typography.fontSize.control,
@@ -86,53 +100,29 @@ export const ButtonRoot = styled(Button, {
   lineHeight: 1,
   letterSpacing: '0.5px',
   textTransform: 'uppercase',
-  cursor: 'pointer',
   transition: [
     `filter ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
     `box-shadow ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
     `transform ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
   ].join(', '),
-  ...($variant === 'primary'
-    ? {
-        '&::before': {
-          width: '1.1em',
-          height: '1em',
-          flex: '0 0 1.1em',
-          backgroundColor: 'currentColor',
-          clipPath: 'polygon(8% 0, 100% 50%, 8% 100%)',
-          color: theme.palette.primary.contrastText,
-          content: '""',
-        },
-      }
-    : {}),
+  '& .pixel-button__caret': {
+    flex: '0 0 1.1em',
+  },
   '&:focus-visible': {
     outline: `2px solid ${theme.palette.border.selected}`,
     outlineOffset: '3px',
   },
-  ...getVariantStyles(theme, $variant),
-  '&[data-disabled]': {
-    filter: 'grayscale(0.4)',
-    boxShadow: 'none',
-    opacity: theme.opacity.disabled,
-    transform: 'none',
-    cursor: 'not-allowed',
-  },
+  ...getButtonBaseStyles(theme, $variant),
 }));
 
 export const IconButtonRoot = styled(Button, {
   shouldForwardProp: (prop) => prop !== '$variant',
 })<IconButtonRootProps>(({ $variant, theme }) => ({
-  display: 'inline-flex',
   width: '34px',
   height: '34px',
-  alignItems: 'center',
-  justifyContent: 'center',
   padding: 0,
-  borderWidth: '2px',
-  borderStyle: 'solid',
   borderRadius: theme.radii.iconButton,
   lineHeight: 0,
-  cursor: 'pointer',
   transition: [
     `filter ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
     `color ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
@@ -140,16 +130,9 @@ export const IconButtonRoot = styled(Button, {
     `box-shadow ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
     `transform ${theme.transitions.duration.fast} ${theme.transitions.easing.standard}`,
   ].join(', '),
-  ...getVariantStyles(theme, $variant),
   '&:focus-visible': {
     outline: `2px solid ${theme.palette.secondary.main}`,
     outlineOffset: '3px',
   },
-  '&[data-disabled]': {
-    filter: 'grayscale(0.4)',
-    boxShadow: 'none',
-    opacity: theme.opacity.disabled,
-    transform: 'none',
-    cursor: 'not-allowed',
-  },
+  ...getButtonBaseStyles(theme, $variant),
 }));

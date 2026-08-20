@@ -1,5 +1,7 @@
 import { forwardRef } from 'react';
 
+import { CaretRightIcon } from '@/shared/icons';
+
 import { ButtonRoot, IconButtonRoot } from './PixelButton.styles';
 import type {
   PixelButtonProps,
@@ -8,7 +10,13 @@ import type {
 
 export const PixelButton = forwardRef<HTMLElement, PixelButtonProps>(
   function PixelButton(
-    { fullWidth = false, type = 'button', variant = 'primary', ...props },
+    {
+      children,
+      fullWidth = false,
+      type = 'button',
+      variant = 'primary',
+      ...props
+    },
     ref
   ) {
     return (
@@ -18,7 +26,12 @@ export const PixelButton = forwardRef<HTMLElement, PixelButtonProps>(
         $variant={variant}
         type={type}
         {...props}
-      />
+      >
+        {variant === 'primary' ? (
+          <CaretRightIcon className="pixel-button__caret" />
+        ) : null}
+        {children}
+      </ButtonRoot>
     );
   }
 );
