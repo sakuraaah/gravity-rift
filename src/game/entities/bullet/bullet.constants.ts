@@ -6,7 +6,7 @@ export const BULLET_HITBOX_RADIUS = BULLET_RADIUS * 1.5;
 
 export const BULLET_COLOR = 0x4fd6ff;
 
-export const BULLET_FIRE_DEBOUNCE_MS = 500;
+export const BULLET_FIRE_INTERVAL_MS = 500;
 
 export const BULLET_BASE_MOVEMENT_SPEED = 1 * GAME_SCALE;
 

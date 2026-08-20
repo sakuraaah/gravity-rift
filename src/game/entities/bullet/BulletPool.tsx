@@ -19,7 +19,7 @@ import { BulletTrail } from './BulletTrail';
 import {
   BULLET_BASE_MOVEMENT_SPEED,
   BULLET_DESPAWN_MARGIN,
-  BULLET_FIRE_DEBOUNCE_MS,
+  BULLET_FIRE_INTERVAL_MS,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
 
@@ -40,7 +40,7 @@ export function BulletPool() {
   const trailLayerRef = useRef<Container>(null);
   const activeBulletsRef = useRef<ActiveBullet[]>([]);
   const fadingTrailsRef = useRef<BulletTrail[]>([]);
-  const lastBulletFiredAtRef = useRef<number | null>(null);
+  const nextBulletFireAtGameTimeMsRef = useRef<number | null>(null);
   const bulletPool = useMemo<Pool<Bullet, BulletSpawnData>>(
     () => new PixiPool(Bullet),
     []
@@ -155,21 +155,20 @@ export function BulletPool() {
       const isFirePressed = controlsRef.current.fire;
 
       if (!isFirePressed) {
-        lastBulletFiredAtRef.current = null;
         return;
       }
 
-      const lastBulletFiredAt = lastBulletFiredAtRef.current;
-      const fireDebounceMs = BULLET_FIRE_DEBOUNCE_MS / gameSpeedMultiplier;
+      const nextBulletFireAtGameTimeMs = nextBulletFireAtGameTimeMsRef.current;
       const canFire =
-        lastBulletFiredAt === null ||
-        gameTimeMs - lastBulletFiredAt >= fireDebounceMs;
+        nextBulletFireAtGameTimeMs === null ||
+        gameTimeMs >= nextBulletFireAtGameTimeMs;
 
       if (canFire) {
         const spawnBulletSuccess = spawnBullet();
 
         if (spawnBulletSuccess) {
-          lastBulletFiredAtRef.current = gameTimeMs;
+          nextBulletFireAtGameTimeMsRef.current =
+            gameTimeMs + BULLET_FIRE_INTERVAL_MS / gameSpeedMultiplier;
         }
       }
     },
