@@ -1,12 +1,18 @@
 import { PauseIcon } from '@/shared/icons';
 import { PixelIconButton } from '@/shared/ui';
-import { useAppStore } from '@/store';
+import { DEFAULT_PLAYER_HP, useAppStore } from '@/store';
 
-import { GameHudActions, GameHudMetrics, GameHudRoot } from './GameHud.styles';
-import { Score, Wave } from './components';
+import {
+  GameHudActionButtons,
+  GameHudActions,
+  GameHudMetrics,
+  GameHudRoot,
+} from './GameHud.styles';
+import { LifeBar, Score, Wave } from './components';
 
 export function GameHud() {
   const pauseGame = useAppStore((state) => state.pauseGame);
+  const playerHp = useAppStore((state) => state.playerHp);
 
   return (
     <GameHudRoot aria-label="Game HUD">
@@ -16,13 +22,17 @@ export function GameHud() {
       </GameHudMetrics>
 
       <GameHudActions>
-        <PixelIconButton
-          aria-label="Pause game"
-          onClick={pauseGame}
-          variant="secondary"
-        >
-          <PauseIcon />
-        </PixelIconButton>
+        <GameHudActionButtons>
+          <PixelIconButton
+            aria-label="Pause game"
+            onClick={pauseGame}
+            variant="secondary"
+          >
+            <PauseIcon />
+          </PixelIconButton>
+        </GameHudActionButtons>
+
+        <LifeBar currentLives={playerHp} totalLives={DEFAULT_PLAYER_HP} />
       </GameHudActions>
     </GameHudRoot>
   );
