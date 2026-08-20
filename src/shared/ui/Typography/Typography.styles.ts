@@ -97,6 +97,7 @@ export const TypographyRoot = styled('span', {
     prop !== '$fontSize' &&
     prop !== '$variant',
 })<TypographyRootProps>(({ $align, $color, $fontSize, $variant, theme }) => ({
+  display: 'block',
   margin: 0,
   color: $color,
   fontSize: $fontSize,
