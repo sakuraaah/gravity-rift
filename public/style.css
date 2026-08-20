@@ -1,10 +1,3 @@
-body {
-  margin: 0;
-  padding: 0;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #ffffff;
-}
-
 #app {
   width: 100%;
   height: 100vh;
@@ -16,7 +9,6 @@ body {
   height: 100%;
   display: grid;
   place-items: center;
-  background-color: #ffffff;
 }
 
 .game-viewport {

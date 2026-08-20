@@ -1,12 +1,16 @@
+const BACKGROUND_COLORS = {
+  void: '#08030f',
+  space: '#150a26',
+  panel: '#1b0e33',
+  raised: '#271447',
+} as const;
+
 export const appTheme = {
   mode: 'dark',
   palette: {
     background: {
-      page: '#ffffff',
-      void: '#08030f',
-      space: '#150a26',
-      panel: '#1b0e33',
-      raised: '#271447',
+      ...BACKGROUND_COLORS,
+      pageBackdrop: `radial-gradient(120% 80% at 75% -8%, ${BACKGROUND_COLORS.panel} 0%, ${BACKGROUND_COLORS.space} 46%, ${BACKGROUND_COLORS.void} 100%)`,
     },
     primary: {
       main: '#ff64a8',

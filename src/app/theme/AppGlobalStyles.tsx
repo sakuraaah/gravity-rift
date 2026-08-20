@@ -13,8 +13,12 @@ export function AppGlobalStyles() {
           minHeight: '100%',
         },
         body: {
+          margin: 0,
+          padding: 0,
           color: theme.palette.text.mid,
-          backgroundColor: theme.palette.background.page,
+          backgroundColor: theme.palette.background.void,
+          backgroundImage: theme.palette.background.pageBackdrop,
+          backgroundAttachment: 'fixed',
           fontFamily: theme.typography.fontFamily.body,
         },
         'button, input, select, textarea': {
@@ -22,9 +26,6 @@ export function AppGlobalStyles() {
         },
         button: {
           color: 'inherit',
-        },
-        '#pixi-container': {
-          backgroundColor: theme.palette.background.page,
         },
         '@media (prefers-reduced-motion: reduce)': {
           '*, *::before, *::after': {
