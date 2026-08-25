@@ -24,7 +24,13 @@ export function LifeBar({ currentLives, totalLives }: LifeBarProps) {
         {Array.from({ length: lifeSlots }, (_, index) => {
           const isFilled = index < filledLives;
 
-          return <LifeIcon key={index} $filled={isFilled} />;
+          return (
+            <LifeIcon
+              key={`${index}-${isFilled}`}
+              $animate={!isFilled}
+              className={`life-icon life-icon--${isFilled ? 'filled' : 'empty'}`}
+            />
+          );
         })}
       </LifeBarIcons>
     </LifeBarRoot>
