@@ -1,38 +1,55 @@
 import { Assets } from 'pixi.js';
 import type { Texture } from 'pixi.js';
 
-const BULLET_TRAIL_TEXTURE_URL = '/assets/sprites/bullet-trail.svg';
+const BULLET_ASSET_URLS = {
+  bullet: '/assets/sprites/bullet-1x.png',
+  trail: '/assets/sprites/bullet-trail.svg',
+} as const;
 
-let bulletTrailTexture: Texture | null = null;
-let bulletTrailTextureLoadPromise: Promise<Texture> | null = null;
+export type BulletTextures = Record<keyof typeof BULLET_ASSET_URLS, Texture>;
+
+let bulletTextures: BulletTextures | null = null;
+let bulletTexturesLoadPromise: Promise<BulletTextures> | null = null;
+
+async function loadTextures(): Promise<BulletTextures> {
+  const [bullet, trail] = await Promise.all([
+    Assets.load<Texture>(BULLET_ASSET_URLS.bullet),
+    Assets.load<Texture>(BULLET_ASSET_URLS.trail),
+  ]);
+
+  const textures = { bullet, trail };
+
+  Object.values(textures).forEach((texture) => {
+    texture.source.scaleMode = 'nearest';
+  });
+
+  return textures;
+}
 
 export function loadBulletAssets() {
-  if (bulletTrailTexture) {
-    return Promise.resolve(bulletTrailTexture);
+  if (bulletTextures) {
+    return Promise.resolve(bulletTextures);
   }
 
-  if (!bulletTrailTextureLoadPromise) {
-    bulletTrailTextureLoadPromise = Assets.load<Texture>(
-      BULLET_TRAIL_TEXTURE_URL
-    )
-      .then((texture) => {
-        texture.source.scaleMode = 'nearest';
-        bulletTrailTexture = texture;
-        return texture;
+  if (!bulletTexturesLoadPromise) {
+    bulletTexturesLoadPromise = loadTextures()
+      .then((textures) => {
+        bulletTextures = textures;
+        return textures;
       })
       .catch((error: unknown) => {
-        bulletTrailTextureLoadPromise = null;
+        bulletTexturesLoadPromise = null;
         throw error;
       });
   }
 
-  return bulletTrailTextureLoadPromise;
+  return bulletTexturesLoadPromise;
 }
 
-export function getLoadedBulletTrailTexture() {
-  if (!bulletTrailTexture) {
+export function getLoadedBulletTextures() {
+  if (!bulletTextures) {
     throw new Error('Bullet assets must be loaded before rendering the game.');
   }
 
-  return bulletTrailTexture;
+  return bulletTextures;
 }

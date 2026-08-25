@@ -1,7 +1,7 @@
 import { MeshRope, Point } from 'pixi.js';
 import type { PointData } from 'pixi.js';
 
-import { getLoadedBulletTrailTexture } from '@/game/assets';
+import { getLoadedBulletTextures } from '@/game/assets';
 
 import {
   BULLET_COLOR,
@@ -31,7 +31,7 @@ export class BulletTrail extends MeshRope {
 
     super({
       points: trailPoints,
-      texture: getLoadedBulletTrailTexture(),
+      texture: getLoadedBulletTextures().trail,
       textureScale: 0,
       width: BULLET_TRAIL_WIDTH,
     });
@@ -47,11 +47,9 @@ export class BulletTrail extends MeshRope {
 
   public init(position?: PointData) {
     const initialPosition = position ?? BULLET_INITIAL_LOCATION;
-    const initialX = Math.round(initialPosition.x);
-    const initialY = Math.round(initialPosition.y);
 
     this.trailPoints.forEach((point) => {
-      point.set(initialX, initialY);
+      point.copyFrom(initialPosition);
     });
 
     this.previousPosition.copyFrom(initialPosition);
@@ -91,7 +89,7 @@ export class BulletTrail extends MeshRope {
 
     this.distanceSinceLastSample += remainingDistance;
     this.previousPosition.copyFrom(position);
-    this.trailPoints[0].set(Math.round(position.x), Math.round(position.y));
+    this.trailPoints[0].copyFrom(position);
   }
 
   private pushSample(x: number, y: number) {
@@ -99,7 +97,7 @@ export class BulletTrail extends MeshRope {
       this.trailPoints[index].copyFrom(this.trailPoints[index - 1]);
     }
 
-    this.trailPoints[1].set(Math.round(x), Math.round(y));
+    this.trailPoints[1].set(x, y);
   }
 
   public startFade(gameTimeMs: number) {

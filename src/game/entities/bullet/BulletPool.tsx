@@ -87,7 +87,6 @@ export function BulletPool() {
       location: {
         x,
         y,
-        rotation,
       },
       velocity,
     });

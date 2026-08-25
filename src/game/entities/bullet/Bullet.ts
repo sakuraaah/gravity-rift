@@ -1,7 +1,9 @@
-import { Container, Graphics } from 'pixi.js';
+import { Sprite } from 'pixi.js';
 
 import { Circle } from 'check2d';
 
+import { getLoadedBulletTextures } from '@/game/assets';
+import { GAME_SCALE } from '@/game/constants';
 import { CollisionKind } from '@/game/systems';
 import type {
   CollisionParticipant,
@@ -14,17 +16,15 @@ import type { Vector2 } from '@/game/utils';
 import { DEFAULT_BULLET_DAMAGE } from '@/store';
 
 import {
-  BULLET_COLOR,
   BULLET_HITBOX_RADIUS,
   BULLET_INITIAL_LOCATION,
-  BULLET_RADIUS,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
 
 let bulletViewId = 0;
 
 export class Bullet
-  extends Container
+  extends Sprite
   implements Consumable, PositionedEntity, ProjectileDamageSource
 {
   public damage = DEFAULT_BULLET_DAMAGE;
@@ -38,24 +38,19 @@ export class Bullet
   private velocity: Vector2 = { x: 0, y: 0 };
 
   public constructor() {
-    super();
+    super(getLoadedBulletTextures().bullet);
 
     this.label = `bullet-${bulletViewId}`;
     bulletViewId += 1;
+    this.anchor.set(0.5);
+    this.eventMode = 'none';
+    this.roundPixels = true;
     this.visible = false;
 
     this.collider = new Circle<CollisionParticipant>(
       BULLET_INITIAL_LOCATION,
       BULLET_HITBOX_RADIUS
     );
-
-    const graphics = new Graphics();
-
-    graphics.setFillStyle({ color: BULLET_COLOR });
-    graphics.circle(0, 0, BULLET_RADIUS);
-    graphics.fill();
-
-    this.addChild(graphics);
   }
 
   public init(data?: BulletSpawnData) {
@@ -65,7 +60,7 @@ export class Bullet
     this.damage = data?.damage ?? DEFAULT_BULLET_DAMAGE;
     this.entityId = crypto.randomUUID();
     this.position.set(location.x, location.y);
-    this.rotation = location.rotation;
+    this.scale.set(GAME_SCALE);
     this.velocity = { ...velocity };
     this.visible = true;
     this.isActive = true;
@@ -133,7 +128,7 @@ export class Bullet
   public reset() {
     this.removeFromParent();
     this.position.set(BULLET_INITIAL_LOCATION.x, BULLET_INITIAL_LOCATION.y);
-    this.rotation = BULLET_INITIAL_LOCATION.rotation;
+    this.scale.set(1);
     this.damage = DEFAULT_BULLET_DAMAGE;
     this.entityId = null;
     this.velocity = { x: 0, y: 0 };
