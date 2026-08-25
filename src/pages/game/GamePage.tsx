@@ -18,9 +18,14 @@ import {
   GamePageSurface,
 } from './GamePage.styles';
 import { GamePageOverlayLayer } from './GamePageOverlayLayer';
+import {
+  DesktopRequiredNotice,
+  useIsDesktopSupported,
+} from './desktop-support';
 
 export function GamePage() {
   const gameSurfaceRef = useRef<HTMLElement>(null);
+  const isDesktopSupported = useIsDesktopSupported();
   const runId = useAppStore((state) => state.runId);
 
   return (
@@ -31,8 +36,14 @@ export function GamePage() {
           aria-label="Gravity Rift game"
           tabIndex={-1}
         >
-          <GameCanvas key={runId} />
-          <GamePageOverlayLayer gameSurfaceRef={gameSurfaceRef} />
+          {isDesktopSupported ? (
+            <>
+              <GameCanvas key={runId} />
+              <GamePageOverlayLayer gameSurfaceRef={gameSurfaceRef} />
+            </>
+          ) : (
+            <DesktopRequiredNotice />
+          )}
         </GamePageSurface>
       </GamePageHero>
 
