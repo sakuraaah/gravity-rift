@@ -56,6 +56,8 @@ export const appTheme = {
     fontFamily: {
       display: "'Press Start 2P', monospace",
       body: "'Silkscreen', monospace",
+      readable:
+        "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
     },
     fontSize: {
       hudLabel: '10px',

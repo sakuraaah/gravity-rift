@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Application } from '@pixi/react';
 
 import { loadGameAssets } from '@/game/assets';
-import { GAME_LAYOUT, LAYOUT_SCALE, RENDER_RESOLUTION } from '@/game/constants';
+import { GAME_LAYOUT, RENDER_RESOLUTION } from '@/game/constants';
 import { useScene } from '@/game/hooks';
 
 import './pixi-setup';
@@ -35,8 +35,8 @@ export default function GameCanvas() {
   }, []);
 
   const viewportStyle = {
-    height: GAME_LAYOUT.Height * LAYOUT_SCALE,
-    width: GAME_LAYOUT.Width * LAYOUT_SCALE,
+    height: '100%',
+    width: '100%',
   };
 
   return assetState !== 'ready' ? (

@@ -18,6 +18,14 @@ function getVariantStyles(theme: Theme, variant: TypographyVariant) {
     fontWeight: theme.typography.fontWeight.regular,
   };
 
+  if (variant === TypographyVariant.Body) {
+    return {
+      fontFamily: theme.typography.fontFamily.readable,
+      fontWeight: theme.typography.fontWeight.regular,
+      lineHeight: 1.65,
+    };
+  }
+
   if (variant === TypographyVariant.HudValue) {
     return {
       ...commonStyles,
@@ -92,6 +100,7 @@ function getVariantStyles(theme: Theme, variant: TypographyVariant) {
 
 export const TypographyRoot = styled('span', {
   shouldForwardProp: (prop) =>
+    prop !== 'as' &&
     prop !== '$align' &&
     prop !== '$color' &&
     prop !== '$fontSize' &&

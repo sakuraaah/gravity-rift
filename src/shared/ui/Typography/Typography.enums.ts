@@ -1,4 +1,5 @@
 export const TypographyVariant = {
+  Body: 'body',
   ControlLabel: 'control-label',
   HudLabel: 'hud-label',
   HudValue: 'hud-value',
