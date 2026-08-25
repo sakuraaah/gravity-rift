@@ -7,4 +7,4 @@ export const GAME_LAYOUT = {
 
 export const LAYOUT_SCALE = 4;
 
-export const RENDER_RESOLUTION = Math.min(2, LAYOUT_SCALE);
+export const RENDER_RESOLUTION = 1;
