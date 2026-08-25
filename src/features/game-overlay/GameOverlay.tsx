@@ -10,11 +10,12 @@ import {
 import type { ControlGridField } from '@/shared/ui';
 import { AppScreen, GamePhase, useAppStore } from '@/store';
 
-import { GameOverlayControls } from './GameOverlay.styles';
+import { GameOverContent, GameOverlayControls } from './GameOverlay.styles';
 import type {
   GameOverlayExitIntent,
   GameOverlayProps,
 } from './GameOverlay.types';
+import { GameOverStats } from './components';
 import { usePauseGameHotkey } from './usePauseGameHotkey';
 
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
@@ -25,6 +26,8 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
   const pauseGame = useAppStore((state) => state.pauseGame);
   const restartGame = useAppStore((state) => state.restartGame);
   const resumeGame = useAppStore((state) => state.resumeGame);
+  const score = useAppStore((state) => state.score);
+  const wave = useAppStore((state) => state.wave);
 
   const isGameScreen = screen === AppScreen.Game;
   const isRunning = isGameScreen && gamePhase === GamePhase.Running;
@@ -162,10 +165,14 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
         }
         open={isGameOverModalOpen}
         portalContainer={gameSurfaceRef}
+        maxWidth="400px"
       >
-        <GameOverlayControls>
-          <ControlGrid fields={gameOverFields} />
-        </GameOverlayControls>
+        <GameOverContent>
+          <GameOverStats score={score} wave={wave} />
+          <GameOverlayControls>
+            <ControlGrid fields={gameOverFields} />
+          </GameOverlayControls>
+        </GameOverContent>
       </Modal>
     </>
   );
