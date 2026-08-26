@@ -20,6 +20,7 @@ import {
   BULLET_BASE_MOVEMENT_SPEED,
   BULLET_DESPAWN_MARGIN,
   BULLET_FIRE_INTERVAL_MS,
+  BULLET_SPAWN_OFFSET_BY_FACING_INDEX,
 } from './bullet.constants';
 import type { BulletSpawnData } from './bullet.types';
 
@@ -78,6 +79,7 @@ export function BulletPool() {
     const collisionWorld = collisionWorldRef.current;
     const { facingIndex, x, y } = spaceshipLocationRef.current;
     const rotation = getRotationByFacingIndex(facingIndex);
+    const spawnOffset = BULLET_SPAWN_OFFSET_BY_FACING_INDEX[facingIndex]!;
     const velocity = {
       x: Math.sin(rotation) * BULLET_BASE_MOVEMENT_SPEED,
       y: -Math.cos(rotation) * BULLET_BASE_MOVEMENT_SPEED,
@@ -85,8 +87,8 @@ export function BulletPool() {
     const bullet = bulletPool.get({
       damage: useAppStore.getState().bulletDamage,
       location: {
-        x,
-        y,
+        x: Math.round(x) + spawnOffset.x,
+        y: Math.round(y) + spawnOffset.y,
       },
       velocity,
     });
