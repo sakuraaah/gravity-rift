@@ -33,9 +33,10 @@ export function Modal({
   ...rootProps
 }: ModalProps) {
   const isContained = portalContainer !== undefined;
+  const modalMode = isContained ? 'trap-focus' : true;
 
   return (
-    <Dialog.Root {...rootProps} modal>
+    <Dialog.Root {...rootProps} modal={modalMode}>
       <Dialog.Portal container={portalContainer}>
         <ModalBackdrop $contained={isContained} $strength={backdropStrength} />
         <ModalViewport $contained={isContained}>
