@@ -2,6 +2,8 @@
 
 Gravity Rift is a pixel arcade shooter set in an asteroid field. You pilot a small spaceship, destroy incoming asteroids and survive for as long as possible. Black holes disturb the playfield by pulling the ship, asteroids and bullets toward their center. Destroyed asteroids add to the score and advance the game through increasingly faster waves.
 
+[Play the hosted prototype](https://game.ntrofimov.dev/)
+
 The project is a playable MVP. Its architecture separates the real-time PixiJS simulation from the React interface. The game scene runs inside a low-resolution pixel canvas while the menus, HUD and overlays remain regular DOM elements.
 
 ## Implementation
