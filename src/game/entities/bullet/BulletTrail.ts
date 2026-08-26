@@ -9,7 +9,6 @@ import {
   BULLET_TRAIL_FADE_DURATION_MS,
   BULLET_TRAIL_POINT_COUNT,
   BULLET_TRAIL_POINT_SPACING,
-  BULLET_TRAIL_WIDTH,
 } from './bullet.constants';
 
 let bulletTrailViewId = 0;
@@ -33,7 +32,6 @@ export class BulletTrail extends MeshRope {
       points: trailPoints,
       texture: getLoadedBulletTextures().trail,
       textureScale: 0,
-      width: BULLET_TRAIL_WIDTH,
     });
 
     this.trailPoints = trailPoints;
@@ -83,7 +81,7 @@ export class BulletTrail extends MeshRope {
       sampleX += directionX * distanceToNextSample;
       sampleY += directionY * distanceToNextSample;
       remainingDistance -= distanceToNextSample;
-      this.pushSample(sampleX, sampleY);
+      this.pushSample(Math.round(sampleX), Math.round(sampleY));
       this.distanceSinceLastSample = 0;
     }
 
