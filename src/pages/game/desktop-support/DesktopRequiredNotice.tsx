@@ -20,7 +20,7 @@ export function DesktopRequiredNotice() {
           component="p"
           variant={TypographyVariant.MainMenuSubtitle}
         >
-          Touch controls in development
+          Touch controls unavailable
         </DesktopRequiredNoticeEyebrow>
 
         <DesktopRequiredNoticeTitle
@@ -28,7 +28,7 @@ export function DesktopRequiredNotice() {
           component="h1"
           variant={TypographyVariant.ModalTitle}
         >
-          Mobile play is coming soon
+          Keyboard and mouse required
         </DesktopRequiredNoticeTitle>
 
         <DesktopRequiredNoticeDivider aria-hidden />
@@ -38,8 +38,7 @@ export function DesktopRequiredNotice() {
           component="p"
           variant={TypographyVariant.Body}
         >
-          Gravity Rift currently requires a keyboard and mouse. Open this page
-          on a desktop device to play.
+          Open Gravity Rift on a desktop or laptop to play.
         </DesktopRequiredNoticeDescription>
       </DesktopRequiredNoticeContent>
     </DesktopRequiredNoticeRoot>
