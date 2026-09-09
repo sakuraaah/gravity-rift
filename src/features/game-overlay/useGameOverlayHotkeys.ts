@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 
+import { isGamePageSurface } from '@/game/systems/player-controls';
 import { AppScreen, GamePhase, useAppStore } from '@/store';
 
 import type { UseGameOverlayHotkeysOptions } from './GameOverlay.types';
@@ -17,7 +18,12 @@ export function useGameOverlayHotkeys({
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== 'Escape' || event.repeat || event.defaultPrevented) {
+      if (
+        event.key !== 'Escape' ||
+        event.repeat ||
+        event.defaultPrevented ||
+        !isGamePageSurface(event.target)
+      ) {
         return;
       }
 

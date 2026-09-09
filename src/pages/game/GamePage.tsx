@@ -35,6 +35,7 @@ export function GamePage() {
           ref={gameSurfaceRef}
           aria-label="Gravity Rift game"
           tabIndex={-1}
+          className="game-page-surface"
         >
           {isDesktopSupported ? (
             <>

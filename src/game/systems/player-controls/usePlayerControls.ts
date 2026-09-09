@@ -16,7 +16,7 @@ import type {
 import {
   createActiveInputIdsByAction,
   isGameCanvas,
-  isInteractiveElement,
+  isGamePageSurface,
 } from './playerControls.utils';
 
 export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
@@ -63,14 +63,21 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
 
   const setKeyboardControlState = useCallback(
     (event: KeyboardEvent, isPressed: boolean) => {
+      if (isPressed) {
+        if (!isGamePageSurface(event.target)) {
+          return;
+        }
+
+        if (event.code === 'ArrowDown') {
+          event.preventDefault();
+          return;
+        }
+      }
+
       const inputId = `keyboard:${event.code}`;
       const control = PLAYER_CONTROL_BY_KEY[event.code];
 
       if (!control) {
-        return;
-      }
-
-      if (isPressed && isInteractiveElement(event.target)) {
         return;
       }
 
@@ -88,14 +95,25 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
 
   const setMouseControlState = useCallback(
     (event: MouseEvent, isPressed: boolean) => {
+      if (isPressed) {
+        if (!isGameCanvas(event.target)) {
+          resetControls();
+          const focusedElement = document.activeElement;
+          if (isGamePageSurface(focusedElement)) {
+            focusedElement.blur();
+          }
+          return;
+        }
+
+        event.target
+          .closest<HTMLElement>('.game-page-surface')
+          ?.focus({ preventScroll: true });
+      }
+
       const inputId = `mouse:${event.button}`;
       const control = PLAYER_CONTROL_BY_MOUSE_BUTTON[event.button];
 
       if (!control) {
-        return;
-      }
-
-      if (isPressed && !isGameCanvas(event.target)) {
         return;
       }
 
@@ -108,7 +126,7 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
         event.preventDefault();
       }
     },
-    [setControlInputState]
+    [resetControls, setControlInputState]
   );
 
   const handleKeyDown = useCallback(
@@ -161,6 +179,7 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
     window.addEventListener('mouseup', handleMouseUp);
     window.addEventListener('contextmenu', handleContextMenu);
     window.addEventListener('blur', resetControls);
+    window.addEventListener('focusout', resetControls);
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
@@ -169,6 +188,7 @@ export function usePlayerControls({ disabled }: UsePlayerControlsOptions) {
       window.removeEventListener('mouseup', handleMouseUp);
       window.removeEventListener('contextmenu', handleContextMenu);
       window.removeEventListener('blur', resetControls);
+      window.removeEventListener('focusout', resetControls);
       resetControls();
     };
   }, [

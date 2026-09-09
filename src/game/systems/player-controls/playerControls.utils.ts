@@ -31,9 +31,21 @@ export function isInteractiveElement(target: EventTarget | null) {
   );
 }
 
-export function isGameCanvas(target: EventTarget | null) {
+export function isGameCanvas(
+  target: EventTarget | null
+): target is HTMLCanvasElement {
   return (
     target instanceof HTMLCanvasElement &&
     target.classList.contains('game-canvas')
+  );
+}
+
+export function isGamePageSurface(
+  target: EventTarget | null
+): target is HTMLElement {
+  return (
+    target instanceof HTMLElement &&
+    target.closest('.game-page-surface') !== null &&
+    !isInteractiveElement(target)
   );
 }
