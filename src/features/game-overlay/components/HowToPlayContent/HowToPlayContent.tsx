@@ -12,9 +12,9 @@ export function HowToPlayContent({ onConfirm }: HowToPlayContentProps) {
           Pilot your ship
         </Typography>
         <Typography component="p" variant={TypographyVariant.Body}>
-          Turn with A / D or ← / →. Hold W or ↑ to thrust forward in the
-          direction you are facing. Hold Space or the left mouse button over the
-          game to fire. Press Escape to pause.
+          A and D or Left and Right: turn. W or Up: thrust.
+          <br />
+          Space or left click: fire. Esc: pause.
         </Typography>
       </HowToPlaySection>
       <HowToPlaySection>
@@ -22,10 +22,8 @@ export function HowToPlayContent({ onConfirm }: HowToPlayContentProps) {
           Clear the asteroid field
         </Typography>
         <Typography component="p" variant={TypographyVariant.Body}>
-          Destroy asteroids to earn points and advance to faster waves. Large
-          asteroids take 3 hits, medium ones 2, and small ones 1. Small
-          asteroids move faster. Each collision costs one life; losing all your
-          lives ends the run.
+          Shoot for points and faster waves. Hits: large 3, medium 2, small 1.
+          Collisions cost a life.
         </Typography>
       </HowToPlaySection>
       <HowToPlaySection>
@@ -33,11 +31,8 @@ export function HowToPlayContent({ onConfirm }: HowToPlayContentProps) {
           Watch the black holes
         </Typography>
         <Typography component="p" variant={TypographyVariant.Body}>
-          Black holes start idle, then become active and pull your ship, bullets
-          and asteroids inward. The pull is strongest in the danger phase, just
-          before they collapse. Touching the center destroys your ship
-          immediately, regardless of remaining lives. Keep your distance and
-          thrust away from the pull.
+          Active holes pull everything inward. Thrust away: touching the center
+          ends your run instantly.
         </Typography>
       </HowToPlaySection>
       <GameOverlayControls>
