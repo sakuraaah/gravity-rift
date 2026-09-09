@@ -1,4 +1,4 @@
-import { PauseIcon } from '@/shared/icons';
+import { HelpIcon, PauseIcon } from '@/shared/icons';
 import { PixelIconButton } from '@/shared/ui';
 import { DEFAULT_PLAYER_HP, useAppStore } from '@/store';
 
@@ -11,6 +11,7 @@ import {
 import { HudControls, LifeBar, Score, Wave } from './components';
 
 export function GameHud() {
+  const openHowToPlay = useAppStore((state) => state.openHowToPlay);
   const pauseGame = useAppStore((state) => state.pauseGame);
   const playerHp = useAppStore((state) => state.playerHp);
   const pressedKeys = useAppStore((state) => state.pressedKeys);
@@ -27,6 +28,13 @@ export function GameHud() {
 
       <GameHudActions>
         <GameHudActionButtons>
+          <PixelIconButton
+            aria-label="How to play"
+            onClick={openHowToPlay}
+            variant="secondary"
+          >
+            <HelpIcon />
+          </PixelIconButton>
           <PixelIconButton
             aria-label="Pause game"
             onClick={pauseGame}

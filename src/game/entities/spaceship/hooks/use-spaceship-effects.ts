@@ -73,7 +73,11 @@ export function useSpaceshipEffects(hullRef: RefObject<Sprite | null>) {
         return;
       }
 
-      if (gamePhase !== GamePhase.Running && gamePhase !== GamePhase.Paused) {
+      if (
+        gamePhase !== GamePhase.Running &&
+        gamePhase !== GamePhase.Paused &&
+        gamePhase !== GamePhase.HowToPlay
+      ) {
         resetHullEffect(hull);
         return;
       }

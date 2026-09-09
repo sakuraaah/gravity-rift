@@ -10,11 +10,15 @@ export type GameOverlayExitIntent =
       modal: 'pause';
     }
   | {
+      action: 'resume';
+      modal: 'how-to-play';
+    }
+  | {
       action: 'main-menu' | 'restart';
       modal: 'game-over';
     }
   | null;
 
-export type UsePauseGameHotkeyOptions = {
-  handlePause: () => void;
+export type UseGameOverlayHotkeysOptions = {
+  requestExit: (intent: NonNullable<GameOverlayExitIntent>) => void;
 };

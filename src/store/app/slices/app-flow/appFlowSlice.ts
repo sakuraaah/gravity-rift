@@ -49,6 +49,15 @@ export const createAppFlowSlice: StateCreator<
 
     set({ gamePhase: GamePhase.Paused });
   },
+  openHowToPlay: () => {
+    const { gamePhase, screen } = get();
+
+    if (screen !== AppScreen.Game || gamePhase !== GamePhase.Running) {
+      return;
+    }
+
+    set({ gamePhase: GamePhase.HowToPlay });
+  },
   restartGame: () => {
     const { gamePhase, screen } = get();
     const isRestartable =
@@ -62,8 +71,10 @@ export const createAppFlowSlice: StateCreator<
   },
   resumeGame: () => {
     const { gamePhase, screen } = get();
+    const isResumable =
+      gamePhase === GamePhase.Paused || gamePhase === GamePhase.HowToPlay;
 
-    if (screen !== AppScreen.Game || gamePhase !== GamePhase.Paused) {
+    if (screen !== AppScreen.Game || !isResumable) {
       return;
     }
 

@@ -15,15 +15,14 @@ import type {
   GameOverlayExitIntent,
   GameOverlayProps,
 } from './GameOverlay.types';
-import { GameOverStats } from './components';
-import { usePauseGameHotkey } from './usePauseGameHotkey';
+import { GameOverStats, HowToPlayContent } from './components';
+import { useGameOverlayHotkeys } from './useGameOverlayHotkeys';
 
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
   const [exitIntent, setExitIntent] = useState<GameOverlayExitIntent>(null);
   const screen = useAppStore((state) => state.screen);
   const gamePhase = useAppStore((state) => state.gamePhase);
   const goToMainMenu = useAppStore((state) => state.goToMainMenu);
-  const pauseGame = useAppStore((state) => state.pauseGame);
   const restartGame = useAppStore((state) => state.restartGame);
   const resumeGame = useAppStore((state) => state.resumeGame);
   const score = useAppStore((state) => state.score);
@@ -33,21 +32,18 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
   const isRunning = isGameScreen && gamePhase === GamePhase.Running;
   const isDying = isGameScreen && gamePhase === GamePhase.Dying;
   const isPaused = isGameScreen && gamePhase === GamePhase.Paused;
+  const isHowToPlay = isGameScreen && gamePhase === GamePhase.HowToPlay;
   const isGameOver = isGameScreen && gamePhase === GamePhase.GameOver;
   const isPauseModalOpen = isPaused && exitIntent?.modal !== 'pause';
+  const isHowToPlayModalOpen =
+    isHowToPlay && exitIntent?.modal !== 'how-to-play';
   const isGameOverModalOpen = isGameOver && exitIntent?.modal !== 'game-over';
-
-  usePauseGameHotkey({ handlePause: pauseGame });
 
   const requestExit = (intent: NonNullable<GameOverlayExitIntent>) => {
     setExitIntent((currentIntent) => currentIntent ?? intent);
   };
 
-  const handlePauseModalOpenChange = (open: boolean) => {
-    if (!open) {
-      requestExit({ action: 'resume', modal: 'pause' });
-    }
-  };
+  const { handleModalOpenChange } = useGameOverlayHotkeys({ requestExit });
 
   const handleModalOpenChangeComplete = (
     modal: NonNullable<GameOverlayExitIntent>['modal'],
@@ -135,13 +131,40 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       {(isRunning || isDying) && <GameHud />}
 
       <Modal
+        title="How to Play"
+        subtitle="Survive the rift"
+        initialFocus={() =>
+          gameSurfaceRef.current?.querySelector<HTMLElement>(
+            '[role="dialog"]'
+          ) ?? null
+        }
+        headerTone={ModalHeaderTone.Default}
+        closable={false}
+        disablePointerDismissal
+        finalFocus={false}
+        onOpenChange={handleModalOpenChange}
+        onOpenChangeComplete={(open) =>
+          handleModalOpenChangeComplete('how-to-play', open)
+        }
+        open={isHowToPlayModalOpen}
+        portalContainer={gameSurfaceRef}
+        maxWidth="600px"
+      >
+        <HowToPlayContent
+          onConfirm={() =>
+            requestExit({ action: 'resume', modal: 'how-to-play' })
+          }
+        />
+      </Modal>
+
+      <Modal
         title="Game Paused"
         subtitle="Resume to continue"
         headerTone={ModalHeaderTone.Default}
         closable={false}
         disablePointerDismissal
         finalFocus={false}
-        onOpenChange={handlePauseModalOpenChange}
+        onOpenChange={handleModalOpenChange}
         onOpenChangeComplete={(open) =>
           handleModalOpenChangeComplete('pause', open)
         }

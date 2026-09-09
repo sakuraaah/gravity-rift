@@ -118,12 +118,6 @@ export function GamePage() {
                 component="li"
                 variant={TypographyVariant.Body}
               >
-                Add a How to Play screen.
-              </GamePageDescriptionRoadmapItem>
-              <GamePageDescriptionRoadmapItem
-                component="li"
-                variant={TypographyVariant.Body}
-              >
                 Make render resolution configurable from a settings screen.
               </GamePageDescriptionRoadmapItem>
               <GamePageDescriptionRoadmapItem

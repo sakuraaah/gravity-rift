@@ -39,7 +39,9 @@ import { useSpaceshipAnimation, useSpaceshipEffects } from './hooks';
 export function Spaceship() {
   const gamePhase = useAppStore((state) => state.gamePhase);
   const isVisible =
-    gamePhase === GamePhase.Running || gamePhase === GamePhase.Paused;
+    gamePhase === GamePhase.Running ||
+    gamePhase === GamePhase.Paused ||
+    gamePhase === GamePhase.HowToPlay;
   const entityIdRef = useRef<string | null>(null);
 
   if (entityIdRef.current === null) {
