@@ -1,7 +1,7 @@
 import type { RefObject } from 'react';
 
-import { GameOverlay } from '@/features/game-overlay';
 import { MainMenu } from '@/features/main-menu';
+import { GameOverlay } from '@/widgets/game-overlay';
 
 type GamePageOverlayLayerProps = {
   gameSurfaceRef: RefObject<HTMLElement | null>;

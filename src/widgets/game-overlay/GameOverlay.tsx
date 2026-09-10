@@ -1,21 +1,24 @@
 import { useState } from 'react';
 
 import { GameHud } from '@/features/game-hud';
+import { ModalGamePause } from '@/features/game-pause';
+import { ModalHowToPlay } from '@/features/how-to-play';
 import {
   ControlFieldType,
   ControlGrid,
   Modal,
+  ModalControls,
   ModalHeaderTone,
 } from '@/shared/ui';
 import type { ControlGridField } from '@/shared/ui';
 import { AppScreen, GamePhase, useAppStore } from '@/store';
 
-import { GameOverContent, GameOverlayControls } from './GameOverlay.styles';
+import { GameOverContent } from './GameOverlay.styles';
 import type {
   GameOverlayExitIntent,
   GameOverlayProps,
 } from './GameOverlay.types';
-import { GameOverStats, HowToPlayContent } from './components';
+import { GameOverStats } from './components';
 import { useGameOverlayHotkeys } from './useGameOverlayHotkeys';
 
 export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
@@ -70,39 +73,6 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
     }
   };
 
-  const pauseFields = [
-    {
-      buttonProps: {
-        children: 'Resume',
-        fullWidth: true,
-        onClick: () => requestExit({ action: 'resume', modal: 'pause' }),
-        variant: 'primary',
-      },
-      id: 'resume',
-      type: ControlFieldType.Button,
-    },
-    {
-      buttonProps: {
-        children: 'Restart',
-        fullWidth: true,
-        onClick: () => requestExit({ action: 'restart', modal: 'pause' }),
-        variant: 'secondary',
-      },
-      id: 'restart-game',
-      type: ControlFieldType.Button,
-    },
-    {
-      buttonProps: {
-        children: 'Main Menu',
-        fullWidth: true,
-        onClick: () => requestExit({ action: 'main-menu', modal: 'pause' }),
-        variant: 'danger',
-      },
-      id: 'main-menu',
-      type: ControlFieldType.Button,
-    },
-  ] satisfies ControlGridField[];
-
   const gameOverFields = [
     {
       buttonProps: {
@@ -130,51 +100,29 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
     <>
       {(isRunning || isDying) && <GameHud />}
 
-      <Modal
-        title="How to Play"
-        subtitle="Survive the rift"
-        initialFocus={() =>
-          gameSurfaceRef.current?.querySelector<HTMLElement>(
-            '[role="dialog"]'
-          ) ?? null
+      <ModalHowToPlay
+        gameSurfaceRef={gameSurfaceRef}
+        onConfirm={() =>
+          requestExit({ action: 'resume', modal: 'how-to-play' })
         }
-        headerTone={ModalHeaderTone.Default}
-        closable={false}
-        disablePointerDismissal
-        finalFocus={false}
         onOpenChange={handleModalOpenChange}
         onOpenChangeComplete={(open) =>
           handleModalOpenChangeComplete('how-to-play', open)
         }
         open={isHowToPlayModalOpen}
-        portalContainer={gameSurfaceRef}
-        maxWidth="600px"
-      >
-        <HowToPlayContent
-          onConfirm={() =>
-            requestExit({ action: 'resume', modal: 'how-to-play' })
-          }
-        />
-      </Modal>
+      />
 
-      <Modal
-        title="Game Paused"
-        subtitle="Resume to continue"
-        headerTone={ModalHeaderTone.Default}
-        closable={false}
-        disablePointerDismissal
-        finalFocus={false}
+      <ModalGamePause
+        onResume={() => requestExit({ action: 'resume', modal: 'pause' })}
+        onRestart={() => requestExit({ action: 'restart', modal: 'pause' })}
+        onMainMenu={() => requestExit({ action: 'main-menu', modal: 'pause' })}
         onOpenChange={handleModalOpenChange}
         onOpenChangeComplete={(open) =>
           handleModalOpenChangeComplete('pause', open)
         }
         open={isPauseModalOpen}
         portalContainer={gameSurfaceRef}
-      >
-        <GameOverlayControls>
-          <ControlGrid fields={pauseFields} />
-        </GameOverlayControls>
-      </Modal>
+      />
 
       <Modal
         title="Game Over"
@@ -192,9 +140,9 @@ export function GameOverlay({ gameSurfaceRef }: GameOverlayProps) {
       >
         <GameOverContent>
           <GameOverStats score={score} wave={wave} />
-          <GameOverlayControls>
+          <ModalControls>
             <ControlGrid fields={gameOverFields} />
-          </GameOverlayControls>
+          </ModalControls>
         </GameOverContent>
       </Modal>
     </>

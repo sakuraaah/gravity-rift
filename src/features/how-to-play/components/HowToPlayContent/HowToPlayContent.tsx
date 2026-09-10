@@ -1,5 +1,9 @@
-import { GameOverlayControls } from '@/features/game-overlay/GameOverlay.styles';
-import { PixelButton, Typography, TypographyVariant } from '@/shared/ui';
+import {
+  ModalControls,
+  PixelButton,
+  Typography,
+  TypographyVariant,
+} from '@/shared/ui';
 
 import { HowToPlayBody, HowToPlaySection } from './HowToPlayContent.styles';
 import type { HowToPlayContentProps } from './HowToPlayContent.types';
@@ -35,11 +39,11 @@ export function HowToPlayContent({ onConfirm }: HowToPlayContentProps) {
           ends your run instantly.
         </Typography>
       </HowToPlaySection>
-      <GameOverlayControls>
+      <ModalControls>
         <PixelButton fullWidth variant="primary" onClick={onConfirm}>
           OK, got it
         </PixelButton>
-      </GameOverlayControls>
+      </ModalControls>
     </HowToPlayBody>
   );
 }
